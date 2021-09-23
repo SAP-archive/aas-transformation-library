@@ -31,6 +31,7 @@ Transform [AutomationML (AML)](https://www.automationml.org/) content into [Asse
   - [Known Issues & Limitations](#known-issues--limitations)
   - [Upcoming Changes](#upcoming-changes)
   - [Contributing](#contributing)
+  - [Code of Conduct](#code-of-conduct)
   - [To Do](#to-do)
   - [License](#license)
 
@@ -736,7 +737,10 @@ Please see [Issues](https://github.com/SAP/aas-transformation-library/issues) li
 Please refer to the Github issue board. For upcoming features check the "enhancement" label.
 
 ## Contributing
-You are welcome to join forces with us in the quest to contribute to the Asset Administration Shell community! Simply check the [Contribution Guidelines](CONTRIBUTING.md).
+You are welcome to join forces with us in the quest to contribute to the Asset Administration Shell community! Simply check our [Contribution Guidelines](CONTRIBUTING.md).
+
+## Code of Conduct
+Everyone participating in this joint project is welcome as long as our [Code of Conduct](CODE_OF_CONDUCT.md) is being adhered to.
 
 ## To Do
 Many improvements are coming! All tasks will be posted to our GitHub issue tracking system. As mentioned, some of the improvements will mean breaking changes. While we strive to avoid doing so, we cannot guarantee this will not happen before the first release.
