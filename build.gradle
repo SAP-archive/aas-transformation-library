@@ -151,8 +151,7 @@ spotless {
         // See https://github.com/diffplug/spotless/tree/main/plugin-gradle#eclipse-jdt for details about the eclipse formatter used by spotless.
         eclipse('4.12.0').configFile 'codestyle/EclipseFormatterProfile.xml'
         importOrderFile 'codestyle/EclipseOrganizeImports.importorder'
-        custom 'Lambda fix', { it.replace('} )', '})').replace('} ,', '},') }
-        licenseHeader '/* Copyright (C)$YEAR SAP SE or an affiliate company. All rights reserved. */'
+        licenseHeader '/* Copyright (C)$YEAR SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. */'
     }
 }
 

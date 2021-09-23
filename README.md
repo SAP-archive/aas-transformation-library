@@ -4,6 +4,7 @@ Transform [AutomationML (AML)](https://www.automationml.org/) content into [Asse
 
 - [aml-transformation-library](#aml-transformation-library)
   - [Documentation](#documentation)
+  - [Requirements](#requirements)
   - [Local Usage](#local-usage)
   - [Validation](#validation)
     - [AML files](#aml-files)
@@ -27,6 +28,11 @@ Transform [AutomationML (AML)](https://www.automationml.org/) content into [Asse
       - [RelationshipElement](#relationshipelement)
       - [AnnotatedRelationshipElement](#annotatedrelationshipelement)
       - [SubmodelElementCollection](#submodelelementcollection)
+  - [Known Issues & Limitations](#known-issues--limitations)
+  - [Upcoming Changes](#upcoming-changes)
+  - [Contributing](#contributing)
+  - [To Do](#to-do)
+  - [License](#license)
 
 ## Documentation
 The library can be used twofold. Users can..
@@ -46,6 +52,9 @@ Depending on its usage the library will output one of the two:
 #### Note:
 There is an _IdGeneration_ function being used to create values for Reference objects.
 In order for the function to be called correctly, the XPath of the config file must be registered in the node graph, which happens in the _prepareGraph()_ of the IdGenerator.java class.
+
+## Requirements
+We rely on [SapMachine 11](https://sap.github.io/SapMachine/) and use [Gradle](https://gradle.org/). 
 
 ## Local Usage
 
@@ -726,5 +735,12 @@ Please see [Issues](https://github.com/SAP/aas-transformation-library/issues) li
 ## Upcoming changes
 Please refer to the Github issue board. For upcoming features check the "enhancement" label.
 
-## Get involved
+## Contributing
 You are welcome to join forces with us in the quest to contribute to the Asset Administration Shell community! Simply check the [Contribution Guidelines](CONTRIBUTING.md).
+
+## To Do
+Many improvements are coming! All tasks will be posted to our GitHub issue tracking system. As mentioned, some of the improvements will mean breaking changes. While we strive to avoid doing so, we cannot guarantee this will not happen before the first release.
+
+## License
+Copyright (c) 2021 SAP SE or an SAP affiliate company. All rights reserved.
+This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the [LICENSE](LICENSE) file.

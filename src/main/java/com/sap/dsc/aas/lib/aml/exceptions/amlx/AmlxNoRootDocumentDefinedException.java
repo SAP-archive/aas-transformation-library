@@ -1,4 +1,4 @@
-/* Copyright (C)2021 SAP SE or an affiliate company. All rights reserved. */
+/* Copyright (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. */
 package com.sap.dsc.aas.lib.aml.exceptions.amlx;
 
 public class AmlxNoRootDocumentDefinedException extends AmlxValidationException {
