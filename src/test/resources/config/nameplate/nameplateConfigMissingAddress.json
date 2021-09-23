@@ -1,0 +1,115 @@
+{
+  "version": "1.0.0",
+  "aasVersion": "3.0RC01",
+  "configMappings": [
+    {
+      "from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
+      "idGeneration": {
+        "parameters": [
+          {
+            "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
+            "from_string": "DefaultManufacturer"
+          },
+          {
+            "from_string": "/"
+          },
+          {
+            "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+          }
+        ],
+        "finalizeFunction": "concatenate_and_hash",
+        "idGenerationName": "mappingIdGeneration"
+      },
+      "assetInformation": {
+        "kindType_xpath": "TYPE",
+        "idGeneration": {
+          "parameters": [
+            {
+              "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
+              "from_string": "DefaultManufacturer"
+            },
+            {
+              "from_string": "/"
+            },
+            {
+              "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+            }
+          ],
+          "finalizeFunction": "concatenate_and_hash",
+          "idGenerationName": "assetIdGeneration"
+        },
+        "globalAssetIdReference": {
+          "valueId": "assetInformationGlobalAssetIdReference",
+          "keyType": "CUSTOM",
+          "keyElement": "ASSET"
+        }
+      },
+      "assetShell": {
+        "idGeneration": {
+          "parameters": [
+            {
+              "from_string": "shellId"
+            }
+          ]
+        },
+        "idShort_xpath": "@Name"
+      },
+      "submodels": [
+        {
+          "from_xpath": "caex:Attribute[@Name='CommercialData']/caex:Attribute[@Name='ManufacturerDetails']",
+          "semanticId_ref": {
+            "valueId": "https://admin-shell.io/zvei/nameplate/1/0/Nameplate",
+            "keyType": "IRI",
+            "keyElement": "SUBMODEL"
+          },
+          "idGeneration": {
+            "parameters": [
+              {
+                "from_idGenerationName": "assetIdGeneration"
+              },
+              {
+                "from_string": "_submodel1"
+              }
+            ],
+            "finalizeFunction": "concatenate"
+          },
+          "idShort_xpath": "'Nameplate'",
+          "submodelElements": [
+            {
+              "semanticId_ref": {
+                "valueId": "0173-1#02-AAO677#002",
+                "keyType": "IRDI",
+                "keyElement": "SUBMODEL_ELEMENT"
+              },
+              "idShort_xpath": " 'ManufacturerName' ",
+              "from_attributeName": "Name",
+              "@type": "MultiLanguageProperty",
+              "values": [
+                {
+                  "langXPath": "'en-us'",
+                  "valueXPath": "caex:Value"
+                }
+              ]
+            },
+            {
+              "semanticId_ref": {
+                "valueId": "0173-1#02-AAW338#001",
+                "keyType": "IRDI",
+                "keyElement": "SUBMODEL_ELEMENT"
+              },
+              "idShort_xpath": " 'ManufacturerProductDesignation' ",
+              "from_xpath": "//caex:Attribute[@Name='DescriptionLong']",
+              "@type": "MultiLanguageProperty",
+              "values": [
+                {
+                  "langXPath": "'en-us'",
+                  "valueXPath": "caex:Value"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

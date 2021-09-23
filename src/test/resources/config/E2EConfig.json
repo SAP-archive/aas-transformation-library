@@ -1,0 +1,77 @@
+{
+  "version":"1.0.0",
+  "aasVersion":"3.0RC01",
+  "placeholders": [
+    {
+      "name":"assetName",
+      "description":"Name of the asset"
+    },
+    {
+      "name":"submodelName",
+      "description":"Name of the submodel"
+    }
+  ],
+  "configMappings": [
+    {
+      "from_xpath":"//caex:SystemUnitClass",
+      "assetInformation": {
+        "kindType_xpath":"TYPE",
+        "idGeneration": {
+          "parameters": [
+            {
+              "from_string":"${{assetName}}"
+            }
+          ]
+        },
+        "globalAssetIdReference": {
+          "valueId":"${{assetName}}",
+          "keyType":"CUSTOM",
+          "keyElement":"ASSET"
+        }
+      },
+      "assetShell": {
+        "idGeneration": {
+          "parameters": [
+            {
+              "from_string":"${{assetName}}"
+            }
+          ]
+        },
+        "idShort_xpath": "'${{assetName}}'"
+      },
+      "submodels": [
+        {
+          "from_attributeName":"IdentificationData",
+          "semanticId_ref": {
+            "valueId":"http://www.sap.com/ain/IdentificationData",
+            "keyType":"IRI",
+            "keyElement":"SUBMODEL"
+          },
+          "idGeneration": {
+            "parameters": [
+              {
+                "from_string":"submodel ${{submodelName}} of asset ${{assetName}}"
+              }
+            ]
+          },
+          "idShort_xpath":"'IdentificationData'",
+          "submodelElements": [
+            {
+              "from_xpath":".",
+              "@type":"SubmodelElementCollection",
+              "semanticId":"http://www.sap.com/ain/collection",
+              "submodelElements": [
+                {
+                  "semanticId":"0112/2///61987#ABA565",
+                  "from_attributeName":"Manufacturer",
+                  "@type":"Property",
+                  "valueType":"string"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

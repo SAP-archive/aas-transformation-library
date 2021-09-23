@@ -1,0 +1,387 @@
+{
+  "version": "1.0.0",
+  "aasVersion": "3.0RC01",
+  "configMappings": [
+    {
+      "from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
+      "idGeneration": {
+        "parameters": [
+          {
+            "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
+            "from_string": "DefaultManufacturer"
+          },
+          {
+            "from_string": "/"
+          },
+          {
+            "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+          }
+        ],
+        "finalizeFunction": "concatenate_and_hash",
+        "idGenerationName": "mappingIdGeneration"
+      },
+      "assetInformation": {
+        "kindType_xpath": "TYPE",
+        "idGeneration": {
+          "parameters": [
+            {
+              "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
+              "from_string": "DefaultManufacturer"
+            },
+            {
+              "from_string": "/"
+            },
+            {
+              "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+            }
+          ],
+          "finalizeFunction": "concatenate_and_hash",
+          "idGenerationName": "assetIdGeneration"
+        },
+        "globalAssetIdReference": {
+          "valueId": "assetInformationGlobalAssetIdReference",
+          "keyType": "CUSTOM",
+          "keyElement": "ASSET"
+        }
+      },
+      "submodels": [
+        {
+          "from_attributeName": "IdentificationData",
+          "semanticId": "http://sap.com",
+          "idGeneration": {
+            "parameters": [
+              {
+                "from_idGenerationName": "assetIdGeneration"
+              },
+              {
+                "from_string": "_submodel1"
+              }
+            ],
+            "finalizeFunction": "concatenate"
+          },
+          "idShort_xpath": "'submodelShortId1'",
+          "submodelElements": [
+            {
+              "semanticId": "submodelElementSemanticId1",
+              "from_attributeName": "Manufacturer",
+              "@type": "Property",
+              "valueType": "STRING"
+            },
+            {
+              "semanticId": "submodelElementSemanticId2",
+              "from_xpath": "caex:Attribute[@Name='Manufacturer']",
+              "valueXPath": "caex:Value",
+              "valueType": "STRING",
+              "@type": "Property"
+            },
+            {
+              "from_xpath": "caex:Attribute[@Name='ManufacturerURI']",
+              "idShort_xpath": "'Browseable'",
+              "@type": "Capability"
+            }
+          ]
+        },
+        {
+          "from_xpath": "caex:Attribute[@Name='CommercialData']",
+          "semanticId": "http://sap.com",
+          "idGeneration": {
+            "parameters": [
+              {
+                "from_string": "submodel2_"
+              },
+              {
+                "from_idGenerationName": "submodel3IdGeneration"
+              }
+            ]
+          },
+          "submodelElements": [
+            {
+              "from_attributeName": "ProductPriceDetails",
+              "@type": "SubmodelElementCollection",
+              "semanticId": "SubmodelElementCollectionSemanticId",
+              "submodelElements": [
+                {
+                  "from_attributeName": "ValidStartDate",
+                  "@type": "Property",
+                  "valueType": "STRING"
+                },
+                {
+                  "from_xpath": "caex:Attribute[@Name='ProductPrice']/caex:Attribute[@Name='PriceAmount']",
+                  "@type": "Property",
+                  "valueType": "STRING"
+                }
+              ]
+            },
+            {
+              "from_attributeName": "ProductDetails",
+              "@type": "SubmodelElementCollection",
+              "semanticId_ref": {
+                "valueId": "ProductDetails",
+                "keyType": "CUSTOM",
+                "keyElement": "CONCEPT_DESCRIPTION"
+              },
+              "submodelElements": [
+                {
+                  "from_attributeName": "DescriptionShort",
+                  "@type": "MultiLanguageProperty",
+                  "values": [
+                    {
+                      "langXPath": "'en'",
+                      "valueXPath": "caex:Value"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "from_attributeName": "PackagingAndTransportation",
+              "@type": "Entity",
+              "semanticId": "PackAndTransport",
+              "entityType": "SELF_MANAGED_ENTITY",
+              "assetReference": {
+                "valueId": "AssetIdExtern",
+                "keyElement": "ASSET"
+              },
+              "statements": [
+                {
+                  "from_attributeName": "GTIN",
+                  "@type": "Property",
+                  "valueType": "STRING"
+                },
+                {
+                  "from_attributeName": "CustomsTariffNumber",
+                  "@type": "Property",
+                  "valueType": "integer"
+                },
+                {
+                  "from_attributeName": "CountryOfOrigin",
+                  "@type": "Property",
+                  "valueType": "STRING"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "from_xpath": "caex:Attribute[@Name='GeneralTechnicalData']",
+          "semanticId": "http://sap.com",
+          "idGeneration": {
+            "parameters": [
+              {
+                "from_idGenerationName": "assetIdGeneration"
+              },
+              {
+                "from_string": "_generalTechnicalData"
+              }
+            ],
+            "finalizeFunction": "concatenate"
+          },
+          "submodelElements": [
+            {
+              "from_attributeName": "AmbientTemperature",
+              "@type": "Range",
+              "semanticId_ref": {
+                "valueId": "AmbientTemperature",
+                "keyType": "IRI",
+                "keyElement": "RANGE"
+              },
+              "valueType": "integer",
+              "minValueXPath": "caex:Attribute[@Name='TemperatureMin']/caex:Value",
+              "maxValueXPath": "caex:Attribute[@Name='TemperatureMax']/caex:Value"
+            },
+            {
+              "from_attributeName": "Material",
+              "@type": "MultiLanguageProperty"
+            }
+          ]
+        },
+        {
+          "from_attributeName": "ParameterData",
+          "semanticId": "http://sap.com",
+          "idGeneration": {
+            "parameters": [
+              {
+                "from_string": "submodel3"
+              }
+            ],
+            "idGenerationName": "submodel3IdGeneration"
+          },
+          "submodelElements": [
+            {
+              "from_xpath": "caex:Attribute",
+              "@type": "Property",
+              "valueType": "STRING"
+            }
+          ]
+        },
+        {
+          "from_xpath": ".",
+          "idShort_xpath": "'Documents'",
+          "semanticId": "http://sap.com/Documents",
+          "idGeneration": {
+            "parameters": [
+              {
+                "from_string": "Documents"
+              }
+            ],
+            "idGenerationName": "submodelDocuments"
+          },
+          "submodelElements": [
+            {
+              "from_xpath": "caex:InternalElement[@Name='Manuals']/caex:InternalElement[@Name='Betriebsanleitung']/caex:ExternalInterface[@Name='ExternalDataReference']",
+              "idShort_xpath": "'Betriebsanleitung'",
+              "@type": "File",
+              "valueXPath": "caex:Attribute[@Name='refURI']/caex:Value",
+              "mimeTypeXPath": "caex:Attribute[@Name='MIMEType']/caex:Value"
+            },
+            {
+              "from_xpath": "caex:InternalElement[@Name='STEPGeometry']/caex:ExternalInterface[@Name='ExternalDataReference']",
+              "idShort_xpath": "'STEPGeometry'",
+              "@type": "ReferenceElement",
+              "value": {
+                "idGeneration": {
+                  "parameters": [
+                    {
+                      "from_xpath": "caex:Attribute[@Name='refURI']/caex:Value"
+                    }
+                  ]
+                },
+                "keyElement": "CONCEPT_DESCRIPTION"
+              }
+            },
+            {
+              "from_xpath": "caex:InternalElement[@Name='ManualsBIN']/caex:InternalElement[@Name='BetriebsanleitungBIN']/caex:ExternalInterface[@Name='ExternalDataReference']",
+              "idShort_xpath": "'BetriebsanleitungBIN'",
+              "@type": "Blob",
+              "valueXPath": "caex:Attribute[@Name='refURI']/caex:Value",
+              "mimeTypeXPath": "caex:Attribute[@Name='MIMEType']/caex:Value"
+            },
+            {
+              "from_xpath": "caex:InternalElement[@Name='ManualsBasicEvent']/caex:InternalElement[@Name='SampleBasicEvent']/caex:ExternalInterface[@Name='ExternalDataReference']",
+              "idShort_xpath": "'SampleBasicEvent'",
+              "@type": "BasicEvent",
+              "observed": {
+                "idGeneration": {
+                  "parameters": [
+                    {
+                      "from_xpath": "caex:Attribute[@Name='refURI']/caex:Value"
+                    }
+                  ]
+                },
+                "keyElement": "BLOB"
+              }
+            }
+          ]
+        },
+        {
+          "from_xpath": ".",
+          "idShort_xpath": "'Operations'",
+          "semanticId": "http://sap.com/operations",
+          "idGeneration": {
+            "parameters": [
+              {
+                "from_idGenerationName": "assetIdGeneration"
+              },
+              {
+                "from_string": "_operations"
+              }
+            ],
+            "finalizeFunction": "concatenate"
+          },
+          "submodelElements": [
+            {
+              "from_attributeName": "OperationA",
+              "semanticId": "ops",
+              "@type": "Operation",
+              "inputVariables": [
+                {
+                  "from_xpath": "caex:Attribute[@Name='Inputs']/caex:Attribute",
+                  "@type": "Property",
+                  "valueType": "STRING"
+                }
+              ],
+              "outputVariables": [
+                {
+                  "from_xpath": "caex:Attribute[@Name='Outputs']/caex:Attribute",
+                  "@type": "Property",
+                  "valueType": "STRING"
+                }
+              ],
+              "inOutputVariables": [
+                {
+                  "from_xpath": "caex:Attribute[@Name='InOut']/caex:Attribute",
+                  "@type": "Property",
+                  "valueType": "STRING"
+                }
+              ]
+            },
+            {
+              "from_attributeName": "OperationA",
+              "semanticId": "test",
+              "@type": "RelationshipElement",
+              "idShort_xpath": "'relElement'",
+              "first": {
+                "valueId": "FOO",
+                "keyType": "IRI",
+                "keyElement": "CONCEPT_DESCRIPTION"
+              },
+              "second": {
+                "valueId": "BAR",
+                "keyType": "IRI",
+                "keyElement": "CONCEPT_DESCRIPTION"
+              }
+            },
+            {
+              "from_attributeName": "OperationA",
+              "semanticId": "test/test/test",
+              "@type": "AnnotatedRelationshipElement",
+              "idShort_xpath": "'annoRelElement'",
+              "first": {
+                "valueId": "abc",
+                "keyElement": "CONCEPT_DESCRIPTION"
+              },
+              "second": {
+                "valueId": "def",
+                "keyElement": "CONCEPT_DESCRIPTION"
+              },
+              "annotations": [
+                {
+                  "from_xpath": "caex:Attribute[@Name='Inputs']/caex:Attribute",
+                  "@type": "Property",
+                  "valueType": "STRING"
+                },
+                {
+                  "from_xpath": "caex:Attribute[@Name='Outputs']/caex:Attribute",
+                  "@type": "Property",
+                  "valueType": "STRING"
+                }
+              ]
+            },
+            {
+              "semanticId": "submodelElementSemanticId2",
+              "from_xpath": "caex:Attribute[@Name='Manufacturer']",
+              "valueXPath": "caex:Value",
+              "valueType": "STRING",
+              "@type": "Property"
+            },
+            {
+              "from_xpath": "caex:Attribute[@Name='ManufacturerURI']",
+              "idShort_xpath": "'Browseable'",
+              "@type": "Capability"
+            }
+          ]
+        }
+      ],
+      "assetShell": {
+        "idGeneration": {
+          "parameters": [
+            {
+              "from_string": "shellId"
+            }
+          ]
+        },
+        "idShort_xpath": "@Name"
+      }
+    }
+  ]
+}

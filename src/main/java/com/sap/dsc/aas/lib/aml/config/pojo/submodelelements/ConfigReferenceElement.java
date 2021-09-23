@@ -1,0 +1,23 @@
+/* Copyright (C)2021 SAP SE or an affiliate company. All rights reserved. */
+package com.sap.dsc.aas.lib.aml.config.pojo.submodelelements;
+
+import com.sap.dsc.aas.lib.aml.config.pojo.AbstractConfigSubmodelElement;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigReference;
+
+public class ConfigReferenceElement extends AbstractConfigSubmodelElement implements ConfigReferenceContainer, ConfigDataElement {
+
+    private ConfigReference value;
+
+    public ConfigReference getValue() {
+        return value;
+    }
+
+    public void setValue(ConfigReference value) {
+        this.value = value;
+    }
+
+    @Override
+    public ConfigReference getReference() {
+        return getValue();
+    }
+}

@@ -1,0 +1,98 @@
+{
+  "version": "1.0.0",
+  "aasVersion": "3.0RC01",
+  "placeholders": [
+    {
+      "name": "manufacturerId",
+      "description" : "The Id of the manufacturer, will be filled from the CliendId before calling the MEI Api"
+    }
+  ],
+  "configMappings": [
+    {
+      "from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
+      "idGeneration": {
+        "parameters": [
+          {
+            "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
+            "from_string": "DefaultManufacturer"
+          },
+          {
+            "from_string": "/"
+          },
+          {
+            "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+          }
+        ],
+        "finalizeFunction": "concatenate_and_hash",
+        "idGenerationName": "mappingIdGeneration"
+      },
+      "assetInformation": {
+        "kindType_xpath": "TYPE",
+        "idGeneration": {
+          "parameters": [
+            {
+              "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
+              "from_string": "DefaultManufacturer"
+            },
+            {
+              "from_string": "/"
+            },
+            {
+              "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+            }
+          ],
+          "finalizeFunction": "concatenate_and_hash",
+          "idGenerationName": "assetIdGeneration"
+        },
+        "globalAssetIdReference": {
+          "valueId": "assetInformationGlobalAssetIdReference",
+          "keyType": "CUSTOM",
+          "keyElement": "ASSET"
+        }
+      },
+      "assetShell": {
+        "idGeneration": {
+          "parameters": [
+            {
+              "from_string": "shellId"
+            }
+          ]
+        },
+        "idShort_xpath": "@Name"
+      },
+      "submodels": [
+        {
+          "from_xpath": "caex:Attribute[@Name='CommercialData']/caex:Attribute[@Name='ManufacturerDetails']",
+          "semanticId_ref": {
+            "valueId": "https://sap.com/aas/ain",
+            "keyType": "CUSTOM",
+            "keyElement": "SUBMODEL"
+          },
+          "idGeneration": {
+            "parameters": [
+              {
+                "from_string": "CustomAINSubmodel"
+              }
+            ],
+            "finalizeFunction": "concatenate"
+          },
+          "idShort_xpath": "'AIN_MEI_Tranformation_Submodel'",
+          "submodelElements": [
+            {
+              "semanticId_ref": {
+                "valueId": "manufacturerId",
+                "keyType": "CUSTOM",
+                "keyElement": "SUBMODEL_ELEMENT"
+              },
+              "idShort_xpath": " 'manufacturerId' ",
+              "from_attributeName": "Name",
+              "valueDefault": "${{manufacturerId}}",
+              "@type": "Property",
+              "valueType": "string"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
