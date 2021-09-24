@@ -1,8 +1,8 @@
-# aml-transformation-library
+# aas-transformation-library
 
 Transform [AutomationML (AML)](https://www.automationml.org/) content into [Asset Administration Shell (AAS)](https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part_2_V1.html) format.
 
-- [aml-transformation-library](#aml-transformation-library)
+- [aas-transformation-library](#aas-transformation-library)
   - [Documentation](#documentation)
   - [Requirements](#requirements)
   - [Local Usage](#local-usage)
@@ -62,7 +62,7 @@ We rely on [SapMachine 11](https://sap.github.io/SapMachine/) and use [Gradle](h
 ```sh
 $ ./gradlew build
 
-$ java -jar build/distributions/aml-transformation-library-shadow-0.0.1-SNAPSHOT.jar
+$ java -jar build/distributions/aas-transformation-library-shadow-0.0.1-SNAPSHOT.jar
 usage: transform -a <AML_INPUT_FILE> | -amlx <AMLX_INPUT_FILE> | -p  -c
        <CONFIG_FILE> [-P <PLACEHOLDER_VALUES_JSON>]
 Transform AutomationML file into an AAS structured file
@@ -78,7 +78,7 @@ Transform AutomationML file into an AAS structured file
 Missing required options: c, [-a AML input file, -amlx AMLX input file, -p
 Print placeholders with description]
 
-$ java -jar ./build/distributions/aml-transformation-library-shadow-0.0.1-SNAPSHOT.jar -c src/test/resources/config/simpleConfig.json -a src/test/resources/aml/full_AutomationComponent.aml
+$ java -jar ./build/distributions/aas-transformation-library-shadow-0.0.1-SNAPSHOT.jar -c src/test/resources/config/simpleConfig.json -a src/test/resources/aml/full_AutomationComponent.aml
 [main] INFO com.sap.dsc.aas.lib.aml.ConsoleApplication - Loaded config version 1.0.0, aas version 2.0.1
 [main] INFO com.sap.dsc.aas.lib.aml.transform.AmlTransformer - Loaded config version 1.0.0, AAS version 2.0.1
 [main] INFO com.sap.dsc.aas.lib.aml.transform.AssetAdministrationShellEnvTransformer - Transforming 1 config assets...
@@ -101,7 +101,7 @@ adding: minimal_AutomationMLComponent_WithDocuments.aml (deflated 80%)
 
 $ cd ../../../../../
 
-$ java -jar ./build/distributions/aml-transformation-library-shadow-0.0.1-SNAPSHOT.jar -c src/test/resources/config/simpleConfig.json -amlx src/test/resources/amlx/minimal_AutomationMLComponent_WithDocuments/minimal_AutomationMLComponent_WithDocuments.amlx
+$ java -jar ./build/distributions/aas-transformation-library-shadow-0.0.1-SNAPSHOT.jar -c src/test/resources/config/simpleConfig.json -amlx src/test/resources/amlx/minimal_AutomationMLComponent_WithDocuments/minimal_AutomationMLComponent_WithDocuments.amlx
 [main] INFO com.sap.dsc.aas.lib.aml.ConsoleApplication - Loaded config version 1.0.0, aas version 2.0.1
 [main] INFO com.sap.dsc.aas.lib.aml.transform.AmlTransformer - Loaded config version 1.0.0, AAS version 2.0.1
 [main] INFO com.sap.dsc.aas.lib.aml.transform.AssetAdministrationShellEnvTransformer - Transforming 1 config assets...
