@@ -6,8 +6,6 @@ git:
 notifications:
   email: false
 
-if: branch = AAS-956-publication
-
 install:
   - ls -la
   - docker run -v $(pwd):/src sapmachine:11 bash -c "cd /src && ./gradlew clean build --info"
