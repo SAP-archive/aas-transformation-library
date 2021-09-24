@@ -1,5 +1,7 @@
 # aas-transformation-library
 
+[![Build Status](https://app.travis-ci.com/SAP/aas-transformation-library.svg?branch=main)](https://app.travis-ci.com/SAP/aas-transformation-library)
+
 Transform [AutomationML (AML)](https://www.automationml.org/) content into [Asset Administration Shell (AAS)](https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part_2_V1.html) format.
 
 - [aas-transformation-library](#aas-transformation-library)
