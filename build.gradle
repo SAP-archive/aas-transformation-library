@@ -1,8 +1,13 @@
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
+
+  SPDX-License-Identifier: Apache 2.0 
+ */
 plugins {
     id 'java'
     id 'jacoco'
     id 'application'
-    id 'com.diffplug.gradle.spotless' version '3.25.0'
+    id 'com.diffplug.spotless' version '5.15.1'
     id 'com.github.ksoichiro.console.reporter' version '0.6.2'
     id 'se.bjurr.violations.violations-gradle-plugin' version '1.40'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
@@ -137,21 +142,36 @@ spotless {
     enforceCheck = false
 
     format 'misc', {
-        target '*.gradle', '.gitignore'
+        target('.gitignore')
         trimTrailingWhitespace()
         indentWithSpaces()
         endWithNewline()
     }
 
+    format 'gradle', {
+        target('*.gradle')
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+        licenseHeader('/* \n  SPDX-FileCopyrightText: (C)$YEAR SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. \n\n  SPDX-License-Identifier: Apache 2.0 \n */','\\w')
+    }
+
+    // format 'xmlaml', {
+    //     target('src/**/*.xml','src/**/*.aml')
+    //     trimTrailingWhitespace()
+    //     indentWithSpaces()
+    //     endWithNewline()
+    //     licenseHeader('<!-- \n  SPDX-FileCopyrightText: (C)$YEAR SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. \n\n  SPDX-License-Identifier: Apache 2.0 \n -->','<[^!]')
+    // }
+
     java {
-        encoding 'UTF8'
+        encoding("UTF8")
         trimTrailingWhitespace()
         removeUnusedImports()
         endWithNewline()
-        // See https://github.com/diffplug/spotless/tree/main/plugin-gradle#eclipse-jdt for details about the eclipse formatter used by spotless.
         eclipse('4.12.0').configFile 'codestyle/EclipseFormatterProfile.xml'
-        importOrderFile 'codestyle/EclipseOrganizeImports.importorder'
-        licenseHeader '/* Copyright (C)$YEAR SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. */'
+        importOrderFile('codestyle/EclipseOrganizeImports.importorder')
+        licenseHeader('/* \n  SPDX-FileCopyrightText: (C)$YEAR SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. \n\n  SPDX-License-Identifier: Apache 2.0 \n */')
     }
 }
 
