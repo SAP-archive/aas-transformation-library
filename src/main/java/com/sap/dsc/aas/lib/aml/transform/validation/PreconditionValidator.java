@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.dom4j.Document;
 import org.dom4j.Node;
 
 import com.sap.dsc.aas.lib.aml.config.pojo.AbstractConfig;
@@ -19,6 +20,7 @@ import com.sap.dsc.aas.lib.aml.config.pojo.preconditions.AbstractPreconditionTyp
 import com.sap.dsc.aas.lib.aml.config.pojo.preconditions.PreconditionTypeMatch;
 import com.sap.dsc.aas.lib.aml.config.pojo.preconditions.PreconditionTypeRange;
 import com.sap.dsc.aas.lib.aml.exceptions.PreconditionValidationException;
+import com.sap.dsc.aas.lib.aml.exceptions.UnableToReadAmlException;
 
 public class PreconditionValidator extends AbstractValidator {
 
@@ -125,5 +127,10 @@ public class PreconditionValidator extends AbstractValidator {
             .filter(precondition -> configElementId.equals(precondition.getConfigElementId()))
             .collect(Collectors.toList());
     }
+
+	@Override
+	public void validate(Document document) throws UnableToReadAmlException {
+		throw new UnsupportedOperationException();
+	}
 
 }

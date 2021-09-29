@@ -5,17 +5,20 @@
  */
 package com.sap.dsc.aas.lib.aml.transform;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.dom4j.Node;
 
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigReference;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigSubmodel;
 import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.aml.transform.idgeneration.IdGenerator;
 import com.sap.dsc.aas.lib.aml.transform.validation.PreconditionValidator;
 
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import io.adminshell.aas.v3.model.Reference;
 import io.adminshell.aas.v3.model.Submodel;
 import io.adminshell.aas.v3.model.impl.DefaultSubmodel;
@@ -81,5 +84,11 @@ public class SubmodelTransformer extends AbstractTransformer {
             .semanticId(semanticIdReference)
             .build();
     }
+    
+	@Override
+	public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigAmlToAas mapping)
+			throws TransformationException {
+		throw new UnsupportedOperationException();
+	}
 
 }

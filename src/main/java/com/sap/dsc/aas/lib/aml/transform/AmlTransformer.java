@@ -51,11 +51,12 @@ public class AmlTransformer extends AbstractTransformer {
      * @return
      * @throws TransformationException
      */
-    public AssetAdministrationShellEnvironment transformAml(InputStream amlStream, ConfigAmlToAas mapping)
+	@Override
+    public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigAmlToAas mapping)
         throws TransformationException {
 
         Document document = getAmlDocument(amlStream);
-        this.amlValidator.validateAml(document);
+        this.amlValidator.validate(document);
 
         List<ConfigMapping> configMappings = mapping.getConfigMappings();
 
@@ -90,7 +91,7 @@ public class AmlTransformer extends AbstractTransformer {
      */
     public void validateAml(InputStream amlStream) throws TransformationException {
         Document document = getAmlDocument(amlStream);
-        this.amlValidator.validateAml(document);
+        this.amlValidator.validate(document);
     }
 
     /**

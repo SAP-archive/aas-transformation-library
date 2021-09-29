@@ -69,7 +69,7 @@ public class AINSubmodelTransformationTest {
         throws IOException, TransformationException, SerializationException, DeserializationException {
 
         ConfigAmlToAas config = configLoader.loadConfig(AIN_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
         // replace the placeholder assigning a sample value
         Map<String, String> placeholderValues = new HashMap<>();
         placeholderValues.put("manufacturerId", SAMPLE_MANUFACTURER_ID);
@@ -97,7 +97,7 @@ public class AINSubmodelTransformationTest {
     void missingManufacturerIdPlaceholder() throws IOException, TransformationException {
 
         ConfigAmlToAas config = configLoader.loadConfig(AIN_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
         // replace the placeholder assigning a sample value
         Map<String, String> placeholderValues = new HashMap<>();
         placeholderValues.put("nan", SAMPLE_MANUFACTURER_ID);

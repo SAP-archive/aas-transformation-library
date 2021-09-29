@@ -65,7 +65,7 @@ public class NameplateSubmodelTransformationTest {
     void validateTransformedNamePlateAgainstAASJSONSchema() throws IOException, TransformationException, SerializationException {
 
         ConfigAmlToAas config = configLoader.loadConfig(NAMEPLATE_CONFIG_JSON);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
 
         String serializedShellEnv = serializer.write(shellEnv);
 
@@ -80,7 +80,7 @@ public class NameplateSubmodelTransformationTest {
     void validateTransformedGenericAgainstAASJSONSchema() throws IOException, TransformationException, SerializationException {
 
         ConfigAmlToAas config = configLoader.loadConfig(SIMPLE_CONFIG_JSON);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
 
         Serializer serializer = new JsonSerializer();
         String serializedShellEnv = serializer.write(shellEnv);
@@ -96,7 +96,7 @@ public class NameplateSubmodelTransformationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         ConfigAmlToAas config = configLoader.loadConfig(NAMEPLATE_CONFIG_JSON);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
 
         SchemaValidatorsConfig schemaValidatorsConfigconfig = new SchemaValidatorsConfig();
         // When set to true, the validation process stops immediately when the first error occurs.
@@ -128,7 +128,7 @@ public class NameplateSubmodelTransformationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         ConfigAmlToAas config = configLoader.loadConfig(NAMEPLATE_CONFIG_MISSING_ADDRESS);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
 
         SchemaValidatorsConfig schemaValidatorsConfigconfig = new SchemaValidatorsConfig();
         // When set to true, the validation process stops immediately when the first error occurs.
@@ -155,7 +155,7 @@ public class NameplateSubmodelTransformationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         ConfigAmlToAas config = configLoader.loadConfig(NAMEPLATE_CONFIG_WRONG_ADDRESS_WRONG_SEMANTICID);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
 
         SchemaValidatorsConfig schemaValidatorsConfigconfig = new SchemaValidatorsConfig();
         // When set to true, the validation process stops immediately when the first error occurs.
@@ -185,7 +185,7 @@ public class NameplateSubmodelTransformationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         ConfigAmlToAas config = configLoader.loadConfig(NAMEPLATE_CONFIG_MISSING_MANUFACTURERPRODUCTDESIGNATION);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
 
         SchemaValidatorsConfig schemaValidatorsConfigconfig = new SchemaValidatorsConfig();
         // When set to true, the validation process stops immediately when the first error occurs.

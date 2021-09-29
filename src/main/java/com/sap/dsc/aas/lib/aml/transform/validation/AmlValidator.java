@@ -28,7 +28,8 @@ public class AmlValidator extends AbstractValidator {
         return Thread.currentThread().getContextClassLoader().getResource(PATH_CAEX_XSD);
     }
 
-    public void validateAml(Document document) throws UnableToReadAmlException {
+    @Override
+    public void validate(Document document) throws UnableToReadAmlException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Validating AML input...");
         }

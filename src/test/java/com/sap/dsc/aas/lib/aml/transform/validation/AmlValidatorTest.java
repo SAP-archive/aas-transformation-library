@@ -42,7 +42,7 @@ public class AmlValidatorTest extends AbstractTransformerTest {
     @Test
     @DisplayName("Load valid AML file")
     void loadValidAmlFile() {
-        assertDoesNotThrow(() -> classUnderTest.validateAml(getAmlDocument(Files.newInputStream(VALID_AML_FILE_PATH))));
+        assertDoesNotThrow(() -> classUnderTest.validate(getAmlDocument(Files.newInputStream(VALID_AML_FILE_PATH))));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class AmlValidatorTest extends AbstractTransformerTest {
     void loadInvalidAmlFile() {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><CustomXmlElement>Text</CustomXmlElement>";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
-        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.validateAml(getAmlDocument(inputStream)));
+        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.validate(getAmlDocument(inputStream)));
     }
 
     private Document getAmlDocument(InputStream amlStream) throws Exception {

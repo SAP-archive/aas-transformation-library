@@ -50,7 +50,7 @@ public class TransformationIntegrationTest {
 
         ConfigAmlToAas config = configLoader.loadConfig(AUTOMATION_COMPONENT_CONFIG_JSON);
 
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
 
         ObjectMapper mapper = new ObjectMapper();
         Serializer serializer = new JsonSerializer();

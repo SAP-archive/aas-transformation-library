@@ -31,6 +31,7 @@ import com.sap.dsc.aas.lib.aml.config.pojo.ConfigPlaceholder;
 import com.sap.dsc.aas.lib.aml.exceptions.InvalidConfigException;
 import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.aml.placeholder.PlaceholderHandling;
+import com.sap.dsc.aas.lib.aml.transform.AbstractTransformer;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
 
 import io.adminshell.aas.v3.dataformat.DeserializationException;
@@ -43,7 +44,7 @@ public class ConsoleApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final ConfigLoader configLoader;
-    private final AmlTransformer amlTransformer;
+    private final AbstractTransformer transformer;
     private final AmlxPackageReader amlxPackageReader;
 
     private static final String OPTION_NAME_CONFIG = "config";
@@ -54,7 +55,7 @@ public class ConsoleApplication {
 
     public ConsoleApplication() {
         this.configLoader = new ConfigLoader();
-        this.amlTransformer = new AmlTransformer();
+        this.transformer = new AmlTransformer();
         this.amlxPackageReader = new AmlxPackageReader();
     }
 
@@ -76,7 +77,7 @@ public class ConsoleApplication {
         ConfigAmlToAas config = this.loadConfig(configFilePath);
         LOGGER.info("Loaded config version {}, aas version {}", config.getVersion(), config.getAasVersion());
 
-        AssetAdministrationShellEnvironment aasEnv = amlTransformer.transformAml(amlStream, config);
+        AssetAdministrationShellEnvironment aasEnv = transformer.transform(amlStream, config);
 
         if (commandLine.hasOption(OPTION_NAME_PLACEHOLDER_VALUES)) {
             LOGGER.info("Replacing placeholders in AAS env");

@@ -5,13 +5,16 @@
  */
 package com.sap.dsc.aas.lib.aml.transform;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
 import org.dom4j.Node;
 
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAssetInformation;
 import com.sap.dsc.aas.lib.aml.exceptions.NoResultByXPathException;
+import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.aml.transform.idgeneration.IdGenerator;
 import com.sap.dsc.aas.lib.aml.transform.validation.PreconditionValidator;
 
@@ -39,5 +42,11 @@ public class AssetInformationTransformer extends AbstractTransformer {
 
         throw new NoResultByXPathException(xPath);
     }
+
+	@Override
+	public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigAmlToAas mapping)
+			throws TransformationException {
+		throw new UnsupportedOperationException();
+	}
 
 }

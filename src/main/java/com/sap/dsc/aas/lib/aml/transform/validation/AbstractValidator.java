@@ -5,6 +5,9 @@
  */
 package com.sap.dsc.aas.lib.aml.transform.validation;
 
+import org.dom4j.Document;
+
+import com.sap.dsc.aas.lib.aml.exceptions.UnableToReadAmlException;
 import com.sap.dsc.aas.lib.aml.transform.XPathHelper;
 
 public abstract class AbstractValidator {
@@ -14,5 +17,8 @@ public abstract class AbstractValidator {
     public AbstractValidator() {
         this.xPathHelper = new XPathHelper();
     }
+
+	abstract public void validate(Document document) throws UnableToReadAmlException;
+	
 
 }

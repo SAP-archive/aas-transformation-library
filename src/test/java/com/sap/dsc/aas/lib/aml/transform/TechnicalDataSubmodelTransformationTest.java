@@ -55,7 +55,7 @@ public class TechnicalDataSubmodelTransformationTest {
         ConfigLoader configLoader = new ConfigLoader();
 
         ConfigAmlToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_JSON);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
         validator = new JsonSchemaValidator();
         serializer = new JsonSerializer();
 
@@ -100,7 +100,7 @@ public class TechnicalDataSubmodelTransformationTest {
         ConfigLoader configLoader = new ConfigLoader();
 
         ConfigAmlToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_MISSING_MANUFACTURER_NAME);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -135,7 +135,7 @@ public class TechnicalDataSubmodelTransformationTest {
         ConfigLoader configLoader = new ConfigLoader();
 
         ConfigAmlToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_MISSING_IDENTIFICATION_DATA);
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
 
         ObjectMapper mapper = new ObjectMapper();
 
