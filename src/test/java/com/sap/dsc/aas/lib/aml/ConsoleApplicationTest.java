@@ -22,7 +22,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.helper.AmlxPackageCreator;
 
 import io.adminshell.aas.v3.dataformat.DeserializationException;
@@ -104,7 +104,7 @@ public class ConsoleApplicationTest {
 
     @Test
     void validConfig() throws IOException {
-        ConfigAmlToAas config = classUnderTest.loadConfig(CONFIG_FILE_PATH);
+        ConfigTransformToAas config = classUnderTest.loadConfig(CONFIG_FILE_PATH);
         assertThat(config).isNotNull();
     }
 

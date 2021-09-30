@@ -7,7 +7,7 @@ package com.sap.dsc.aas.lib.aml.config.pojo;
 
 import java.util.List;
 
-public class ConfigAmlToAas {
+public class ConfigTransformToAas {
 
     private String version;
     private String aasVersion;

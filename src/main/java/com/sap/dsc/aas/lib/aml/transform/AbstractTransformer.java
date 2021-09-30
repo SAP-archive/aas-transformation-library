@@ -13,7 +13,7 @@ import org.dom4j.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigIdGeneration;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigReference;
 import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
@@ -78,7 +78,7 @@ public abstract class AbstractTransformer {
 	 * @return
 	 * @throws TransformationException
 	 */
-	public abstract AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigAmlToAas mapping)
+	public abstract AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigTransformToAas mapping)
 			throws TransformationException;
 
 }

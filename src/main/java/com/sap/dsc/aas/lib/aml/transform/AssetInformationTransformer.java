@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.dom4j.Node;
 
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAssetInformation;
 import com.sap.dsc.aas.lib.aml.exceptions.NoResultByXPathException;
 import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
@@ -44,7 +44,7 @@ public class AssetInformationTransformer extends AbstractTransformer {
     }
 
 	@Override
-	public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigAmlToAas mapping)
+	public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigTransformToAas mapping)
 			throws TransformationException {
 		throw new UnsupportedOperationException();
 	}

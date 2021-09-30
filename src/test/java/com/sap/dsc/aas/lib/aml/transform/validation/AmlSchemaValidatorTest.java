@@ -22,21 +22,21 @@ import org.junit.jupiter.api.Test;
 import com.sap.dsc.aas.lib.aml.exceptions.UnableToReadAmlException;
 import com.sap.dsc.aas.lib.aml.transform.AbstractTransformerTest;
 
-public class AmlValidatorTest extends AbstractTransformerTest {
+public class AmlSchemaValidatorTest extends AbstractTransformerTest {
 
     public static final Path VALID_AML_FILE_PATH = Paths.get("src/test/resources/aml/minimal_IdentificationData.aml");
-    private AmlValidator classUnderTest;
+    private AmlSchemaValidator classUnderTest;
 
     @BeforeEach
     void setup() throws Exception {
         super.setUp();
-        this.classUnderTest = new AmlValidator();
+        this.classUnderTest = new AmlSchemaValidator();
     }
 
     @Test
     @DisplayName("CAEX schema exists")
     void loadCaexSchema() {
-        assertNotNull(this.classUnderTest.getCaexSchema());
+        assertNotNull(this.classUnderTest.getSchemaURL());
     }
 
     @Test

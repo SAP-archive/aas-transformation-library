@@ -27,7 +27,7 @@ import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersionDetector;
 import com.networknt.schema.ValidationMessage;
 import com.sap.dsc.aas.lib.aml.config.ConfigLoader;
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
 
 import io.adminshell.aas.v3.dataformat.DeserializationException;
@@ -56,7 +56,7 @@ public class TransformationIntegrationTest {
         AmlTransformer amlTransformer = new AmlTransformer();
         ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigAmlToAas config = configLoader.loadConfig(CONFIG_JSON);
+        ConfigTransformToAas config = configLoader.loadConfig(CONFIG_JSON);
 
         shellEnv = amlTransformer.transform(amlInputStream, config);
     }
@@ -68,7 +68,7 @@ public class TransformationIntegrationTest {
         AmlTransformer amlTransformer = new AmlTransformer();
         ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigAmlToAas config = configLoader.loadConfig(AUTOMATION_COMPONENT_CONFIG_JSON);
+        ConfigTransformToAas config = configLoader.loadConfig(AUTOMATION_COMPONENT_CONFIG_JSON);
 
         shellEnv = amlTransformer.transform(amlInputStream, config);
 

@@ -13,7 +13,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigMapping;
 
 public class ConfigLoaderTest {
@@ -28,7 +28,7 @@ public class ConfigLoaderTest {
 
     @Test
     void loadFromFile() throws IOException {
-        ConfigAmlToAas result = classUnderTest.loadConfig(PATH_SIMPLE_CONFIG);
+        ConfigTransformToAas result = classUnderTest.loadConfig(PATH_SIMPLE_CONFIG);
 
         assertThat(result).isNotNull();
         assertThat(result.getVersion()).isEqualTo("1.0.0");

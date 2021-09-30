@@ -14,14 +14,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ConfigAmlToAasTest {
+public class ConfigTransformToAasTest {
 
     @Test
     @DisplayName("Load config JSON from string")
     void loadFromString() throws JsonMappingException, JsonProcessingException {
         String json = "{ \"version\" : \"1.0.0\", \"aasVersion\" : \"3.0RC01\", \"configMappings\": [] }";
         ObjectMapper objectMapper = new ObjectMapper();
-        ConfigAmlToAas config = objectMapper.readValue(json, ConfigAmlToAas.class);
+        ConfigTransformToAas config = objectMapper.readValue(json, ConfigTransformToAas.class);
 
         assertEquals("1.0.0", config.getVersion());
         assertEquals("3.0RC01", config.getAasVersion());

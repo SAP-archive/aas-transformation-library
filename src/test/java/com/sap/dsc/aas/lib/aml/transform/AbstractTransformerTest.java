@@ -45,7 +45,7 @@ public abstract class AbstractTransformerTest {
     protected Element unitClass;
     protected Element attribute;
     protected Element subAttribute;
-    protected ConfigAmlToAas mapping;
+    protected ConfigTransformToAas mapping;
 
     protected IdGenerator mockIdGenerator;
     protected PreconditionValidator mockPreconditionValidator;
@@ -67,12 +67,12 @@ public abstract class AbstractTransformerTest {
         return idGeneration;
     }
 
-    protected ConfigAmlToAas createDefaultMappingConfig() {
+    protected ConfigTransformToAas createDefaultMappingConfig() {
         ConfigAssetShell configAssetShell = new ConfigAssetShell();
         configAssetShell.setIdGeneration(createSimpleIdGeneration("5678"));
         configAssetShell.setIdShortXPath("'ShellIdShort'");
 
-        ConfigAmlToAas configAmlToAas = new ConfigAmlToAas();
+        ConfigTransformToAas configAmlToAas = new ConfigTransformToAas();
 
         // higher level object
         configMapping = new ConfigMapping();

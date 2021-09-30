@@ -16,7 +16,7 @@ import org.dom4j.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAssetInformation;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAssetShell;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigMapping;
@@ -143,7 +143,7 @@ public class AssetAdministrationShellEnvTransformer extends AbstractTransformer 
     }
     
 	@Override
-	public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigAmlToAas mapping)
+	public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigTransformToAas mapping)
 			throws TransformationException {
 		throw new UnsupportedOperationException();
 	}

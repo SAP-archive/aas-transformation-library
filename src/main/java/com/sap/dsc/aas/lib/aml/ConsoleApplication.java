@@ -26,7 +26,7 @@ import com.sap.dsc.aas.lib.aml.amlx.AmlxPackage;
 import com.sap.dsc.aas.lib.aml.amlx.AmlxPackagePart;
 import com.sap.dsc.aas.lib.aml.amlx.AmlxPackageReader;
 import com.sap.dsc.aas.lib.aml.config.ConfigLoader;
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigPlaceholder;
 import com.sap.dsc.aas.lib.aml.exceptions.InvalidConfigException;
 import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
@@ -48,8 +48,11 @@ public class ConsoleApplication {
     private final AmlxPackageReader amlxPackageReader;
 
     private static final String OPTION_NAME_CONFIG = "config";
+    
     private static final String OPTION_NAME_AML_INPUT_FILE = "aml";
     private static final String OPTION_NAME_AMLX_INPUT_FILE = "amlx";
+    private static final String OPTION_NAME_NODESET_INPUT_FILE = "ua";
+    
     private static final String OPTION_NAME_PRINT_PLACEHOLDERS = "print-placeholders";
     private static final String OPTION_NAME_PLACEHOLDER_VALUES = "placeholder-values";
 
@@ -59,7 +62,7 @@ public class ConsoleApplication {
         this.amlxPackageReader = new AmlxPackageReader();
     }
 
-    protected ConfigAmlToAas loadConfig(String filePath) throws IOException {
+    protected ConfigTransformToAas loadConfig(String filePath) throws IOException {
         return this.configLoader.loadConfig(filePath);
     }
 
@@ -74,7 +77,7 @@ public class ConsoleApplication {
     protected void transformAml(CommandLine commandLine, String configFilePath, InputStream amlStream, String aasOutputFileName)
         throws IOException, TransformationException {
 
-        ConfigAmlToAas config = this.loadConfig(configFilePath);
+        ConfigTransformToAas config = this.loadConfig(configFilePath);
         LOGGER.info("Loaded config version {}, aas version {}", config.getVersion(), config.getAasVersion());
 
         AssetAdministrationShellEnvironment aasEnv = transformer.transform(amlStream, config);
@@ -115,6 +118,13 @@ public class ConsoleApplication {
             }
         }
     }
+    
+
+	private void transformNodeSet(CommandLine commandLine, String configFileName, String nodesetInputFileName,
+			String aasOutputFileName) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
 
     protected void writeAasToFile(String aasOutputFileName, AssetAdministrationShellEnvironment aasEnv)
         throws IOException, SerializationException {
@@ -131,7 +141,7 @@ public class ConsoleApplication {
     }
 
     protected void printPlaceholders(String configFileName) throws IOException {
-        ConfigAmlToAas config = this.loadConfig(configFileName);
+        ConfigTransformToAas config = this.loadConfig(configFileName);
         LOGGER.info("Loaded config version {}, aas version {}", config.getVersion(), config.getAasVersion());
         List<ConfigPlaceholder> placeholders = config.getPlaceholders();
 
@@ -175,6 +185,8 @@ public class ConsoleApplication {
             .argName("AML_INPUT_FILE").build());
         optionGroup.addOption(Option.builder("amlx").desc("AMLX input file").longOpt(OPTION_NAME_AMLX_INPUT_FILE).hasArg()
             .argName("AMLX_INPUT_FILE").build());
+        optionGroup.addOption(Option.builder("ua").desc("UA NodeSet input file").longOpt(OPTION_NAME_NODESET_INPUT_FILE).hasArg()
+                .argName("NODESET_INPUT_FILE").build());
         optionGroup.addOption(Option.builder("p").desc("Print placeholders with description").longOpt(OPTION_NAME_PRINT_PLACEHOLDERS)
             .build());
         options.addOptionGroup(optionGroup);
@@ -186,21 +198,26 @@ public class ConsoleApplication {
             final CommandLine commandLine = parser.parse(options, args);
             String configFileName = commandLine.getOptionValue(OPTION_NAME_CONFIG);
 
-            if (commandLine.hasOption(OPTION_NAME_PRINT_PLACEHOLDERS)) {
+            if (commandLine.hasOption(OPTION_NAME_PRINT_PLACEHOLDERS)) { //TODO AML specific Logic
                 application.printPlaceholders(configFileName);
             } else if (commandLine.hasOption(OPTION_NAME_AMLX_INPUT_FILE)) {
                 String amlxInputFileName = commandLine.getOptionValue(OPTION_NAME_AMLX_INPUT_FILE);
                 String aasOutputFileName = application.getAasOutputFileName(amlxInputFileName);
 
                 application.transformAmlx(commandLine, configFileName, amlxInputFileName, aasOutputFileName);
-            } else {
+            } else if (commandLine.hasOption(OPTION_NAME_AML_INPUT_FILE)) {
                 String amlInputFileName = commandLine.getOptionValue(OPTION_NAME_AML_INPUT_FILE);
                 String aasOutputFileName = application.getAasOutputFileName(amlInputFileName);
 
                 application.transformAml(commandLine, configFileName, amlInputFileName, aasOutputFileName);
+            } else if (commandLine.hasOption(OPTION_NAME_NODESET_INPUT_FILE)) {
+                String nodesetInputFileName = commandLine.getOptionValue(OPTION_NAME_NODESET_INPUT_FILE);
+                String aasOutputFileName = application.getAasOutputFileName(nodesetInputFileName);
+
+                application.transformNodeSet(commandLine, configFileName, nodesetInputFileName, aasOutputFileName);
             }
         } catch (final ParseException ex) {
-            final String header = "Transform AutomationML file into an AAS structured file\n\n";
+            final String header = "Transform XML file into an AAS structured file\n\n";
             final String footer = "\n" + ex.getMessage();
 
             final HelpFormatter formatter = new HelpFormatter();
@@ -209,5 +226,6 @@ public class ConsoleApplication {
             LOGGER.error(ex.getMessage(), ex);
         }
     }
+
 
 }

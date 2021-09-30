@@ -139,7 +139,7 @@ public class AmlxValidator {
     private List<String> getExternalReferences(String rootDocumentTarget, PackagePart rootDocumentPart)
         throws TransformationException, IOException {
         try (InputStream rootDocument = rootDocumentPart.getInputStream()) {
-            Document document = this.amlTransformer.getAmlDocument(rootDocument);
+            Document document = this.amlTransformer.getXmlDocument(rootDocument);
             Element root = document.getRootElement();
 
             List<String> externalReferences = new ArrayList<>();

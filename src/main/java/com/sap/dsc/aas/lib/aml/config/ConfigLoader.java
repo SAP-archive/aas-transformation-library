@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 
 public class ConfigLoader {
     private final ObjectMapper objectMapper;
@@ -18,8 +18,8 @@ public class ConfigLoader {
         this.objectMapper = new ObjectMapper();
     }
 
-    public ConfigAmlToAas loadConfig(String filePath) throws IOException {
-        return objectMapper.readValue(Paths.get(filePath).toFile(), ConfigAmlToAas.class);
+    public ConfigTransformToAas loadConfig(String filePath) throws IOException {
+        return objectMapper.readValue(Paths.get(filePath).toFile(), ConfigTransformToAas.class);
     }
 
 }

@@ -20,12 +20,14 @@ import org.slf4j.LoggerFactory;
 
 import com.sap.dsc.aas.lib.aml.exceptions.UnableToReadAmlException;
 
-public class AmlValidator extends AbstractValidator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+public class AmlSchemaValidator extends SchemaValidator {
+	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     public static final String PATH_CAEX_XSD = "aml/CAEX_ClassModel_V.3.0.xsd";
 
-    protected URL getCaexSchema() {
-        return Thread.currentThread().getContextClassLoader().getResource(PATH_CAEX_XSD);
+    public AmlSchemaValidator() {
+    	super(Thread.currentThread().getContextClassLoader().getResource(PATH_CAEX_XSD));
     }
 
     @Override
@@ -36,7 +38,7 @@ public class AmlValidator extends AbstractValidator {
 
         try {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(getCaexSchema());
+            Schema schema = factory.newSchema(getSchemaURL());
 
             Validator validator = schema.newValidator();
             // Prevent allowing external entities in untrusted documents to be processed

@@ -13,7 +13,7 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 
 import com.sap.dsc.aas.lib.aml.config.pojo.AbstractConfigSubmodelElement;
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigReference;
 import com.sap.dsc.aas.lib.aml.config.pojo.submodelelements.*;
 import com.sap.dsc.aas.lib.aml.exceptions.ModelTypeNotSupportedException;
@@ -462,7 +462,7 @@ public class SubmodelElementTransformer extends AbstractTransformer {
     }
     
 	@Override
-	public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigAmlToAas mapping)
+	public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigTransformToAas mapping)
 			throws TransformationException {
 		throw new UnsupportedOperationException();
 	}

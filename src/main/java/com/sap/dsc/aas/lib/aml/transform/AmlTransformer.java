@@ -18,12 +18,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigMapping;
 import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.aml.exceptions.UnableToReadAmlException;
 import com.sap.dsc.aas.lib.aml.transform.idgeneration.IdGenerator;
-import com.sap.dsc.aas.lib.aml.transform.validation.AmlValidator;
+import com.sap.dsc.aas.lib.aml.transform.validation.SchemaValidator;
+import com.sap.dsc.aas.lib.aml.transform.validation.AbstractValidator;
+import com.sap.dsc.aas.lib.aml.transform.validation.AmlSchemaValidator;
 import com.sap.dsc.aas.lib.aml.transform.validation.PreconditionValidator;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
@@ -31,7 +33,7 @@ public class AmlTransformer extends AbstractTransformer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private AssetAdministrationShellEnvTransformer assetAdministrationShellEnvTransformer;
-    private AmlValidator amlValidator;
+    private SchemaValidator amlValidator;
 
     public AmlTransformer() {
         this(new IdGenerator(), new PreconditionValidator());
@@ -40,7 +42,7 @@ public class AmlTransformer extends AbstractTransformer {
     public AmlTransformer(IdGenerator idGenerator, PreconditionValidator validator) {
         super(idGenerator, validator);
         this.assetAdministrationShellEnvTransformer = new AssetAdministrationShellEnvTransformer(idGenerator, preconditionValidator);
-        this.amlValidator = new AmlValidator();
+        this.amlValidator = new AmlSchemaValidator();
     }
 
     /**
@@ -52,10 +54,10 @@ public class AmlTransformer extends AbstractTransformer {
      * @throws TransformationException
      */
 	@Override
-    public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigAmlToAas mapping)
+    public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigTransformToAas mapping)
         throws TransformationException {
 
-        Document document = getAmlDocument(amlStream);
+        Document document = getXmlDocument(amlStream);
         this.amlValidator.validate(document);
 
         List<ConfigMapping> configMappings = mapping.getConfigMappings();
@@ -90,7 +92,7 @@ public class AmlTransformer extends AbstractTransformer {
      * @throws TransformationException If the input stream is not valid AML
      */
     public void validateAml(InputStream amlStream) throws TransformationException {
-        Document document = getAmlDocument(amlStream);
+        Document document = getXmlDocument(amlStream);
         this.amlValidator.validate(document);
     }
 
@@ -108,7 +110,7 @@ public class AmlTransformer extends AbstractTransformer {
      * @return
      * @throws TransformationException
      */
-    public Document getAmlDocument(InputStream amlStream) throws TransformationException {
+    public Document getXmlDocument(InputStream amlStream) throws TransformationException {
         try {
             SAXReader reader = new SAXReader();
             reader.setEncoding("UTF-8");

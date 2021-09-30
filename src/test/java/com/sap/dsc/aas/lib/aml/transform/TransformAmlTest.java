@@ -29,7 +29,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigIdGeneration;
 import com.sap.dsc.aas.lib.aml.config.pojo.Precondition;
 import com.sap.dsc.aas.lib.aml.config.pojo.preconditions.PreconditionTypeForAll;
@@ -88,7 +88,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     @Test
     @DisplayName("Test failure case, that the AML document can't read")
     void transformAmlWithEmptyAmlStream() {
-        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.transform(null, new ConfigAmlToAas()));
+        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.transform(null, new ConfigTransformToAas()));
     }
 
     @Test
@@ -96,7 +96,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     void readInvalidXml() {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><UnclosedOpenTag>Text";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
-        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.transform(inputStream, new ConfigAmlToAas()));
+        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.transform(inputStream, new ConfigTransformToAas()));
     }
 
     @Test
@@ -104,7 +104,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     void readInvalidAml() {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><CustomXmlElement>Text</CustomXmlElement>";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
-        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.transform(inputStream, new ConfigAmlToAas()));
+        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.transform(inputStream, new ConfigTransformToAas()));
     }
 
     @Test

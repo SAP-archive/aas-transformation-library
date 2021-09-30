@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.networknt.schema.*;
 import com.sap.dsc.aas.lib.aml.config.ConfigLoader;
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
+import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
 
 import io.adminshell.aas.v3.dataformat.SerializationException;
@@ -54,7 +54,7 @@ public class TechnicalDataSubmodelTransformationTest {
         AmlTransformer amlTransformer = new AmlTransformer();
         ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigAmlToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_JSON);
+        ConfigTransformToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_JSON);
         shellEnv = amlTransformer.transform(amlInputStream, config);
         validator = new JsonSchemaValidator();
         serializer = new JsonSerializer();
@@ -99,7 +99,7 @@ public class TechnicalDataSubmodelTransformationTest {
         AmlTransformer amlTransformer = new AmlTransformer();
         ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigAmlToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_MISSING_MANUFACTURER_NAME);
+        ConfigTransformToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_MISSING_MANUFACTURER_NAME);
         shellEnv = amlTransformer.transform(amlInputStream, config);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -134,7 +134,7 @@ public class TechnicalDataSubmodelTransformationTest {
         AmlTransformer amlTransformer = new AmlTransformer();
         ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigAmlToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_MISSING_IDENTIFICATION_DATA);
+        ConfigTransformToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_MISSING_IDENTIFICATION_DATA);
         shellEnv = amlTransformer.transform(amlInputStream, config);
 
         ObjectMapper mapper = new ObjectMapper();
