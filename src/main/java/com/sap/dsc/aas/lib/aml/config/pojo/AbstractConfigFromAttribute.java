@@ -33,7 +33,7 @@ public abstract class AbstractConfigFromAttribute extends AbstractConfig {
         if (this.xPath != null) {
             throw new AlreadyDefinedException("from_xpath", this.xPath);
         }
-        this.xPath = "caex:Attribute[@Name='" + attributeName + "']";
+        this.xPath = "caex:Attribute[@Name='" + attributeName + "']";//FIXME
     }
 
     public ConfigReference getSemanticIdReference() {

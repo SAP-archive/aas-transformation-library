@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public abstract class AbstractConfig {
 
-    private String idShortXPath = "@Name";
+    private String idShortXPath = "@Name";//FIXME
     private String configElementId;
 
     public String getIdShortXPath() {

@@ -18,9 +18,11 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.cli.CommandLine;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.helper.AmlxPackageCreator;
@@ -53,7 +55,7 @@ public class ConsoleApplicationTest {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
 
-        classUnderTest = new ConsoleApplication();
+        classUnderTest = new ConsoleApplication(Mockito.mock(CommandLine.class));
     }
 
     @AfterEach
@@ -104,8 +106,8 @@ public class ConsoleApplicationTest {
 
     @Test
     void validConfig() throws IOException {
-        ConfigTransformToAas config = classUnderTest.loadConfig(CONFIG_FILE_PATH);
-        assertThat(config).isNotNull();
+        classUnderTest.loadConfig(CONFIG_FILE_PATH);
+        assertThat(classUnderTest.config).isNotNull();
     }
 
     @Test
@@ -115,7 +117,7 @@ public class ConsoleApplicationTest {
         assertThat(getPrinted()).contains("Loaded config version");
         assertThat(getPrinted()).contains("Wrote AAS file");
 
-        String outputFileName = classUnderTest.getAasOutputFileName(AML_FILE_PATH);
+        String outputFileName = classUnderTest.deriveOutputFileName(AML_FILE_PATH);
         File outputFile = Paths.get(outputFileName).toFile();
 
         assertThat(outputFile.exists()).isTrue();
@@ -129,7 +131,7 @@ public class ConsoleApplicationTest {
         assertThat(getPrinted()).contains("Loaded config version null");
         assertThat(getPrinted()).contains("Wrote AAS file");
 
-        String outputFileName = classUnderTest.getAasOutputFileName(AML_FILE_PATH);
+        String outputFileName = classUnderTest.deriveOutputFileName(AML_FILE_PATH);
         File outputFile = Paths.get(outputFileName).toFile();
 
         assertTrue(outputFile.exists());
@@ -148,7 +150,7 @@ public class ConsoleApplicationTest {
         ConsoleApplication.main(new String[] {"-a", AML_FILE_PATH, "-c", "src/test/resources/config/minimal_placeholder.json", "-P",
             "{\"assetName\":\"myAssetId\",\"submodelName\":\"mySubmodelId\"}"});
 
-        String outputFileName = classUnderTest.getAasOutputFileName(AML_FILE_PATH);
+        String outputFileName = classUnderTest.deriveOutputFileName(AML_FILE_PATH);
         Path path = Paths.get(outputFileName);
         File outputFile = path.toFile();
         assertThat(outputFile.exists()).isTrue();
@@ -173,7 +175,7 @@ public class ConsoleApplicationTest {
         assertThat(getPrinted()).contains("Loaded config version");
         assertThat(getPrinted()).contains("Wrote AAS file");
 
-        String outputFileName = classUnderTest.getAasOutputFileName(amlxDir);
+        String outputFileName = classUnderTest.deriveOutputFileName(amlxDir);
 
         List<File> outputFiles = Arrays.asList(amlxFile,
             Paths.get(outputFileName).toFile(),
