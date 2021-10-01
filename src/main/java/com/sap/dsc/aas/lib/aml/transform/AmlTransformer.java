@@ -39,7 +39,7 @@ public class AmlTransformer extends AbstractTransformer {
         this(new IdGenerator(), new PreconditionValidator());
     }
 
-    public AmlTransformer(IdGenerator idGenerator, PreconditionValidator validator) {
+    protected AmlTransformer(IdGenerator idGenerator, PreconditionValidator validator) {//FIXME only used by tests
         super(idGenerator, validator);
         this.assetAdministrationShellEnvTransformer = new AssetAdministrationShellEnvTransformer(idGenerator, preconditionValidator);
         this.amlValidator = new AmlSchemaValidator();
@@ -66,8 +66,9 @@ public class AmlTransformer extends AbstractTransformer {
             getValidatedVersionString(mapping.getVersion()),
             getValidatedVersionString(mapping.getAasVersion()));
 
-        this.preconditionValidator.setPreconditions(mapping.getPreconditions());
-        this.idGenerator.prepareGraph(document, configMappings);
+        this.preconditionValidator.setPreconditions(mapping.getPreconditions()); //TODO understand and refactor
+        this.idGenerator.prepareGraph(document, configMappings); //TODO understand and refactor
+        
         return assetAdministrationShellEnvTransformer.createShellEnv(document, configMappings);
     }
 
