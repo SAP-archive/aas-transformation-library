@@ -35,7 +35,7 @@ public class IdGeneratorGraph {
         this.nodesByName = new HashMap<>();
         this.nodesWithoutName = new ArrayList<>();
         this.idCache = new HashMap<>();
-        this.xPathHelper = new XPathHelper();
+        this.xPathHelper = XPathHelper.getInstance();
     }
 
     public void addGraphNode(Node xmlNode, ConfigIdGeneration idGeneration)

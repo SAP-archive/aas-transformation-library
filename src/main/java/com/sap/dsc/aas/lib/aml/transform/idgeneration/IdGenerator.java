@@ -22,7 +22,7 @@ public class IdGenerator {
     private XPathHelper xPathHelper;
 
     public IdGenerator() {
-        this.xPathHelper = new XPathHelper();
+        this.xPathHelper = XPathHelper.getInstance();
     }
 
     public IdGeneratorGraph getGraph() {

@@ -15,7 +15,7 @@ public abstract class AbstractValidator {
     protected XPathHelper xPathHelper;
 
     public AbstractValidator() {
-        this.xPathHelper = new XPathHelper();
+        this.xPathHelper = XPathHelper.getInstance();
     }
 
 	abstract public void validate(Document document) throws UnableToReadAmlException;

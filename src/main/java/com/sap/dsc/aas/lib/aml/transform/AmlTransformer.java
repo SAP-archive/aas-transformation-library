@@ -36,7 +36,8 @@ public class AmlTransformer extends AbstractTransformer {
     private SchemaValidator amlValidator;
 
     public AmlTransformer() {
-        this(new IdGenerator(), new PreconditionValidator());
+    	this(new IdGenerator(), new PreconditionValidator());
+    	XPathHelper.getInstance().setNamespaceBinding("caex", "http://www.dke.de/CAEX");
     }
 
     protected AmlTransformer(IdGenerator idGenerator, PreconditionValidator validator) {//FIXME only used by tests

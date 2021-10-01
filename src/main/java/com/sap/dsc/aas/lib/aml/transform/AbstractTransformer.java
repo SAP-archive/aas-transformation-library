@@ -35,7 +35,7 @@ public abstract class AbstractTransformer {
     public AbstractTransformer(IdGenerator idGenerator, PreconditionValidator preconditionValidator) {
         this.idGenerator = idGenerator;
         this.preconditionValidator = preconditionValidator;
-        this.xPathHelper = new XPathHelper();
+        this.xPathHelper = XPathHelper.getInstance();
     }
 
     protected Reference createReferenceFromConfig(Node node, ConfigReference configReference) {

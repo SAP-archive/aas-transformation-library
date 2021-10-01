@@ -10,10 +10,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +32,11 @@ import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
 public class XPathHelperTest extends AbstractTransformerTest {
 
     private XPathHelper classUnderTest;
+    
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+    private final PrintStream originalErr = System.err;
 
     private static Stream<Arguments> stringValues() {
         return Stream.of(
@@ -43,8 +53,17 @@ public class XPathHelperTest extends AbstractTransformerTest {
     @Override
     @BeforeEach
     protected void setUp() throws Exception {
-        this.classUnderTest = new XPathHelper();
+        this.classUnderTest = XPathHelper.getInstance();
+        classUnderTest.setNamespaceBinding("caex", "http://www.dke.de/CAEX");
+        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(errContent));
         super.setUp();
+    }
+
+    @After
+    public void restoreStreams() {
+        System.setOut(originalOut);
+        System.setErr(originalErr);
     }
 
     @Test
@@ -60,6 +79,27 @@ public class XPathHelperTest extends AbstractTransformerTest {
     @DisplayName("Get multiple string values based on a given XPath")
     void getStringValues(String xPath, List<String> expectedValues) {
         assertThat(classUnderTest.getStringValues(unitClass, xPath)).containsExactlyElementsIn(expectedValues);
+    }
+    
+    @Test
+    void doubleNamespaceBinding(){
+        classUnderTest.setNamespaceBinding("caex", "http://www.dke.de/CAEX");
+        assertThat(outContent.toString().contains("already set"));
+        assertThat(!outContent.toString().contains("will be overriden"));
+    }
+    
+    @Test
+    void overrideNamespaceBinding(){
+        classUnderTest.setNamespaceBinding("caex", "http://overrideURI");
+        assertThat(outContent.toString().contains("already set"));
+        assertThat(outContent.toString().contains("will be overriden"));
+    }
+    
+    @Test
+    void illegalNamespaceBinding(){
+    	Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("", "http://www.dke.de/CAEX"));
+    	Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("myprefix", null));
+    	Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("myprefix", null));
     }
 
 }
