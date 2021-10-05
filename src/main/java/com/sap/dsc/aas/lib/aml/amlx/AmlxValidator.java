@@ -130,7 +130,8 @@ public class AmlxValidator {
 
     private void validateRootAmlFile(String rootDocumentTarget, PackagePart rootDocumentPart) throws TransformationException, IOException {
         try (InputStream rootDocument = rootDocumentPart.getInputStream()) {
-            amlTransformer.validateAml(rootDocument);
+            Document readXmlDocument = amlTransformer.readXmlDocument(rootDocument);
+        	amlTransformer.validateDocument(readXmlDocument);
         } catch (TransformationException exception) {
             throw new AmlxInvalidRootAmlDocumentException(rootDocumentTarget, exception);
         }
@@ -139,7 +140,7 @@ public class AmlxValidator {
     private List<String> getExternalReferences(String rootDocumentTarget, PackagePart rootDocumentPart)
         throws TransformationException, IOException {
         try (InputStream rootDocument = rootDocumentPart.getInputStream()) {
-            Document document = this.amlTransformer.getXmlDocument(rootDocument);
+            Document document = this.amlTransformer.readXmlDocument(rootDocument);
             Element root = document.getRootElement();
 
             List<String> externalReferences = new ArrayList<>();

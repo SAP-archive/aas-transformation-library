@@ -29,11 +29,14 @@ import com.sap.dsc.aas.lib.aml.transform.validation.AmlSchemaValidator;
 import com.sap.dsc.aas.lib.aml.transform.validation.PreconditionValidator;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
-public class AmlTransformer extends AbstractTransformer {
+public class AmlTransformer extends DocumentTransformer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private AssetAdministrationShellEnvTransformer assetAdministrationShellEnvTransformer;
+    
     private SchemaValidator amlValidator;
+    
+	private PreconditionValidator preconditionValidator;
+	private IdGenerator idGenerator;
 
     public AmlTransformer() {
     	this(new IdGenerator(), new PreconditionValidator());
@@ -41,48 +44,9 @@ public class AmlTransformer extends AbstractTransformer {
     }
 
     protected AmlTransformer(IdGenerator idGenerator, PreconditionValidator validator) {//FIXME only used by tests
-        super(idGenerator, validator);
-        this.assetAdministrationShellEnvTransformer = new AssetAdministrationShellEnvTransformer(idGenerator, preconditionValidator);
+    	this.preconditionValidator = validator;
+    	this.idGenerator = idGenerator;
         this.amlValidator = new AmlSchemaValidator();
-    }
-
-    /**
-     * Transforms an AML file to AAS. We expect the AML file to be UTF-8 encoded.
-     *
-     * @param amlStream
-     * @param mapping
-     * @return
-     * @throws TransformationException
-     */
-	@Override
-    public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigTransformToAas mapping)
-        throws TransformationException {
-
-        Document document = getXmlDocument(amlStream);
-        this.amlValidator.validate(document);
-
-        List<ConfigMapping> configMappings = mapping.getConfigMappings();
-
-        LOGGER.info("Loaded config version {}, AAS version {}",
-            getValidatedVersionString(mapping.getVersion()),
-            getValidatedVersionString(mapping.getAasVersion()));
-
-        this.preconditionValidator.setPreconditions(mapping.getPreconditions()); //TODO understand and refactor
-        this.idGenerator.prepareGraph(document, configMappings); //TODO understand and refactor
-        
-        return assetAdministrationShellEnvTransformer.createShellEnv(document, configMappings);
-    }
-
-    protected String getValidatedVersionString(String version) {
-        if (version == null) {
-            return "[No version provided]";
-        }
-
-        if (version.matches("[0-9]+(\\.[0-9]+){1,2}")) {
-            return version;
-        }
-
-        return "[Invalid version string provided]";
     }
 
     /**
@@ -93,8 +57,8 @@ public class AmlTransformer extends AbstractTransformer {
      * @param amlStream File input stream
      * @throws TransformationException If the input stream is not valid AML
      */
-    public void validateAml(InputStream amlStream) throws TransformationException {
-        Document document = getXmlDocument(amlStream);
+	@Override
+    public void validateDocument(Document document) throws TransformationException {
         this.amlValidator.validate(document);
     }
 
@@ -112,7 +76,8 @@ public class AmlTransformer extends AbstractTransformer {
      * @return
      * @throws TransformationException
      */
-    public Document getXmlDocument(InputStream amlStream) throws TransformationException {
+	@Override
+    public Document readXmlDocument(InputStream amlStream) throws TransformationException {
         try {
             SAXReader reader = new SAXReader();
             reader.setEncoding("UTF-8");
@@ -123,4 +88,35 @@ public class AmlTransformer extends AbstractTransformer {
             throw new UnableToReadAmlException("Unable to load AML structure", e);
         }
     }
+
+	@Override
+	public SchemaValidator getSchemaValidator() {
+		return this.amlValidator;
+	}
+
+	@Override
+	protected void afterValidation(Document readXmlDocument, ConfigTransformToAas mapping) {
+        LOGGER.info("Loaded config version {}, AAS version {}",
+                getValidatedVersionString(mapping.getVersion()),
+                getValidatedVersionString(mapping.getAasVersion()));		
+	}
+	
+
+    protected String getValidatedVersionString(String version) {
+        if (version == null) {
+            return "[No version provided]";
+        }
+        if (version.matches("[0-9]+(\\.[0-9]+){1,2}")) {
+            return version;
+        }
+        return "[Invalid version string provided]";
+    }
+
+	@Override
+	protected AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
+			ConfigTransformToAas mapping) throws TransformationException {
+        preconditionValidator.setPreconditions(mapping.getPreconditions());
+        idGenerator.prepareGraph(validXmlDocument, mapping.getConfigMappings());
+		return new AssetAdministrationShellEnvTransformer(idGenerator, preconditionValidator).createShellEnv(validXmlDocument, mapping.getConfigMappings());
+	}
 }

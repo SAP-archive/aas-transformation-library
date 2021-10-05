@@ -43,10 +43,4 @@ public class AssetInformationTransformer extends AbstractTransformer {
         throw new NoResultByXPathException(xPath);
     }
 
-	@Override
-	public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigTransformToAas mapping)
-			throws TransformationException {
-		throw new UnsupportedOperationException();
-	}
-
 }

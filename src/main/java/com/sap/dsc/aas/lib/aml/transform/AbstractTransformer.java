@@ -5,7 +5,6 @@
  */
 package com.sap.dsc.aas.lib.aml.transform;
 
-import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 
@@ -13,10 +12,8 @@ import org.dom4j.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigIdGeneration;
 import com.sap.dsc.aas.lib.aml.config.pojo.ConfigReference;
-import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.aml.transform.idgeneration.IdGenerator;
 import com.sap.dsc.aas.lib.aml.transform.validation.PreconditionValidator;
 
@@ -69,16 +66,5 @@ public abstract class AbstractTransformer {
             .identifier(this.idGenerator.generateId(node, idGeneration))
             .build();
     }
-
-	/**
-	 * Transforms an AML file to AAS. We expect the AML file to be UTF-8 encoded.
-	 *
-	 * @param amlStream
-	 * @param mapping
-	 * @return
-	 * @throws TransformationException
-	 */
-	public abstract AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigTransformToAas mapping)
-			throws TransformationException;
-
+    
 }

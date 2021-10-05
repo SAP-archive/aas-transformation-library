@@ -85,10 +85,4 @@ public class SubmodelTransformer extends AbstractTransformer {
             .build();
     }
     
-	@Override
-	public AssetAdministrationShellEnvironment transform(InputStream amlStream, ConfigTransformToAas mapping)
-			throws TransformationException {
-		throw new UnsupportedOperationException();
-	}
-
 }

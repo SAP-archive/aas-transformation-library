@@ -15,7 +15,7 @@ import com.sap.dsc.aas.lib.aml.config.pojo.submodelelements.ConfigSubmodelElemen
 import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.aml.transform.XPathHelper;
 
-public class IdGenerator {
+public class IdGenerator {//FIXME for which Ids? IdShort? Identifier?
 
     private IdGeneratorGraph graph;
 
@@ -63,7 +63,7 @@ public class IdGenerator {
         for (ConfigMapping configMapping : configMappings) {
             List<Node> rootMappingNodes = xPathHelper.getNodes(xmlRootNode, configMapping.getXPath());
             for (Node rootMappingNode : rootMappingNodes) {
-                this.graph.addGraphNode(rootMappingNode, configMapping.getIdGeneration());
+                this.graph.addGraphNode(rootMappingNode, configMapping.getIdGeneration());//XMLElement to IDGen-Mapping? But why adding it multiple times?
                 this.graph.addGraphNode(rootMappingNode, configMapping.getConfigAssetShell().getIdGeneration());
                 this.graph.addGraphNode(rootMappingNode, configMapping.getConfigAssetInformation().getIdGeneration());
                 this.graph.addGraphNode(rootMappingNode,
@@ -112,7 +112,7 @@ public class IdGenerator {
         }
     }
 
-    private void addSubmodelElementReferencesToGraph(ConfigReferenceContainer configReferenceContainer, Node rootSubmodelElementNode)
+    private void addSubmodelElementReferencesToGraph(ConfigReferenceContainer configReferenceContainer, Node rootSubmodelElementNode)//FIXME SME implies IdShort?
         throws TransformationException {
         if (configReferenceContainer.getReferences() != null) {
             for (ConfigReference reference : configReferenceContainer.getReferences()) {
