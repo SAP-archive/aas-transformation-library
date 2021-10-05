@@ -20,7 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sap.dsc.aas.lib.config.ConfigLoader;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
@@ -46,7 +45,6 @@ public class AINSubmodelTransformationTest {
     private static Serializer serializer;
     private AmlTransformer amlTransformer;
     private ConfigLoader configLoader;
-    private ObjectMapper mapper;
     private InputStream amlInputStream;
     private PlaceholderHandling placeholderHandling;
     private String SAMPLE_MANUFACTURER_ID = "sampleReplacedManufacturerId";
@@ -54,7 +52,6 @@ public class AINSubmodelTransformationTest {
     @BeforeEach
     protected void setUp() throws Exception {
         amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
-        mapper = new ObjectMapper();
 
         amlTransformer = new AmlTransformer();
         configLoader = new ConfigLoader();

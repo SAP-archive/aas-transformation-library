@@ -36,10 +36,19 @@ public abstract class DocumentTransformer {
 	 */
 	protected abstract void afterValidation(Document readXmlDocument, ConfigTransformToAas mapping);
 
+	/**actual transformation done after a successful XML read and validation action
+	 * 
+	 * @param readXmlDocument
+	 * @param mapping
+	 * @return
+	 * @throws TransformationException
+	 */
 	protected abstract AssetAdministrationShellEnvironment createShellEnv(Document readXmlDocument, ConfigTransformToAas mapping) throws TransformationException;
 
 	/**
-	 * Parses and validates XML Document from InputStream.
+	 * Parses and XML Document from InputStream.
+	 *
+	 * Note that the input stream will be read and closed by this method.
 	 *
 	 * The SAXReader is unable to parse the XML file if it uses the wrong encoding to read an input
 	 * stream. We expect files in UTF-8 format only. Otherwise SAXReader relies on the System Charset,
@@ -55,9 +64,8 @@ public abstract class DocumentTransformer {
 	public abstract Document readXmlDocument(InputStream inStream) throws TransformationException;
 
 	/**
-	 * Validates a given AML file. We expect the AML file to be UTF-8 encoded.
+	 * Validates a given XML file. We expect the XML file to be UTF-8 encoded.
 	 *
-	 * Note that the input stream will be read and closed by this method.
 	 *
 	 * @param document read org.dom4j.Document
 	 * @throws TransformationException If the input stream is not valid

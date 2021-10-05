@@ -5,13 +5,9 @@
  */
 package com.sap.dsc.aas.lib.transform;
 
-import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 
 import org.dom4j.Node;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.dsc.aas.lib.config.pojo.ConfigIdGeneration;
 import com.sap.dsc.aas.lib.config.pojo.ConfigReference;
 import com.sap.dsc.aas.lib.transform.idgeneration.IdGenerator;
@@ -23,7 +19,6 @@ import io.adminshell.aas.v3.model.impl.DefaultKey;
 import io.adminshell.aas.v3.model.impl.DefaultReference;
 
 public abstract class AbstractTransformer {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     protected IdGenerator idGenerator;
     protected PreconditionValidator preconditionValidator;

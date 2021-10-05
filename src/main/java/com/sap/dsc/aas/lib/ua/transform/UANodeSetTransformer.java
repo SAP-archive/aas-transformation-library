@@ -3,7 +3,7 @@
 
   SPDX-License-Identifier: Apache-2.0 
  */
-package com.sap.dsc.aas.lib.aml.transform;
+package com.sap.dsc.aas.lib.ua.transform;
 
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
@@ -18,40 +18,41 @@ import org.xml.sax.SAXException;
 
 import com.sap.dsc.aas.lib.transform.AssetAdministrationShellEnvTransformer;
 import com.sap.dsc.aas.lib.transform.DocumentTransformer;
-import com.sap.dsc.aas.lib.transform.XPathHelper;
 import com.sap.dsc.aas.lib.transform.idgeneration.IdGenerator;
-import com.sap.dsc.aas.lib.aml.transform.validation.AmlSchemaValidator;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
+import com.sap.dsc.aas.lib.ua.transform.validation.UANodeSetSchemaValidator;
 
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
-public class AmlTransformer extends DocumentTransformer {
+//TODO write tests
+public class UANodeSetTransformer extends DocumentTransformer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     
-    private SchemaValidator amlValidator;
+    private SchemaValidator nodesetValidator;
     
 	private PreconditionValidator preconditionValidator;
 	private IdGenerator idGenerator;
 
-    public AmlTransformer() {
+    public UANodeSetTransformer() {
     	this(new IdGenerator(), new PreconditionValidator());
-    	XPathHelper.getInstance().setNamespaceBinding("caex", "http://www.dke.de/CAEX");
+    	//FIXME check for needed namespace bindings
+    	//XPathHelper.getInstance().setNamespaceBinding(null, null);
     }
 
-    public AmlTransformer(IdGenerator idGenerator, PreconditionValidator validator) {//FIXME only used by tests
+    public UANodeSetTransformer(IdGenerator idGenerator, PreconditionValidator validator) {//FIXME only used by tests
     	this.preconditionValidator = validator;
     	this.idGenerator = idGenerator;
-        this.amlValidator = new AmlSchemaValidator();
+        this.nodesetValidator = new UANodeSetSchemaValidator();
     }
 
 	@Override
     public void validateDocument(Document document) throws TransformationException {
-        this.amlValidator.validate(document);
+        this.nodesetValidator.validate(document);
     }
 
 	@Override
@@ -63,32 +64,19 @@ public class AmlTransformer extends DocumentTransformer {
             reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             return reader.read(amlStream);
         } catch (DocumentException | SAXException e) {
-            throw new UnableToReadXmlException("Unable to load AML structure", e);
+            throw new UnableToReadXmlException("Unable to load UA NodeSet structure", e);
         }
     }
 
 	@Override
 	public SchemaValidator getSchemaValidator() {
-		return this.amlValidator;
+		return this.nodesetValidator;
 	}
 
 	@Override
 	protected void afterValidation(Document readXmlDocument, ConfigTransformToAas mapping) {
-        LOGGER.info("Loaded config version {}, AAS version {}",
-                getValidatedVersionString(mapping.getVersion()),
-                getValidatedVersionString(mapping.getAasVersion()));		
+        LOGGER.info("NodeSet validated.");
 	}
-	
-
-    protected String getValidatedVersionString(String version) {
-        if (version == null) {
-            return "[No version provided]";
-        }
-        if (version.matches("[0-9]+(\\.[0-9]+){1,2}")) {
-            return version;
-        }
-        return "[Invalid version string provided]";
-    }
 
 	@Override
 	protected AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,

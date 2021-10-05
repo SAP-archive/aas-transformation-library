@@ -43,9 +43,7 @@ public class TechnicalDataSubmodelTransformationTest {
     private static AssetAdministrationShellEnvironment shellEnv;
     private static Serializer serializer;
     private static JsonSchemaValidator validator;
-    private ConfigLoader configLoader;
-    private AmlTransformer amlTransformer;
-    private InputStream amlInputStream;
+
 
     @BeforeEach
     protected void setUp() throws Exception {
