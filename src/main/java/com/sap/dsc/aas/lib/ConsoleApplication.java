@@ -32,6 +32,7 @@ import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.InvalidConfigException;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.placeholder.PlaceholderHandling;
+import com.sap.dsc.aas.lib.ua.transform.UANodeSetTransformer;
 
 import io.adminshell.aas.v3.dataformat.DeserializationException;
 import io.adminshell.aas.v3.dataformat.SerializationException;
@@ -91,9 +92,11 @@ public class ConsoleApplication {
 		}
 	}
 
-	private AssetAdministrationShellEnvironment transformNodeSet(String nodesetInputFileName) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+	private AssetAdministrationShellEnvironment transformNodeSet(String nodesetInputFileName) throws IOException, TransformationException {
+		try (InputStream nodesetStream = Files.newInputStream(Paths.get(nodesetInputFileName))) {
+			LOGGER.info("Loaded config version {}, aas version {}", config.getVersion(), config.getAasVersion());
+			return new UANodeSetTransformer().transform(nodesetStream, config);
+		}
 	}
 
 	private void writeAasToFile(String aasOutputFileName, AssetAdministrationShellEnvironment aasEnv) {
