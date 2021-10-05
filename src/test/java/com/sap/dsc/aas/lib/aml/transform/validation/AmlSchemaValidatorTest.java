@@ -19,8 +19,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.sap.dsc.aas.lib.aml.exceptions.UnableToReadAmlException;
-import com.sap.dsc.aas.lib.aml.transform.AbstractTransformerTest;
+import com.sap.dsc.aas.lib.transform.AbstractTransformerTest;
+import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 
 public class AmlSchemaValidatorTest extends AbstractTransformerTest {
 
@@ -50,7 +50,7 @@ public class AmlSchemaValidatorTest extends AbstractTransformerTest {
     void loadInvalidAmlFile() {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><CustomXmlElement>Text</CustomXmlElement>";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
-        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.validate(getAmlDocument(inputStream)));
+        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.validate(getAmlDocument(inputStream)));
     }
 
     private Document getAmlDocument(InputStream amlStream) throws Exception {

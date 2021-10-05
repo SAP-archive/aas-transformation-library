@@ -29,23 +29,23 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigIdGeneration;
-import com.sap.dsc.aas.lib.aml.config.pojo.Precondition;
-import com.sap.dsc.aas.lib.aml.config.pojo.preconditions.PreconditionTypeForAll;
-import com.sap.dsc.aas.lib.aml.config.pojo.preconditions.PreconditionTypeRange;
-import com.sap.dsc.aas.lib.aml.exceptions.PreconditionValidationException;
-import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
-import com.sap.dsc.aas.lib.aml.exceptions.UnableToReadAmlException;
-import com.sap.dsc.aas.lib.aml.transform.validation.PreconditionValidator;
+import com.sap.dsc.aas.lib.config.pojo.ConfigIdGeneration;
+import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
+import com.sap.dsc.aas.lib.config.pojo.Precondition;
+import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeForAll;
+import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeRange;
+import com.sap.dsc.aas.lib.exceptions.PreconditionValidationException;
+import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
+import com.sap.dsc.aas.lib.transform.AbstractTransformerTest;
+import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 
 import io.adminshell.aas.v3.model.AssetAdministrationShell;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
-import io.adminshell.aas.v3.model.Identifier;
 
 class TransformAmlTest extends AbstractTransformerTest {
 
-    private DocumentTransformer classUnderTest;
+    private AmlTransformer classUnderTest;
     private InputStream amlInputStream;
 
     static Stream<Arguments> getValidatedVersionString() {
@@ -88,7 +88,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     @Test
     @DisplayName("Test failure case, that the AML document can't read")
     void transformAmlWithEmptyAmlStream() {
-        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.transform(null, new ConfigTransformToAas()));
+        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.transform(null, new ConfigTransformToAas()));
     }
 
     @Test
@@ -96,7 +96,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     void readInvalidXml() {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><UnclosedOpenTag>Text";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
-        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.transform(inputStream, new ConfigTransformToAas()));
+        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.transform(inputStream, new ConfigTransformToAas()));
     }
 
     @Test
@@ -104,7 +104,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     void readInvalidAml() {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><CustomXmlElement>Text</CustomXmlElement>";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
-        assertThrows(UnableToReadAmlException.class, () -> classUnderTest.transform(inputStream, new ConfigTransformToAas()));
+        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.transform(inputStream, new ConfigTransformToAas()));
     }
 
 //    @Test
@@ -180,7 +180,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     @MethodSource
     @DisplayName("Test if the given version String is really a version number")
     void getValidatedVersionString(String version, String expectedVersion) {
-        assertThat(((AmlTransformer)classUnderTest).getValidatedVersionString(version)).isEqualTo(expectedVersion);
+        assertThat(classUnderTest.getValidatedVersionString(version)).isEqualTo(expectedVersion);
     }
 
 }

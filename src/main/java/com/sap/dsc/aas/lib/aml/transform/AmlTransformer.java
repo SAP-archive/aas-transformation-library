@@ -7,8 +7,6 @@ package com.sap.dsc.aas.lib.aml.transform;
 
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
-import java.util.List;
-
 import javax.xml.XMLConstants;
 
 import org.dom4j.Document;
@@ -18,15 +16,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigTransformToAas;
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigMapping;
-import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
-import com.sap.dsc.aas.lib.aml.exceptions.UnableToReadAmlException;
-import com.sap.dsc.aas.lib.aml.transform.idgeneration.IdGenerator;
-import com.sap.dsc.aas.lib.aml.transform.validation.SchemaValidator;
-import com.sap.dsc.aas.lib.aml.transform.validation.AbstractValidator;
+import com.sap.dsc.aas.lib.transform.AssetAdministrationShellEnvTransformer;
+import com.sap.dsc.aas.lib.transform.DocumentTransformer;
+import com.sap.dsc.aas.lib.transform.XPathHelper;
+import com.sap.dsc.aas.lib.transform.idgeneration.IdGenerator;
 import com.sap.dsc.aas.lib.aml.transform.validation.AmlSchemaValidator;
-import com.sap.dsc.aas.lib.aml.transform.validation.PreconditionValidator;
+import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
+import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
+import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
+import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
+
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public class AmlTransformer extends DocumentTransformer {
@@ -43,7 +43,7 @@ public class AmlTransformer extends DocumentTransformer {
     	XPathHelper.getInstance().setNamespaceBinding("caex", "http://www.dke.de/CAEX");
     }
 
-    protected AmlTransformer(IdGenerator idGenerator, PreconditionValidator validator) {//FIXME only used by tests
+    public AmlTransformer(IdGenerator idGenerator, PreconditionValidator validator) {//FIXME only used by tests
     	this.preconditionValidator = validator;
     	this.idGenerator = idGenerator;
         this.amlValidator = new AmlSchemaValidator();
@@ -85,7 +85,7 @@ public class AmlTransformer extends DocumentTransformer {
             reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             return reader.read(amlStream);
         } catch (DocumentException | SAXException e) {
-            throw new UnableToReadAmlException("Unable to load AML structure", e);
+            throw new UnableToReadXmlException("Unable to load AML structure", e);
         }
     }
 

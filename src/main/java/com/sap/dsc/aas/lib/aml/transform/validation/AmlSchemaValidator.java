@@ -6,8 +6,6 @@
 package com.sap.dsc.aas.lib.aml.transform.validation;
 
 import java.lang.invoke.MethodHandles;
-import java.net.URL;
-
 import javax.xml.XMLConstants;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -18,7 +16,8 @@ import org.dom4j.io.DocumentSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.dsc.aas.lib.aml.exceptions.UnableToReadAmlException;
+import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
+import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 
 public class AmlSchemaValidator extends SchemaValidator {
 	
@@ -31,7 +30,7 @@ public class AmlSchemaValidator extends SchemaValidator {
     }
 
     @Override
-    public void validate(Document document) throws UnableToReadAmlException {
+    public void validate(Document document) throws UnableToReadXmlException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Validating AML input...");
         }
@@ -46,7 +45,7 @@ public class AmlSchemaValidator extends SchemaValidator {
             validator.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
             validator.validate(new DocumentSource(document));
         } catch (Exception e) {
-            throw new UnableToReadAmlException("Error during AML validation", e);
+            throw new UnableToReadXmlException("Error during AML validation", e);
         }
     }
 

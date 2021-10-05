@@ -23,8 +23,6 @@ import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
-import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
-import com.sap.dsc.aas.lib.aml.exceptions.ValidationException;
 import com.sap.dsc.aas.lib.aml.exceptions.amlx.AmlxInvalidRootAmlDocumentException;
 import com.sap.dsc.aas.lib.aml.exceptions.amlx.AmlxMultipleRootDocumentsDefinedException;
 import com.sap.dsc.aas.lib.aml.exceptions.amlx.AmlxNoRootDocumentDefinedException;
@@ -32,6 +30,8 @@ import com.sap.dsc.aas.lib.aml.exceptions.amlx.AmlxPartNotFoundException;
 import com.sap.dsc.aas.lib.aml.exceptions.amlx.AmlxRelationshipNotFoundException;
 import com.sap.dsc.aas.lib.aml.exceptions.amlx.AmlxValidationException;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
+import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.exceptions.ValidationException;
 
 public class AmlxValidator {
 
