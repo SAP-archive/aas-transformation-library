@@ -116,12 +116,12 @@ Writing to: minimal_AutomationMLComponent_WithDocuments/files/TestTXTWarranty.tx
 
 ## Validation
 ### AML files
-AML file validation includes the following steps (cf. [_AmlValidator.java_](https://github.wdf.sap.corp/AAS/aml-transformation-module/blob/develop/src/main/java/com/sap/dsc/aas/lib/aml/transform/validation/AmlValidator.java)):
+AML file validation includes the following steps (cf. [_AmlValidator.java_](https://github.com/br-iosb/aas-transformation-library/blob/main/src/main/java/com/sap/dsc/aas/lib/aml/transform/validation/AmlValidator.java)):
 - Check that the AML file is a valid XML file
-- Check that the AML file is valid according to the [CAEX 3.0 class model](https://github.wdf.sap.corp/AAS/aml-transformation-module/blob/develop/src/main/resources/aml/CAEX_ClassModel_V.3.0.xsd)
+- Check that the AML file is valid according to the [CAEX 3.0 class model](https://github.com/br-iosb/aas-transformation-library/blob/main/src/main/resources/aml/CAEX_ClassModel_V.3.0.xsd)
 
 ### AMLX files
-AMLX file validation includes the following steps (cf. [_AmlxValidator.java_](https://github.wdf.sap.corp/AAS/aml-transformation-module/blob/develop/src/main/java/com/sap/dsc/aas/lib/aml/amlx/AmlxValidator.java)):
+AMLX file validation includes the following steps (cf. [_AmlxValidator.java_](hhttps://github.com/br-iosb/aas-transformation-library/blob/main/src/main/java/com/sap/dsc/aas/lib/aml/amlx/AmlxValidator.java)):
 - Check whether each document defined in */_rels/.rels* exists
 - Check whether each file in the AMLX file (a ZIP archive) is defined in */_rels/.rels*
 - Check that the root document exists
