@@ -749,4 +749,4 @@ Everyone participating in this joint project is welcome as long as our [Code of 
 Many improvements are coming! All tasks will be posted to our GitHub issue tracking system. As mentioned, some of the improvements will mean breaking changes. While we strive to avoid doing so, we cannot guarantee this will not happen before the first release.
 
 ## License
-Copyright 2021 SAP SE or an SAP affiliate company and aas-transformation-library contributors. Please see our [LICENSE](LICENSE.md) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available via the [REUSE tool](https://api.reuse.software/info/github.com/SAP/aas-transformation-library).
+Copyright 2021 SAP SE or an SAP affiliate company and aas-transformation-library contributors. Please see our [LICENSE](https://github.com/SAP/aas-transformation-library/blob/main/LICENSE) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available via the [REUSE tool](https://api.reuse.software/info/github.com/SAP/aas-transformation-library).
