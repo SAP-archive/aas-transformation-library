@@ -252,8 +252,8 @@ dependencies {
     def slf4j_version = "1.7.30"
     def json_schema_validator_version = "1.0.45"
     def jaxen_version = "1.1.6"
-    def aas_dataformat_json = "1.0.3"
-    def aas_model_version = "1.0.3"
+    def aas_dataformat_json = "1.1.1"
+    def aas_model_version = "1.1.1"
 
     implementation group: "com.google.guava", name: "guava", version: guava_version
     implementation group: "commons-cli", name: "commons-cli", version: commons_version
