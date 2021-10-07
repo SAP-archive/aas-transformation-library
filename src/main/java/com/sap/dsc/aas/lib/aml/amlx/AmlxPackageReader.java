@@ -14,8 +14,8 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 
-import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
-import com.sap.dsc.aas.lib.aml.exceptions.ValidationException;
+import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.exceptions.ValidationException;
 
 public class AmlxPackageReader {
 

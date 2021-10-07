@@ -21,10 +21,10 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersionDetector;
 import com.networknt.schema.ValidationMessage;
-import com.sap.dsc.aas.lib.aml.config.ConfigLoader;
-import com.sap.dsc.aas.lib.aml.config.pojo.ConfigAmlToAas;
-import com.sap.dsc.aas.lib.aml.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
+import com.sap.dsc.aas.lib.config.ConfigLoader;
+import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
+import com.sap.dsc.aas.lib.exceptions.TransformationException;
 
 import io.adminshell.aas.v3.dataformat.SerializationException;
 import io.adminshell.aas.v3.dataformat.Serializer;
@@ -48,9 +48,9 @@ public class TransformationIntegrationTest {
         AmlTransformer amlTransformer = new AmlTransformer();
         ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigAmlToAas config = configLoader.loadConfig(AUTOMATION_COMPONENT_CONFIG_JSON);
+        ConfigTransformToAas config = configLoader.loadConfig(AUTOMATION_COMPONENT_CONFIG_JSON);
 
-        shellEnv = amlTransformer.transformAml(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, config);
 
         ObjectMapper mapper = new ObjectMapper();
         Serializer serializer = new JsonSerializer();

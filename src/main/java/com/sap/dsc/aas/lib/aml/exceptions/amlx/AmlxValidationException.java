@@ -5,7 +5,7 @@
  */
 package com.sap.dsc.aas.lib.aml.exceptions.amlx;
 
-import com.sap.dsc.aas.lib.aml.exceptions.ValidationException;
+import com.sap.dsc.aas.lib.exceptions.ValidationException;
 
 public class AmlxValidationException extends ValidationException {
 
