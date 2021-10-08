@@ -1,14 +1,12 @@
 package com.sap.dsc.aas.lib.transform;
 
-import java.io.InputStream;
-
-import org.dom4j.Document;
-
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
-
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+import org.dom4j.Document;
+
+import java.io.InputStream;
 
 public abstract class DocumentTransformer {
 
@@ -25,6 +23,7 @@ public abstract class DocumentTransformer {
 		Document readXmlDocument = readXmlDocument(inStream);
 		validateDocument(readXmlDocument);
 		afterValidation(readXmlDocument, mapping);
+		XPathHelper.getInstance().setXmlRoot(readXmlDocument);
 		return createShellEnv(readXmlDocument, mapping);
 	}
 
