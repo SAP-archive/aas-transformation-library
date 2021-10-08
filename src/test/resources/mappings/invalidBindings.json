@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "aasVersion": "3.0RC01",
+  "mappings": [
+    {
+      "from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
+      "assetInformation": {
+        "globalAssetIdReference": {
+          "valueId": "assetInformationGlobalAssetIdReference",
+          "keyType": "CUSTOM",
+          "keyElement": "ASSET"
+        },
+        "@bind" : {
+          "assetKind" : "TYPE",
+          "unknownProp1" : 3,
+          "unknownProp2" : "some value"
+        }
+      }
+    }
+  ]
+}
