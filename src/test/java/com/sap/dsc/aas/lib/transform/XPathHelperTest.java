@@ -13,7 +13,9 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.junit.After;
@@ -99,6 +101,16 @@ public class XPathHelperTest extends AbstractTransformerTest {
     	Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("", "http://www.dke.de/CAEX"));
     	Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("myprefix", null));
     	Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("myprefix", null));
+    }
+    
+    @Test
+    void testAddNamespaceBindings(){
+    	Map<String,String> bindings = new HashMap<>();
+    	bindings.put("a", "http://a.org/ns");
+    	bindings.put("b", "http://b.org/ns");
+        classUnderTest.addNamespaceBindings(bindings);
+        Map<String, String> namespaceBindings = classUnderTest.getNamespaceBindings();
+        assertThat(namespaceBindings).containsAtLeastEntriesIn(bindings);
     }
 
 }
