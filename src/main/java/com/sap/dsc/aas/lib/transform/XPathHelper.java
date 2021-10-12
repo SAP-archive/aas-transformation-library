@@ -80,7 +80,7 @@ public class XPathHelper {
 	}
 
 	/**
-	 * Create a XPath, with the CAEX namespace set.
+	 * Create a XPath, with the namespace bindings set.
 	 *
 	 * @param parentNode      Base node to start the search
 	 * @param xpathExpression The XPath expression to match
