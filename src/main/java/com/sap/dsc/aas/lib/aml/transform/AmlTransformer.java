@@ -95,6 +95,7 @@ public class AmlTransformer extends DocumentTransformer {
 			ConfigTransformToAas mapping) throws TransformationException {
         preconditionValidator.setPreconditions(mapping.getPreconditions());
         idGenerator.prepareGraph(validXmlDocument, mapping.getConfigMappings());
+        XPathHelper.getInstance().addNamespaceBindings(mapping.getNamespaceBindings());
 		return new AssetAdministrationShellEnvTransformer(idGenerator, preconditionValidator).createShellEnv(validXmlDocument, mapping.getConfigMappings());
 	}
 }

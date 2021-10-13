@@ -6,6 +6,7 @@
 package com.sap.dsc.aas.lib.config.pojo;
 
 import java.util.List;
+import java.util.Map;
 
 public class ConfigTransformToAas {
 
@@ -14,6 +15,7 @@ public class ConfigTransformToAas {
     private List<ConfigMapping> configMappings;
     private List<Precondition> preconditions;
     private List<ConfigPlaceholder> placeholders;
+    private Map<String, String> namespaceBindings;
 
     public String getVersion() {
         return version;
@@ -54,4 +56,12 @@ public class ConfigTransformToAas {
     public void setPlaceholders(List<ConfigPlaceholder> placeholders) {
         this.placeholders = placeholders;
     }
+
+    public Map<String, String> getNamespaceBindings() {
+		return namespaceBindings;
+	}
+
+	public void setNamespaceBindings(Map<String, String> namespaceBindings) {
+		this.namespaceBindings = namespaceBindings;
+	}
 }

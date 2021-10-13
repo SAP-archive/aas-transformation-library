@@ -134,7 +134,9 @@ public class XPathHelper {
 	 * @param bindingsToAdd
 	 */
 	public void addNamespaceBindings(Map<String, String> bindingsToAdd) {
-		bindingsToAdd.forEach((k,v) -> setNamespaceBinding(k, v));
+		if (bindingsToAdd != null) {			
+			bindingsToAdd.forEach((k,v) -> setNamespaceBinding(k, v));
+		}
 	}
 
 }
