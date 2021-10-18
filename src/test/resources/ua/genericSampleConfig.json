@@ -1,0 +1,68 @@
+{
+	"version": "1.0.0",
+	"aasVersion": "3.0RC01",
+	"namespaceBindings": {
+		"opc": "http://opcfoundation.org/UA/2011/03/UANodeSet.xsd",
+		"uax": "http://opcfoundation.org/UA/2008/02/Types.xsd",
+		"bla": "http://opcfoundation.org/UA/I4AAS/V3/Types.xsd"
+	},
+	"configMappings": [
+		{
+			"from_xpath": "/opc:UANodeSet",
+			"idGeneration": {
+				"parameters": [
+					{
+						"from_string": "dummyIDSubmodel"
+					}
+				],
+				"finalizeFunction": "concatenate_and_hash",
+				"idGenerationName": "dummyIdGenSubmodel"
+			},
+			"submodels": [
+				{
+					"from_xpath": "opc:UAVariable/opc:Value/uax:ListOfExtensionObject/uax:ExtensionObject/uax:Body",
+					"semanticId": "http://semanticid.com",
+					"idGeneration": {
+						"parameters": [
+							{
+								"from_idGenerationName": "dummyIdGenSubmodel"
+							},
+							{
+								"from_string": "_submodelTest"
+							}
+						],
+						"finalizeFunction": "concatenate"
+					},
+					"idShort_xpath": "bla:AASKeyDataType/bla:Value",
+					"submodelElements": []
+				}
+			],
+			"assetInformation": {
+				"idGeneration": {
+					"parameters": [
+						{
+							"from_string": "dummyIDAsset"
+						}
+					],
+					"finalizeFunction": "concatenate_and_hash",
+					"idGenerationName": "dummyIdGenAsset"
+				},
+				"globalAssetIdReference": {
+					"valueId": "assetInformationGlobalAssetIdReference",
+					"keyType": "CUSTOM",
+					"keyElement": "ASSET"
+				}
+			},
+			"assetShell": {
+				"idGeneration": {
+					"parameters": [
+						{
+							"from_string": "shellId"
+						}
+					]
+				},
+				"idShort_xpath": "string('idshortAAS')"
+			}
+		}
+	]
+}

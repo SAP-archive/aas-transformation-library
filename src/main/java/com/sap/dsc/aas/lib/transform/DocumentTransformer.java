@@ -61,7 +61,7 @@ public abstract class DocumentTransformer {
 	 * @return
 	 * @throws TransformationException
 	 */
-	public abstract Document readXmlDocument(InputStream inStream) throws TransformationException;
+	protected abstract Document readXmlDocument(InputStream inStream) throws TransformationException;
 
 	/**
 	 * Validates a given XML file. We expect the XML file to be UTF-8 encoded.
@@ -70,10 +70,10 @@ public abstract class DocumentTransformer {
 	 * @param document read org.dom4j.Document
 	 * @throws TransformationException If the input stream is not valid
 	 */
-	public void validateDocument(Document document) throws TransformationException {
+	protected void validateDocument(Document document) throws TransformationException {
 		getSchemaValidator().validate(document);
 	}
 
-	public abstract SchemaValidator getSchemaValidator();
+	protected abstract SchemaValidator getSchemaValidator();
 
 }

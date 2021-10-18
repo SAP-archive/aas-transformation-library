@@ -132,6 +132,7 @@ public class XPathHelperTest extends AbstractTransformerTest {
 		Object evaluate = XPathHelper.getInstance().createXPath(testDoc, "string(/opc:UANodeSet/opc:UAVariable/opc:Value/uax:ListOfExtensionObject/uax:ExtensionObject/uax:Body/bla:AASKeyDataType/bla:Type)")
 				.evaluate(testDoc);
 		assertNotNull(evaluate);
+		
 	}
 
     
