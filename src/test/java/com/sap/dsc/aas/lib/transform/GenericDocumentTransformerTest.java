@@ -1,16 +1,9 @@
 package com.sap.dsc.aas.lib.transform;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.sap.dsc.aas.lib.config.ConfigLoader;
-import com.sap.dsc.aas.lib.config.pojo.ConfigMapping;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 
@@ -59,6 +51,7 @@ class GenericDocumentTransformerTest {
 		
 		AssetAdministrationShellEnvironment transform = transformer.transform(testInputStream, config);
 		Assert.assertNotNull(transform);
+		Assert.assertEquals(71, transform.getSubmodels().size());
 	}
 
 }
