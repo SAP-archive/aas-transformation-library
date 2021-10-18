@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.ConfigLoader;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
@@ -35,6 +36,7 @@ class GenericDocumentTransformerTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
+		TestUtils.resetBindings();
         testInputStream = Files.newInputStream(Paths.get(XML_INPUT));
 	}
 

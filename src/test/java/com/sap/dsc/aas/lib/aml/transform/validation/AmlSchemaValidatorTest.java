@@ -20,6 +20,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.sap.dsc.aas.lib.transform.AbstractTransformerTest;
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 
 public class AmlSchemaValidatorTest extends AbstractTransformerTest {

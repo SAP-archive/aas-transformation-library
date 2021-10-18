@@ -7,15 +7,22 @@ package com.sap.dsc.aas.lib.config.pojo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sap.dsc.aas.lib.TestUtils;
 
 public class ConfigTransformToAasTest {
 
+    @BeforeEach
+    void setup() throws Exception {
+		TestUtils.resetBindings();
+    }
+    
     @Test
     @DisplayName("Load config JSON from string")
     void loadFromString() throws JsonMappingException, JsonProcessingException {

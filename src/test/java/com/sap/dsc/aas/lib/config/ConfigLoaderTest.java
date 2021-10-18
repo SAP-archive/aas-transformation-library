@@ -13,6 +13,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.pojo.ConfigMapping;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 
@@ -23,7 +24,8 @@ public class ConfigLoaderTest {
     private ConfigLoader classUnderTest;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
+		TestUtils.resetBindings();
         classUnderTest = new ConfigLoader();
     }
 

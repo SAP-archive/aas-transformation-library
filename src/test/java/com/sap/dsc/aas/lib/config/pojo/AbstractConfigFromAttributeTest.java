@@ -8,15 +8,23 @@ package com.sap.dsc.aas.lib.config.pojo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sap.dsc.aas.lib.TestUtils;
+import com.sap.dsc.aas.lib.config.ConfigLoader;
 import com.sap.dsc.aas.lib.exceptions.AlreadyDefinedException;
 
 public class AbstractConfigFromAttributeTest {
 
+    @BeforeEach
+    void setup() throws Exception {
+		TestUtils.resetBindings();
+    }
+    
     @Test
     void invalidConfigXPathAlreadyDefined() {
         final AbstractConfigFromAttribute configObject1 = new AbstractConfigFromAttribute() {};

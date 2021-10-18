@@ -61,11 +61,11 @@ public class XPathHelperTest extends AbstractTransformerTest {
     @Override
     @BeforeEach
     protected void setUp() throws Exception {
+    	super.setUp();
         this.classUnderTest = XPathHelper.getInstance();
         classUnderTest.setNamespaceBinding("caex", "http://www.dke.de/CAEX");
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
-        super.setUp();
     }
 
     @After

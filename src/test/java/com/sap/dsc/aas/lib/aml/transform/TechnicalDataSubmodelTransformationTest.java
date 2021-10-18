@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.networknt.schema.*;
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.ConfigLoader;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
@@ -47,6 +48,7 @@ public class TechnicalDataSubmodelTransformationTest {
 
     @BeforeEach
     protected void setUp() throws Exception {
+    	TestUtils.resetBindings();
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();

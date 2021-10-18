@@ -20,7 +20,7 @@ public class PreconditionTypeMatchTest extends AbstractPreconditionTypeTest {
     private PreconditionTypeMatch classUnderTest;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
         super.setup();
         classUnderTest = new PreconditionTypeMatch();
     }

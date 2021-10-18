@@ -6,12 +6,14 @@
 package com.sap.dsc.aas.lib.config.pojo.preconditions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sap.dsc.aas.lib.TestUtils;
 
 abstract class AbstractPreconditionTypeTest {
 
     protected ObjectMapper objectMapper;
 
-    void setup() {
+    void setup() throws Exception {
+		TestUtils.resetBindings();
         this.objectMapper = new ObjectMapper();
     }
 

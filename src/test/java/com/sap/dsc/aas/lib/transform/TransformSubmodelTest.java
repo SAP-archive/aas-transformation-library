@@ -21,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.pojo.ConfigIdGeneration;
 import com.sap.dsc.aas.lib.config.pojo.ConfigSubmodel;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
@@ -35,6 +36,7 @@ public class TransformSubmodelTest extends AbstractTransformerTest {
     @BeforeEach
     protected void setUp() throws Exception {
         super.setUp();
+        TestUtils.setAMLBindings();
         when(mockIdGenerator.generateId(or(any(Node.class), isNull()), or(any(ConfigIdGeneration.class), isNull())))
             .thenReturn(AbstractTransformerTest.ID_VALUE + "_submodel");
         when(mockIdGenerator.generateSemanticId(or(any(Node.class), isNull()), or(any(ConfigIdGeneration.class), isNull())))

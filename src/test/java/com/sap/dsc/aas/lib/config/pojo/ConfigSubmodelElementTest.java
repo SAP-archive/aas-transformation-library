@@ -22,6 +22,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.pojo.submodelelements.ConfigAnnotatedRelationshipElement;
 import com.sap.dsc.aas.lib.config.pojo.submodelelements.ConfigBasicEvent;
 import com.sap.dsc.aas.lib.config.pojo.submodelelements.ConfigBlob;
@@ -41,7 +42,8 @@ public class ConfigSubmodelElementTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
+		TestUtils.resetBindings();
         objectMapper = new ObjectMapper();
     }
 

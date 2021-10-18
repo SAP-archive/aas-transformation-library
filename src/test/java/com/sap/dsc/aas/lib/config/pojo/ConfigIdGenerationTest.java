@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.exceptions.MissingConfigException;
 
 public class ConfigIdGenerationTest {
@@ -19,7 +20,8 @@ public class ConfigIdGenerationTest {
     private ConfigIdGeneration classUnderTest;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
+		TestUtils.resetBindings();
         this.classUnderTest = new ConfigIdGeneration();
     }
 

@@ -25,9 +25,12 @@ public class XPathHelper {
 	private XPathHelper() {
 	}
 
-	private static XPathHelper instance = new XPathHelper();
+	private static XPathHelper instance;
 
 	public static XPathHelper getInstance() {
+		if (instance == null) {
+			instance = new XPathHelper();
+		}
 		return instance;
 	}
 

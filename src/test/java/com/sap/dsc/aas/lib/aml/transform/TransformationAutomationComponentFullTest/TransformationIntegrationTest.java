@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,6 +22,7 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersionDetector;
 import com.networknt.schema.ValidationMessage;
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
 import com.sap.dsc.aas.lib.config.ConfigLoader;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
@@ -40,6 +42,11 @@ public class TransformationIntegrationTest {
     public static final String AAS_v3_JSON = "src/test/resources/aas/AASEnv_Test_JSON_v3.json";
     private static AssetAdministrationShellEnvironment shellEnv;
 
+	@BeforeEach
+	protected void setUp() throws Exception {
+		TestUtils.resetBindings();
+	}
+        
     @Test
     void validateTransformedAutomationConfigFullAgainstAASJSONSchema() throws IOException, SerializationException, TransformationException {
 

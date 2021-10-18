@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.dom4j.*;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.pojo.*;
 import com.sap.dsc.aas.lib.config.pojo.submodelelements.ConfigProperty;
 import com.sap.dsc.aas.lib.config.pojo.submodelelements.ConfigSubmodelElementCollection;
@@ -51,6 +52,7 @@ public abstract class AbstractTransformerTest {
     protected PreconditionValidator mockPreconditionValidator;
 
     protected void setUp() throws Exception {
+		TestUtils.resetBindings();
         // sample configuration
         this.mapping = createDefaultMappingConfig();
         // sample AML document

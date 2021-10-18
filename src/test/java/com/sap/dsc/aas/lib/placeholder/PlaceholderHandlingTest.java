@@ -16,6 +16,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.placeholder.exceptions.PlaceholderValueMissingException;
 
 import io.adminshell.aas.v3.dataformat.DeserializationException;
@@ -30,7 +31,8 @@ public class PlaceholderHandlingTest {
     private PlaceholderHandling classUnderTest;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
+		TestUtils.resetBindings();
         this.classUnderTest = new PlaceholderHandling();
     }
 
