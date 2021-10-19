@@ -21,6 +21,8 @@ import com.sap.dsc.aas.lib.mapping.model.Mapping;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
 
+import io.adminshell.aas.v3.model.SubmodelElement;
+
 public class MappingSpecificationParserTest {
 
     private MappingSpecificationParser parser;
@@ -62,4 +64,24 @@ public class MappingSpecificationParserTest {
         assertThat(cause instanceof InvalidBindingException);
         assertThat(((InvalidBindingException) cause).getFields()).hasSize(2);
     }
+    
+	@Test
+	void minimalTemplateExample() throws IOException {
+		MappingSpecification result = parser
+				.loadMappingSpecification("src/test/resources/mappings/simpleMapping_min.json");
+
+		assertThat(result).isNotNull();
+		assertThat(result.getVersion()).isEqualTo("1.0.0");
+		assertThat(result.getAasVersion()).isEqualTo("3.0RC01");
+		assertThat(result.getMappings()).isNotEmpty();
+
+		Mapping mapping = result.getMappings().get(0);
+		assertThat(mapping.getAssetInformation() instanceof LegacyTemplate);
+		assertThat(((LegacyTemplate) mapping.getAssetInformation()).getKindTypeXPath()).contains("TYPE");
+
+		SubmodelElement submodelElement = mapping.getSubmodels().get(0).getSubmodelElements().get(0);
+		Template temp = (Template) submodelElement;
+		assertThat(temp.getBindSpecification().getBindings().keySet()).containsAtLeastElementsIn(new String[] {"idShort", "value", "mimeType"});
+		assertThat(temp.getBindSpecification().getBindings().get("value")).isEqualTo("caex:Attribute[@Name='refURI']/caex:Value");
+	}
 }
