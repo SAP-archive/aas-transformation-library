@@ -128,6 +128,19 @@ AMLX file validation includes the following steps (cf. [_AmlxValidator.java_](hh
 - Check that there is exactly one root document
 - Check that the root document is a valid AML file
 
+### OPC UA Nodeset files
+The OPC UA Nodeset validation includes the following (cf. [_
+UANodeSetSchemaValidator.java](https://github.com/kannoth/aas-transformation-library/blob/main/src/main/java/com/sap/dsc/aas/lib/ua/transform/validation/UANodeSetSchemaValidator.java)):
+
+- Check that the nodeset xml file is valid xml file.
+- Check that the nodeset xml file is valid according
+  to [UANodeSet.xsd](https://github.com/OPCFoundation/UA-Nodeset/blob/v1.04/Schema/UANodeSet.xsd) V1.04 schema.
+  #### Note :
+  The node
+  set [EntType.xml](https://github.com/kannoth/aas-transformation-library/tree/main/src/test/resources/ua/EntType.xml)
+  is taken from OPC UA information models published
+  by [Equinor](https://github.com/equinor/opc-ua-information-models/tree/test).
+
 ## Configuration
 The configuration file describes how the AAS file should be generated.
 See [this config file](src/test/resources/config/simpleConfig.json) for an example.
