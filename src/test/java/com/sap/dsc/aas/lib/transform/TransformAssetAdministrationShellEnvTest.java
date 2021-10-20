@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.pojo.*;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 
@@ -30,6 +31,7 @@ public class TransformAssetAdministrationShellEnvTest extends AbstractTransforme
     @BeforeEach
     protected void setUp() throws Exception {
         super.setUp();
+        TestUtils.setAMLBindings();
         when(mockIdGenerator.generateId(or(any(Node.class), isNull()), or(any(ConfigIdGeneration.class), isNull())))
             .thenReturn("1234");
         this.classUnderTest = new AssetAdministrationShellEnvTransformer(mockIdGenerator, mockPreconditionValidator);

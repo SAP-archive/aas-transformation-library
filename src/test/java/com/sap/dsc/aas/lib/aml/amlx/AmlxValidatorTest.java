@@ -20,6 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.aml.exceptions.amlx.AmlxInvalidRootAmlDocumentException;
 import com.sap.dsc.aas.lib.aml.exceptions.amlx.AmlxMultipleRootDocumentsDefinedException;
 import com.sap.dsc.aas.lib.aml.exceptions.amlx.AmlxNoRootDocumentDefinedException;
@@ -35,7 +36,8 @@ class AmlxValidatorTest {
     private AmlxValidator classUnderTest;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
+    	TestUtils.resetBindings();
         this.classUnderTest = new AmlxValidator();
     }
 

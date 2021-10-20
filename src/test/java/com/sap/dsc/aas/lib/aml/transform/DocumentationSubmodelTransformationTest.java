@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.ConfigLoader;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
@@ -45,6 +46,7 @@ public class DocumentationSubmodelTransformationTest {
 
     @BeforeEach
     protected void setUp() throws Exception {
+    	TestUtils.resetBindings();
         amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
         amlTransformer = new AmlTransformer();
         configLoader = new ConfigLoader();

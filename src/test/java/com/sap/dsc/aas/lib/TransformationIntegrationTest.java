@@ -51,6 +51,7 @@ public class TransformationIntegrationTest {
 
     @BeforeEach
     protected void setUp() throws Exception {
+    	TestUtils.resetBindings();
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();

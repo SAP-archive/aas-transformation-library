@@ -16,13 +16,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.sap.dsc.aas.lib.TestUtils;
 
 public class PreconditionTest {
 
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
+		TestUtils.resetBindings();
         this.objectMapper = new ObjectMapper();
     }
 

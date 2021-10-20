@@ -26,6 +26,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.aml.helper.AmlxPackageCreator;
 
 public class AmlxPackagePartTest {
@@ -36,6 +37,7 @@ public class AmlxPackagePartTest {
 
     @BeforeEach
     void setup() throws Exception {
+    	TestUtils.resetBindings();
         opcPackage = getOpcPackage(PATH_TO_MINIMAL_AMLX_DIR);
     }
 

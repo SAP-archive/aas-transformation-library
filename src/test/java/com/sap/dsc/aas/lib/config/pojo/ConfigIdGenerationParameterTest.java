@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.exceptions.AlreadyDefinedException;
 
 public class ConfigIdGenerationParameterTest {
@@ -21,7 +22,8 @@ public class ConfigIdGenerationParameterTest {
     private ConfigIdGenerationParameter classUnderTest;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
+		TestUtils.resetBindings();
         this.classUnderTest = new ConfigIdGenerationParameter();
     }
 

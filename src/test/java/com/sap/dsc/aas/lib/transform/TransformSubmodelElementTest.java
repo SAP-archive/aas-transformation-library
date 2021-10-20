@@ -30,6 +30,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.sap.dsc.aas.lib.transform.pojo.GenericSubmodelElementAttributes;
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.pojo.AbstractConfig;
 import com.sap.dsc.aas.lib.config.pojo.ConfigIdGeneration;
 import com.sap.dsc.aas.lib.config.pojo.ConfigReference;
@@ -93,6 +94,7 @@ public class TransformSubmodelElementTest extends AbstractTransformerTest {
     @BeforeEach
     protected void setUp() throws Exception {
         super.setUp();
+        TestUtils.setAMLBindings();
         when(mockIdGenerator.generateId(or(any(Node.class), isNull()), or(any(ConfigIdGeneration.class), isNull())))
             .thenReturn(ID_VALUE);
         when(mockIdGenerator.generateSemanticId(or(any(Node.class), isNull()), or(any(ConfigIdGeneration.class), isNull())))

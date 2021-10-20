@@ -47,9 +47,11 @@ public class ConsoleApplicationTest {
     /**
      * Capture system.out in a stream
      * https://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
+     * @throws Exception 
      */
     @BeforeEach
-    public void setUpStreams() {
+    public void setUpStreams() throws Exception {
+    	TestUtils.resetBindings();
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
 

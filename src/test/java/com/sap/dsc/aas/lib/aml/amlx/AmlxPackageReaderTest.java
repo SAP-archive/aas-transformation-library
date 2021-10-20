@@ -21,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.aml.helper.AmlxPackageCreator;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.exceptions.ValidationException;
@@ -30,7 +31,8 @@ public class AmlxPackageReaderTest {
     private File amlxFile;
 
     @BeforeEach
-    void setup() throws IOException {
+    void setup() throws Exception {
+    	TestUtils.resetBindings();
         this.amlxFile = AmlxPackageCreator.compressFolder(AmlxPackageCreator.PATH_TO_MINIMAL_AMLX_DIR);
     }
 

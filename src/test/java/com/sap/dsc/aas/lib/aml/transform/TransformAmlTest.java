@@ -29,6 +29,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.pojo.ConfigIdGeneration;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.config.pojo.Precondition;
@@ -67,6 +68,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     @BeforeEach
     protected void setUp() throws Exception {
         super.setUp();
+        TestUtils.setAMLBindings();
         when(mockIdGenerator.generateId(any(Node.class), or(any(ConfigIdGeneration.class), isNull())))
             .thenReturn(ID_VALUE);
 

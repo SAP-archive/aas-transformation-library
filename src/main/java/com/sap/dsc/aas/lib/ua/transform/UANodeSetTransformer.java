@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 
 import com.sap.dsc.aas.lib.transform.AssetAdministrationShellEnvTransformer;
 import com.sap.dsc.aas.lib.transform.DocumentTransformer;
+import com.sap.dsc.aas.lib.transform.XPathHelper;
 import com.sap.dsc.aas.lib.transform.idgeneration.IdGenerator;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
@@ -81,6 +82,7 @@ public class UANodeSetTransformer extends DocumentTransformer {
 	@Override
 	protected AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
 			ConfigTransformToAas mapping) throws TransformationException {
+		XPathHelper.getInstance().addNamespaceBindings(mapping.getNamespaceBindings());
         preconditionValidator.setPreconditions(mapping.getPreconditions());
         idGenerator.prepareGraph(validXmlDocument, mapping.getConfigMappings());
 		return new AssetAdministrationShellEnvTransformer(idGenerator, preconditionValidator).createShellEnv(validXmlDocument, mapping.getConfigMappings());

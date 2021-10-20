@@ -106,6 +106,7 @@ public class IdGeneratorGraphTest extends AbstractTransformerTest {
 
     @BeforeEach
     void setup() throws Exception {
+    	super.setUp();
         this.classUnderTest = new IdGeneratorGraph();
         this.node = mock(Node.class);
         this.idGenerations = createValidIdGenerations();
@@ -115,8 +116,6 @@ public class IdGeneratorGraphTest extends AbstractTransformerTest {
         this.graphNode1 = this.classUnderTest.getGraphNode(ID_GENERATION_NAME_1);
         this.graphNode2 = this.classUnderTest.getGraphNode(ID_GENERATION_NAME_2);
         this.graphNode3 = this.classUnderTest.getUnnamedGraphNodes().get(0);
-
-        super.setUp();
     }
 
     private ConfigIdGeneration createIdGeneration(String idGenerationName) {

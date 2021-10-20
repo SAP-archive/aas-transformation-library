@@ -13,16 +13,19 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.config.pojo.ConfigMapping;
 import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 
 public class ConfigLoaderTest {
 
     public static final String PATH_SIMPLE_CONFIG = "src/test/resources/config/simpleConfig.json";
+    public static final String PATH_CONFIG_NSBINDING = "src/test/resources/config/nsbindingConfig.json";
     private ConfigLoader classUnderTest;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
+		TestUtils.resetBindings();
         classUnderTest = new ConfigLoader();
     }
 
@@ -43,5 +46,15 @@ public class ConfigLoaderTest {
     @Test
     void loadNonexistentFile() {
         assertThrows(IOException.class, () -> classUnderTest.loadConfig("src/test/resources/config/doesNotExist.json"));
+    }
+    
+    @Test
+    void loadWithNSBindings() throws IOException {
+        ConfigTransformToAas result = classUnderTest.loadConfig(PATH_CONFIG_NSBINDING);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getVersion()).isEqualTo("1.0.0");
+        assertThat(result.getAasVersion()).isEqualTo("3.0RC01");
+        assertThat(result.getNamespaceBindings().size()).isEqualTo(2);
     }
 }

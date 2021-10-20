@@ -25,9 +25,12 @@ public class XPathHelper {
 	private XPathHelper() {
 	}
 
-	private static XPathHelper instance = new XPathHelper();
+	private static XPathHelper instance;
 
 	public static XPathHelper getInstance() {
+		if (instance == null) {
+			instance = new XPathHelper();
+		}
 		return instance;
 	}
 
@@ -80,7 +83,7 @@ public class XPathHelper {
 	}
 
 	/**
-	 * Create a XPath, with the CAEX namespace set.
+	 * Create a XPath, with the namespace bindings set.
 	 *
 	 * @param parentNode      Base node to start the search
 	 * @param xpathExpression The XPath expression to match
@@ -94,8 +97,12 @@ public class XPathHelper {
 		return xpath;
 	}
 
-	private Map<String, String> namespaces = new HashMap<>();
+	private Map<String, String> namespaces = new TreeMap<>();
 
+	/**
+	 * @param nsPrefix prefix to use
+	 * @param nsUri namespace bound to the prefix
+	 */
 	public void setNamespaceBinding(String nsPrefix, String nsUri) {
 		if (Strings.isNullOrEmpty(nsPrefix)) {
 			throw new IllegalArgumentException("No valid Prefix (null or empty).");
@@ -116,6 +123,22 @@ public class XPathHelper {
 			namespaces.put(nsPrefix, validNsUri);
 		} else {
 			LOGGER.info(String.format("Prefix '%s' already set to '%s'.", nsPrefix, currentUri));
+		}
+	}
+	
+	/**
+	 * @return Returns an unmodifiable view of the current namespace bindings.
+	 */
+	public Map<String, String> getNamespaceBindings() {
+		return Collections.unmodifiableMap(namespaces);
+	}
+	
+	/**
+	 * @param bindingsToAdd
+	 */
+	public void addNamespaceBindings(Map<String, String> bindingsToAdd) {
+		if (bindingsToAdd != null) {			
+			bindingsToAdd.forEach((k,v) -> setNamespaceBinding(k, v));
 		}
 	}
 

@@ -34,6 +34,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.aml.helper.AmlxPackageCreator;
 
 public class AmlxPackageTest {
@@ -42,6 +43,7 @@ public class AmlxPackageTest {
 
     @BeforeEach
     void setup() throws Exception {
+    	TestUtils.resetBindings();
         amlxPackage = getAmlxPackage(AmlxPackageCreator.PATH_TO_MINIMAL_AMLX_DIR);
     }
 

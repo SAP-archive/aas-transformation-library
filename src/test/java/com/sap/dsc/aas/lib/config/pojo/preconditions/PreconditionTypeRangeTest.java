@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 public class PreconditionTypeRangeTest extends AbstractPreconditionTypeTest {
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
         super.setup();
     }
 
