@@ -1,6 +1,11 @@
 {
   "version": "1.0.0",
   "aasVersion": "3.0RC01",
+  "namespaceBindings": {
+    "ns1": "http://ns.org/1",
+    "ns2": "http://ns.org/2",
+    "caex": "http://www.dke.de/CAEX"
+  },
   "configMappings": [
     {
       "@definitions": {
