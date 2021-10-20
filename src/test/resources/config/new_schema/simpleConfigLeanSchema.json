@@ -48,6 +48,18 @@
       "@foreach": {
         "@xpath:": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
       },
+      "assetShell": {
+        "id": {
+          "concatenate": [
+            {
+              "string": "shellId"
+            }
+          ]
+        },
+        "@bind": {
+          "idShort_xpath": "@Name"
+        }
+      },
       "@bind": {
         "id": {
           "@def": "mappingIdGeneration"
@@ -501,19 +513,7 @@
             }
           ]
         }
-      ],
-      "assetShell": {
-        "id": {
-          "concatenate": [
-            {
-              "string": "shellId"
-            }
-          ]
-        },
-        "@bind": {
-          "idShort_xpath": "@Name"
-        }
-      }
+      ]
     }
   ]
 }
