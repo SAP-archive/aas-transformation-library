@@ -116,7 +116,9 @@
               "modelType": "Property",
               "valueType": "STRING",
               "@bind": {
-                "value": "caex:Value"
+                "value": {
+                  "@xpath": "caex:Value"
+                }
               }
             },
             {
@@ -125,7 +127,9 @@
               },
               "modelType": "Capability",
               "@bind": {
-                "idShort": "'Browseable'"
+                "idShort": {
+                  "@xpath": "'Browseable'"
+                }
               }
             }
           ]

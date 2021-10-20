@@ -54,7 +54,9 @@
             },
             {
               "@type": "xpath",
-              "args": "[caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value]"
+              "args": [
+                "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+              ]
             }
           ]
         }
@@ -77,7 +79,9 @@
         "@bind": {
           "idShort": {
             "@type": "xpath",
-            "args": "@Name"
+            "args": [
+              "@Name"
+            ]
           }
         }
       },
@@ -109,7 +113,9 @@
         {
           "@foreach": {
             "@type": "CaexAttributeName",
-            "args": "IdentificationData"
+            "args": [
+              "IdentificationData"
+            ]
           },
           "@bind": {
             "idShort": {
@@ -141,7 +147,9 @@
             {
               "@foreach": {
                 "@type": "CaexAttributeName",
-                "args": "Manufacturer"
+                "args": [
+                  "Manufacturer"
+                ]
               },
               "modelType": "Property",
               "semanticId": "submodelElementSemanticId1",
@@ -216,7 +224,9 @@
             {
               "@foreach": {
                 "@type": "CaexAttributeName",
-                "args": "ProductPriceDetails"
+                "args": [
+                  "ProductPriceDetails"
+                ]
               },
               "modelType": "SubmodelElementCollection",
               "semanticId": "SubmodelElementCollectionSemanticId",
@@ -224,7 +234,9 @@
                 {
                   "@foreach": {
                     "@type": "CaexAttributeName",
-                    "args": "ValidStartDate"
+                    "args": [
+                      "ValidStartDate"
+                    ]
                   },
                   "modelType": "Property",
                   "valueType": "STRING"
@@ -232,9 +244,11 @@
                 {
                   "@foreach": {
                     "@type": "xpath",
-                    "args": "caex:Attribute[@Name='ProductPrice']/caex:Attribute[@Name='PriceAmount']"
+                    "args": [
+                      "caex:Attribute[@Name='ProductPrice']/caex:Attribute[@Name='PriceAmount']"
+                    ]
                   },
-                  "@type": "Property",
+                  "modelType": "Property",
                   "valueType": "STRING"
                 }
               ]
@@ -242,7 +256,9 @@
             {
               "@foreach": {
                 "@type": "CaexAttributeName",
-                "args": "ProductDetails"
+                "args": [
+                  "ProductDetails"
+                ]
               },
               "modelType": "SubmodelElementCollection",
               "semanticId_ref": {
@@ -254,7 +270,9 @@
                 {
                   "@foreach": {
                     "@type": "CaexAttributeName",
-                    "args": "DescriptionShort"
+                    "args": [
+                      "DescriptionShort"
+                    ]
                   },
                   "modelType": "MultiLanguageProperty",
                   "values": [
@@ -281,7 +299,9 @@
             {
               "@foreach": {
                 "@type": "CaexAttributeName",
-                "args": "PackagingAndTransportation"
+                "args": [
+                  "PackagingAndTransportation"
+                ]
               },
               "modelType": "Entity",
               "semanticId": "PackAndTransport",
@@ -294,7 +314,9 @@
                 {
                   "@foreach": {
                     "@type": "CaexAttributeName",
-                    "args": "gtin"
+                    "args": [
+                      "gtin"
+                    ]
                   },
                   "modelType": "Property",
                   "valueType": "STRING"
@@ -302,7 +324,9 @@
                 {
                   "@foreach": {
                     "@type": "CaexAttributeName",
-                    "args": "CustomTariffNumber"
+                    "args": [
+                      "CustomTariffNumber"
+                    ]
                   },
                   "modelType": "Property",
                   "valueType": "integer"
@@ -310,7 +334,9 @@
                 {
                   "@foreach": {
                     "@type": "CaexAttributeName",
-                    "args": "CountryOfOrigin"
+                    "args": [
+                      "CountryOfOrigin"
+                    ]
                   },
                   "modelType": "Property",
                   "valueType": "STRING"
@@ -348,7 +374,9 @@
             {
               "@foreach": {
                 "@type": "CaexAttributeName",
-                "args": "AmbientTemperature"
+                "args": [
+                  "AmbientTemperature"
+                ]
               },
               "modelType": "Range",
               "semanticId_ref": {
@@ -360,13 +388,13 @@
               "@bind": {
                 "minValue": {
                   "@type": "xpath",
-                  "@args": [
+                  "args": [
                     "caex:Attribute[@Name='TemperatureMin']/caex:Value"
                   ]
                 },
                 "maxValue": {
                   "@type": "xpath",
-                  "@args": [
+                  "args": [
                     "caex:Attribute[@Name='TemperatureMax']/caex:Value"
                   ]
                 }
@@ -374,25 +402,31 @@
             },
             {
               "from_attributeName": "Material",
-              "@type": "MultiLanguageProperty"
+              "modelType": "MultiLanguageProperty"
             }
           ]
         },
         {
           "@foreach": {
             "@type": "CaexAttributeName",
-            "args": "ParameterData"
+            "args": [
+              "ParameterData"
+            ]
           },
           "semanticId": "http://sap.com",
           "id": {
             "@type": "var",
-            "args": "submodel3Id"
+            "args": [
+              "submodel3Id"
+            ]
           },
           "submodelElements": [
             {
               "@foreach": {
                 "@type": "xpath",
-                "@args": "caex:Attribute"
+                "args": [
+                  "caex:Attribute"
+                ]
               },
               "modelType": "Property",
               "valueType": "STRING"
@@ -402,13 +436,17 @@
         {
           "@foreach": {
             "@type": "xpath",
-            "args": "."
+            "args": [
+              "."
+            ]
           },
           "semanticId": "http://sap.com/Documents",
           "@bind": {
             "idShort": {
               "@type": "xpath",
-              "@args": "'Documents'"
+              "args": [
+                "'Documents'"
+              ]
             }
           },
           "id": {
@@ -421,23 +459,31 @@
             {
               "@foreach": {
                 "@type": "xpath",
-                "args": "caex:InternalElement[@Name='Manuals']/caex:InternalElement[@Name='Betriebsanleitung']/caex:ExternalInterface[@Name='ExternalDataReference']"
+                "args": [
+                  "caex:InternalElement[@Name='Manuals']/caex:InternalElement[@Name='Betriebsanleitung']/caex:ExternalInterface[@Name='ExternalDataReference']"
+                ]
               },
               "@bind": {
                 "idShort": {
                   "@type": "xpath",
-                  "@args": "'Betriebsanleitung'"
+                  "args": [
+                    "'Betriebsanleitung'"
+                  ]
                 },
                 "value": {
                   "@type": "xpath",
-                  "@args": "caex:Attribute[@Name='refURI']/caex:Value"
+                  "args": [
+                    "caex:Attribute[@Name='refURI']/caex:Value"
+                  ]
                 },
                 "mimeType": {
                   "@type": "xpath",
-                  "@args": "caex:Attribute[@Name='MIMEType']/caex:Value"
+                  "args": [
+                    "caex:Attribute[@Name='MIMEType']/caex:Value"
+                  ]
                 }
               },
-              "@type": "File"
+              "modelType": "File"
             },
             {
               "@foreach": {
@@ -456,7 +502,9 @@
                 "value": {
                   "id": {
                     "@type": "xpath",
-                    "args": "caex:Attribute[@Name='refURI']/caex:Value"
+                    "args": [
+                      "caex:Attribute[@Name='refURI']/caex:Value"
+                    ]
                   },
                   "keyElement": {
                     "@type": "xpath",
@@ -478,19 +526,19 @@
               "@bind": {
                 "idShort": {
                   "@type": "xpath",
-                  "@args": [
+                  "args": [
                     "'BetriebsanleitungBIN'"
                   ]
                 },
                 "value": {
                   "@type": "xpath",
-                  "@args": [
+                  "args": [
                     "caex:Attribute[@Name='refURI']/caex:Value"
                   ]
                 },
                 "mimeType": {
                   "@type": "xpath",
-                  "@args": [
+                  "args": [
                     "'caex:Attribute[@Name='MIMEType']/caex:Value'"
                   ]
                 }
@@ -523,7 +571,9 @@
               },
               "modelType": {
                 "@type": "xpath",
-                "args": ["'BasicEvent'"]
+                "args": [
+                  "'BasicEvent'"
+                ]
               }
             }
           ]
@@ -531,23 +581,31 @@
         {
           "@foreach": {
             "@type": "xpath",
-            "args": ["."]
+            "args": [
+              "."
+            ]
           },
           "@bind": {
             "idShort": {
               "@type": "xpath",
-              "args": ["'Operations'"]
+              "args": [
+                "'Operations'"
+              ]
             },
             "id": {
               "@type": "concatenate",
               "args": [
                 {
                   "@type": "def",
-                  "args": ["assetIdGeneration"]
+                  "args": [
+                    "assetIdGeneration"
+                  ]
                 },
                 {
                   "@type": "string",
-                  "args": ["_operations"]
+                  "args": [
+                    "_operations"
+                  ]
                 }
               ]
             }
@@ -557,7 +615,9 @@
             {
               "@foreach": {
                 "@type": "CaexAttributeName",
-                "args": ["OperationA"]
+                "args": [
+                  "OperationA"
+                ]
               },
               "semanticId": "ops",
               "modelType": "Operation",
@@ -565,7 +625,9 @@
                 {
                   "@foreach": {
                     "@type": "xpath",
-                    "args": ["caex:Attribute[@Name='Inputs']/caex:Attribute"]
+                    "args": [
+                      "caex:Attribute[@Name='Inputs']/caex:Attribute"
+                    ]
                   },
                   "modelType": "Property",
                   "valueType": "STRING"
@@ -575,7 +637,9 @@
                 {
                   "@foreach": {
                     "@type": "xpath",
-                    "args": ["caex:Attribute[@Name='Outputs']/caex:Attribute"]
+                    "args": [
+                      "caex:Attribute[@Name='Outputs']/caex:Attribute"
+                    ]
                   },
                   "modelType": "Property",
                   "valueType": "STRING"
@@ -585,7 +649,9 @@
                 {
                   "@foreach": {
                     "@type": "xpath",
-                    "args": ["caex:Attribute[@Name='InOut']/caex:Attribute"]
+                    "args": [
+                      "caex:Attribute[@Name='InOut']/caex:Attribute"
+                    ]
                   },
                   "modelType": "Property",
                   "valueType": "STRING"
@@ -595,7 +661,9 @@
             {
               "@foreach": {
                 "@type": "CaexAttributeName",
-                "args": ["OperationA"]
+                "args": [
+                  "OperationA"
+                ]
               },
               "semanticId": "test",
               "modelType": "RelationshipElement",
@@ -612,15 +680,18 @@
               "@bind": {
                 "idShort": {
                   "@type": "xpath",
-                  "args": ["'relElement'"]
-
+                  "args": [
+                    "'relElement'"
+                  ]
                 }
               }
             },
             {
               "@foreach": {
                 "@type": "CaexAttributeName",
-                "args": ["OperationA"]
+                "args": [
+                  "OperationA"
+                ]
               },
               "semanticId": "test/test/test",
               "modelType": "AnnotatedRelationshipElement",
@@ -635,14 +706,18 @@
               "@bind": {
                 "idShort": {
                   "@type": "xpath",
-                  "args": ["'annoRelElement'"]
+                  "args": [
+                    "'annoRelElement'"
+                  ]
                 }
               },
               "annotations": [
                 {
                   "@foreach": {
                     "@type": "xpath",
-                    "args": ["caex:Attribute[@Name='Inputs']/caex:Attribute"]
+                    "args": [
+                      "caex:Attribute[@Name='Inputs']/caex:Attribute"
+                    ]
                   },
                   "modelType": "Property",
                   "valueType": "STRING"
@@ -650,7 +725,9 @@
                 {
                   "@foreach": {
                     "@type": "xpath",
-                    "args": ["caex:Attribute[@Name='Outputs']/caex:Attribute"]
+                    "args": [
+                      "caex:Attribute[@Name='Outputs']/caex:Attribute"
+                    ]
                   },
                   "modelType": "Property",
                   "valueType": "STRING"
@@ -660,14 +737,17 @@
             {
               "@foreach": {
                 "@type": "xpath",
-                "args": ["caex:Attribute[@Name='Manufacturer']"]
+                "args": [
+                  "caex:Attribute[@Name='Manufacturer']"
+                ]
               },
               "semanticId": "submodelElementSemanticId2",
               "@bind": {
-                "value":
-                {
+                "value": {
                   "@type": "xpath",
-                  "args": ["caex:Value"]
+                  "args": [
+                    "caex:Value"
+                  ]
                 }
               },
               "valueType": "STRING",
@@ -676,12 +756,16 @@
             {
               "@foreach": {
                 "@type": "xpath",
-                "args": ["caex:Attribute[@Name='ManufacturerURI']"]
+                "args": [
+                  "caex:Attribute[@Name='ManufacturerURI']"
+                ]
               },
               "@bind": {
                 "idShort": {
                   "@type": "xpath",
-                  "args": ["'Browsable'"]
+                  "args": [
+                    "'Browsable'"
+                  ]
                 }
               },
               "modelType": "Capability"
