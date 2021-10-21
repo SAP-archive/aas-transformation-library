@@ -22,6 +22,7 @@ public class UANodeSetSchemaValidatorTest {
 
     private final String MINIMAL_NODESET = "ua/minimal-nodeset.xml";
     private final String HUGE_NODESET = "ua/EntType.xml";
+    private final String BIG_MACHINE_NODESET = "ua/big.machine.nodeset.xml";
 
     SchemaValidator classUnderTest;
 
@@ -31,7 +32,7 @@ public class UANodeSetSchemaValidatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {MINIMAL_NODESET, HUGE_NODESET})
+    @ValueSource(strings = {MINIMAL_NODESET, HUGE_NODESET, BIG_MACHINE_NODESET})
     @DisplayName("Validates OPCUA NodeSet xmls. Two valid node sets are validated against v 1.04 schema")
     void validateValidNodeSets(String filePath) throws FileNotFoundException {
 
@@ -42,7 +43,7 @@ public class UANodeSetSchemaValidatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {MINIMAL_NODESET, HUGE_NODESET})
+    @ValueSource(strings = {MINIMAL_NODESET, HUGE_NODESET, BIG_MACHINE_NODESET})
     @DisplayName("Validates OPCUA NodeSet xmls. Two invalid node sets are validated against v 1.04 schema")
     void validateInvalidNodeSets(String filePath) throws IOException {
 
