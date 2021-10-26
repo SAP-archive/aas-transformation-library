@@ -55,7 +55,7 @@
       },
       "assetShell": {
         "id": {
-          "concatenate": [
+          "@concatenate": [
             {
               "string": "shellId"
             }

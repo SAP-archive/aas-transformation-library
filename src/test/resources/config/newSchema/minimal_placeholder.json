@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "aasVersion": "3.0RC01",
+  "configMappings": [
+    {
+      "@definitions": {
+      },
+      "@vars": {
+        "assetName": "Name of the asset",
+        "submodelName": "Name of the submodel"
+      },
+      "@foreach": {
+        "@xpath": "//caex:SystemUnitClass"
+      },
+      "submodels": [
+        {
+          "@foreach": {
+            "@caexAttributeName": "IdentificationData"
+          },
+          "semanticId": "http://sap.com",
+          "id": {
+            "@concatenate": [
+              {
+                "string": "submodel "
+              },
+              {
+                "var": "submodelName"
+              },
+              {
+                "string": " of asset "
+              },
+              {
+                "var": "assetName"
+              }
+            ]
+          },
+          "submodelElements": []
+        }
+      ],
+      "assetInformation": {
+        "@bind": {
+          "kindType": {
+            "@xpath": "'TYPE'"
+          }
+        },
+        "id": "assetInformationId",
+        "globalAssetIdReference": {
+          "valueId": "assetInformationGlobalAssetIdReference",
+          "keyType": "CUSTOM",
+          "keyElement": "ASSET"
+        }
+      },
+      "assetShell": {}
+    }
+  ]
+}
