@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.util.*;
+import java.util.stream.Collectors;
 
 //FIXME the purpose is to check feasibility of getting XPath expression for NodeId from browsepath
 // it was originally written using W3C library and then be switched directly to dom4j, so it needs a lot of improvements and optimization
@@ -16,40 +17,24 @@ import java.util.*;
 public class BrowsepathXPathBuilder implements XPathBuilder {
 
     private final XPathHelper xpathHelper;
-    private final String[] namespaceURIs;
+    private final List<String> namespaceURIs;
     private final Set<String> hierarchyReferences;
     private String hierarchyIsConstraint ;
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public BrowsepathXPathBuilder(){
+        String DEFAULT_NS = "http://opcfoundation.org/UA/";
         xpathHelper = XPathHelper.getInstance();
         hierarchyReferences = new HashSet<>();
         hierarchyReferences.addAll(Arrays.asList(Hierarchy.HAS_COMPONENT.nodeId, Hierarchy.HAS_PROPERTY.nodeId, Hierarchy.ORGANIZES.nodeId));
-        List<Element> namespacesNodeList = xpathHelper.xmlRoot.getRootElement().element("NamespaceUris").elements("Uri");
-        String DEFAULT_NS = "http://opcfoundation.org/UA/";
-        if (namespacesNodeList != null) {
-            namespaceURIs = new String[namespacesNodeList.size() + 1];
-            namespaceURIs[0] = DEFAULT_NS;
-            for (int i = 0; i < namespacesNodeList.size(); i++) {
-                Node item = namespacesNodeList.get(i);
-                if (item != null)
-                    namespaceURIs[i + 1] = item.getText();
-            }
-        } else {
-            namespaceURIs = new String[]{DEFAULT_NS};
-        }
-        List<Element> aliasesNodeList = xpathHelper.xmlRoot.getRootElement().element("Aliases").elements("Alias");
-        if (aliasesNodeList != null) {
-            Set<String> aliases = new HashSet<>();
-            for (Element alias : aliasesNodeList) {
-                if (alias != null) {
-                    String attr = alias.attributeValue("Alias");
-                    if (Hierarchy.hierarchyReferences().contains(alias.getText()))
-                        aliases.add(attr);
-                }
-            }
-            hierarchyReferences.addAll(aliases);
-        }
+        namespaceURIs = new ArrayList<>();
+        namespaceURIs.add(DEFAULT_NS);
+        namespaceURIs.addAll(xpathHelper.xmlRoot.getRootElement().element("NamespaceUris").elements("Uri")
+                .stream().map(Element::getText).collect(Collectors.toList()));
+        hierarchyReferences.addAll(xpathHelper.xmlRoot.getRootElement().element("Aliases").elements("Alias")
+                .stream().filter(e -> Hierarchy.hierarchyReferences().contains(e.getText()))
+                         .map(e -> e.attributeValue("Alias"))
+                         .collect(Collectors.toSet()));
         hierarchyIsConstraint="(";
         for (String ref : hierarchyReferences) {
             hierarchyIsConstraint += "@ReferenceType=\"" + ref + "\" or ";
@@ -58,20 +43,19 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
     }
 
     @Override
-    public String pathExpression(String[] input) {
-        if (input == null || input.length == 0 || input[0] == null || input[0].replace("/", "").trim().isEmpty()) {
+    public String pathExpression(String[] browosePath) {
+        if (browosePath == null || browosePath.length == 0 || browosePath[0] == null || browosePath[0].replace("/", "").trim().isEmpty()) {
             return null;
         }
-        String exp = "/UANodeSet/*[@BrowseName=\"" + input[0] + "\"]/@NodeId";
-        if (input.length == 1) {
+        String exp = "/UANodeSet/*[@BrowseName=\"" + browosePath[0] + "\"]/@NodeId";
+        if (browosePath.length == 1) {
             return exp;
         }
-        XPathHelper xpathHelper = XPathHelper.getInstance();
         List<Node> parentIDs = xpathHelper.getNodes(exp);
         if (parentIDs == null || parentIDs.isEmpty()) {
             return null;
         }
-        return getExpForBrowsePath(Arrays.copyOfRange(input, 1, input.length), parentIDs.get(0).getText());
+        return getExpForBrowsePath(Arrays.copyOfRange(browosePath, 1, browosePath.length), parentIDs.get(0).getText());
     }
 
     private String getExpForBrowsePath(String[] browsePath, String parentID) {
@@ -125,9 +109,8 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
         if (browsePath.length == 1 &&  parentElem.attributeCount() > 0)
             return parentId;
         //considering references: "HasComponent", "HasProperty" and "Organizes" to determine children of a node
+        // Child and Parent relationships are in context of these references
         List<Node> childrenNodeId = xpathHelper.getNodes("/UANodeSet/*[@BrowseName=\"" + browsePath[1] + "\"]/@NodeId");
-        LOGGER.info("childrenNodeId: {}", childrenNodeId);
-
         Node childNode = findReferencedChild(parent, childrenNodeId);
         if (childNode != null) {
             return getNodeIdFromBrowsePath(Arrays.copyOfRange(browsePath, 2, browsePath.length), childNode);
@@ -144,6 +127,10 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
         return getNodeIdFromBrowsePath(newPath, nodeId);
     }
 
+    /*
+    parent and child relationships don't have the meaning of xml nodes relationships
+    theses relationships are in context of UANode set (in context of "HasComponent","HasProperty", "Organizes"
+     */
     private boolean isParent(Element parent, Element child) {
         if (parent == null || child == null ||
                 child.getNodeType() != Node.ELEMENT_NODE || child.attributeCount() ==0 ||
@@ -192,33 +179,25 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
     }
 
     private Set<String> getNodeIdSet(List<Node> childrenNodes) {
-        Set<String> ids = new TreeSet<>();
         if (childrenNodes == null || childrenNodes.size() == 0)
-            return ids;
-        for (Node child : childrenNodes) {
-            if (child == null || child.getNodeType() != Node.ELEMENT_NODE || ((Element) child).attributeCount() == 0)
-                return ids;
-            String id = ((Element) child).attributeValue("NodeId");
-            if (id != null && !id.trim().isEmpty())
-                ids.add(id);
-        }
-        return ids;
+            return new TreeSet<>();
+        return childrenNodes.stream().filter(ch -> ch instanceof  Element).map(ch -> ((Element) ch).attributeValue("NodeId")).collect(Collectors.toSet());
     }
 
     public String getNamespace(String browseName) {
         if (browseName == null || browseName.trim().isEmpty()) {
-            return namespaceURIs[0];
+            return namespaceURIs.get(0);
         }
         String[] bn = browseName.split(":");
         if (bn.length == 1) {
-            return namespaceURIs[0];
+            return namespaceURIs.get(0);
         } else if (bn.length > 1) {
             try {
                 int index = Integer.parseInt(bn[0]);
-                if (index >= 0 && index < namespaceURIs.length)
-                    return namespaceURIs[index];
+                if (index >= 0 && index < namespaceURIs.size())
+                    return namespaceURIs.get(index);
             } catch (NumberFormatException e) {
-                return namespaceURIs[0];
+                return namespaceURIs.get(0);
             }
         }
         return null;
@@ -239,8 +218,7 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
             this.nodeId = nodeId;
         }
         public static Set<String> hierarchyReferences(){
-            HashSet<String> refs = new HashSet<>(Arrays.asList(HAS_COMPONENT.nodeId, HAS_PROPERTY.nodeId, ORGANIZES.nodeId));
-            return refs;
+            return new HashSet<>(Arrays.asList(HAS_COMPONENT.nodeId, HAS_PROPERTY.nodeId, ORGANIZES.nodeId));
         }
     }
 

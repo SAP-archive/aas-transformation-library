@@ -7,7 +7,6 @@ package com.sap.dsc.aas.lib.transform;
 
 import com.google.common.base.Strings;
 import com.sap.dsc.aas.lib.exceptions.NoResultByXPathException;
-import org.dom4j.Document;
 import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.slf4j.Logger;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 public class XPathHelper {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-	public Document xmlRoot;
 
 	private XPathHelper() {
 	}
@@ -47,9 +45,6 @@ public class XPathHelper {
 		return createXPath(parentNode, xpathExpression).selectNodes(parentNode);
 	}
 
-	public List<Node> getNodes(String xpathExpression){
-		return getNodes(this.xmlRoot, xpathExpression);
-	}
 
 	public String getStringValueOrNull(Node node, String xPath) {
 		Object result = createXPath(node, xPath).evaluate(node);
@@ -101,9 +96,6 @@ public class XPathHelper {
 		return xpath;
 	}
 
-	public void setXmlRoot(Document root){
-		this.xmlRoot = root;
-	}
 
 	private Map<String, String> namespaces = new HashMap<>();
 
