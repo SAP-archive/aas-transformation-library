@@ -19,13 +19,18 @@ public interface Template {
 	@JsonProperty("@bind")
 	void setBindSpecification(BindSpecification bindSpecification);
 
-	Map<String, Expression> getVariables();
+	Expression getForeachExpression();
 
-	@JsonProperty("@vars")
-	void setVariables(Map<String, Expression> variables);
+	@JsonProperty("@foreach")
+	void setForeachExpression(Expression expression);
 
 	Map<String, Expression> getDefinitions();
 
 	@JsonProperty("@definitions")
 	void setDefinitions(Map<String, Expression> definitions);
+
+	Map<String, Expression> getVariables();
+
+	@JsonProperty("@vars")
+	void setVariables(Map<String, Expression> variables);
 }
