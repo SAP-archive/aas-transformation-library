@@ -1,12 +1,13 @@
-package com.sap.dsc.aas.lib.aml.config.jackson;
+package com.sap.dsc.aas.lib.mapping.jackson;
 
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.sap.dsc.aas.lib.expressions.Expression;
 import com.sap.dsc.aas.lib.mapping.model.BindSpecification;
 
 public class BindingSpecificationDeserializer extends JsonDeserializer<BindSpecification> {
@@ -19,13 +20,17 @@ public class BindingSpecificationDeserializer extends JsonDeserializer<BindSpeci
         throws IOException, JsonProcessingException {
         BindSpecification spec = new BindSpecification();
 
-        JsonNode node = jp.getCodec().readTree(jp);
-        node.fields().forEachRemaining(entry -> {
-            // TODO add here logic to parse XPaths, BrowsePaths etc.
-            String name = entry.getKey();
-            JsonNode value = entry.getValue();
-            spec.setBinding(name, value.textValue());
-        });
+        while (jp.nextToken() != JsonToken.END_OBJECT) {
+            // read property name
+            String property = jp.getCurrentName();
+
+            // move to the corresponding value
+            jp.nextToken();
+
+            Expression valueExpr = jp.getCodec().readValue(jp, Expression.class);
+            spec.setBinding(property, valueExpr);
+        }
+
         return spec;
     }
 }

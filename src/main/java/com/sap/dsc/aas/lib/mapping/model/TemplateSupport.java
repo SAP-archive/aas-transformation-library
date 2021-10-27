@@ -7,13 +7,15 @@ package com.sap.dsc.aas.lib.mapping.model;
 
 import java.util.Map;
 
+import com.sap.dsc.aas.lib.expressions.Expression;
+
 public class TemplateSupport implements Template {
 
     private Object target;
 
     private BindSpecification bindSpecification;
-    private Map<String, Object> variables;
-    private Map<String, Object> definitions;
+    private Map<String, Expression> variables;
+    private Map<String, Expression> definitions;
 
     public TemplateSupport() {
     }
@@ -41,22 +43,22 @@ public class TemplateSupport implements Template {
     }
 
     @Override
-    public Map<String, Object> getVariables() {
+    public Map<String, Expression> getVariables() {
         return variables;
     }
 
     @Override
-    public void setVariables(Map<String, Object> variables) {
+    public void setVariables(Map<String, Expression> variables) {
         this.variables = variables;
     }
 
     @Override
-    public Map<String, Object> getDefinitions() {
+    public Map<String, Expression> getDefinitions() {
         return definitions;
     }
 
     @Override
-    public void setDefinitions(Map<String, Object> definitions) {
+    public void setDefinitions(Map<String, Expression> definitions) {
         this.definitions = definitions;
     }
 }

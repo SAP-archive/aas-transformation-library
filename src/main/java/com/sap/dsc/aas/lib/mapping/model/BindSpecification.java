@@ -8,15 +8,17 @@ package com.sap.dsc.aas.lib.mapping.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sap.dsc.aas.lib.expressions.Expression;
+
 public class BindSpecification {
 
-    protected Map<String, Object> bindings = new HashMap<>();
+    protected Map<String, Expression> bindings = new HashMap<>();
 
-    public Map<String, Object> getBindings() {
+    public Map<String, Expression> getBindings() {
         return bindings;
     }
 
-    public void setBinding(String key, Object value) {
+    public void setBinding(String key, Expression value) {
         bindings.put(key, value);
     }
 }
