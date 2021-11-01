@@ -2,6 +2,7 @@ package com.sap.dsc.aas.lib.ua.transform;
 
 import com.sap.dsc.aas.lib.transform.XPathBuilder;
 import com.sap.dsc.aas.lib.transform.XPathHelper;
+import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.slf4j.Logger;
@@ -20,18 +21,20 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
     private final List<String> namespaceURIs;
     private final Set<String> hierarchyReferences;
     private String hierarchyIsConstraint ;
+    private Document root;
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public BrowsepathXPathBuilder(){
+    public BrowsepathXPathBuilder(Document root){
+        this.root = root;
         String DEFAULT_NS = "http://opcfoundation.org/UA/";
         xpathHelper = XPathHelper.getInstance();
         hierarchyReferences = new HashSet<>();
         hierarchyReferences.addAll(Arrays.asList(Hierarchy.HAS_COMPONENT.nodeId, Hierarchy.HAS_PROPERTY.nodeId, Hierarchy.ORGANIZES.nodeId));
         namespaceURIs = new ArrayList<>();
         namespaceURIs.add(DEFAULT_NS);
-        namespaceURIs.addAll(xpathHelper.xmlRoot.getRootElement().element("NamespaceUris").elements("Uri")
+        namespaceURIs.addAll(root.getRootElement().element("NamespaceUris").elements("Uri")
                 .stream().map(Element::getText).collect(Collectors.toList()));
-        hierarchyReferences.addAll(xpathHelper.xmlRoot.getRootElement().element("Aliases").elements("Alias")
+        hierarchyReferences.addAll(root.getRootElement().element("Aliases").elements("Alias")
                 .stream().filter(e -> Hierarchy.hierarchyReferences().contains(e.getText()))
                          .map(e -> e.attributeValue("Alias"))
                          .collect(Collectors.toSet()));
@@ -51,7 +54,7 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
         if (browosePath.length == 1) {
             return exp;
         }
-        List<Node> parentIDs = xpathHelper.getNodes(exp);
+        List<Node> parentIDs = xpathHelper.getNodes(root, exp);
         if (parentIDs == null || parentIDs.isEmpty()) {
             return null;
         }
@@ -66,7 +69,7 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
         if (browsePath.length == 1) {
             return exp;
         }
-       List<Node> parents = xpathHelper.getNodes(exp);
+       List<Node> parents = xpathHelper.getNodes(root, exp);
         if (parents == null || parents.isEmpty()) {
             return null;
         }
@@ -83,7 +86,7 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
         if (browsePath == null || browsePath.length == 0 || browsePath[0] == null || browsePath[0].replace("/", "").trim().isEmpty()) {
             return prev == null ? null : prev.getText();
         }
-        List<Node> parents = xpathHelper.getNodes("/UANodeSet/*[@BrowseName=\"" + browsePath[0] + "\"]");
+        List<Node> parents = xpathHelper.getNodes(root,"/UANodeSet/*[@BrowseName=\"" + browsePath[0] + "\"]");
         if (parents == null || parents.size() == 0 || parents.get(0) == null) {
             return prev == null ? null : prev.getText();
         }
@@ -110,7 +113,7 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
             return parentId;
         //considering references: "HasComponent", "HasProperty" and "Organizes" to determine children of a node
         // Child and Parent relationships are in context of these references
-        List<Node> childrenNodeId = xpathHelper.getNodes("/UANodeSet/*[@BrowseName=\"" + browsePath[1] + "\"]/@NodeId");
+        List<Node> childrenNodeId = xpathHelper.getNodes(root,"/UANodeSet/*[@BrowseName=\"" + browsePath[1] + "\"]/@NodeId");
         Node childNode = findReferencedChild(parent, childrenNodeId);
         if (childNode != null) {
             return getNodeIdFromBrowsePath(Arrays.copyOfRange(browsePath, 2, browsePath.length), childNode);
@@ -118,7 +121,7 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
 
         //considering references: "IsComponent", "IsProperty" and "OrganizedBy" to determine children of a node
         String exp = computeExpression(browsePath[1],parentId);
-        List<Node> nodes = xpathHelper.getNodes(exp);//xpathHelper.xmlRoot.elements(exp);//
+        List<Node> nodes = xpathHelper.getNodes(root,exp);//xpathHelper.xmlRoot.elements(exp);//
         if (nodes == null || nodes.size() == 0 || nodes.get(0).getNodeType() != Node.ELEMENT_NODE) {
             return prev == null ? null : prev.getText();
         }

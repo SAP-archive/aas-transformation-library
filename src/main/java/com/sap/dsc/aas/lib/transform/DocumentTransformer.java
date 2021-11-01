@@ -23,7 +23,6 @@ public abstract class DocumentTransformer {
 		Document readXmlDocument = readXmlDocument(inStream);
 		validateDocument(readXmlDocument);
 		afterValidation(readXmlDocument, mapping);
-		XPathHelper.getInstance().setXmlRoot(readXmlDocument);
 		return createShellEnv(readXmlDocument, mapping);
 	}
 
