@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class BrowsepathXPathBuilderTest {
     BrowsepathXPathBuilder parser;
     Logger LOGGER = Logger.getLogger("ParserTest.class");
-    String nodesetInputFileName = "src/test/resources/ua/iwu.fraunhofer.joiningcell.xml";
+    String nodesetInputFileName = "src/test/resources/ua/minimal-nodeset.xml";
     Document xmlDoc;
 
 
@@ -31,8 +31,6 @@ public class BrowsepathXPathBuilderTest {
         try (InputStream nodesetStream = Files.newInputStream(Paths.get(nodesetInputFileName))) {
             UANodeSetTransformer transformer = new UANodeSetTransformer();
             xmlDoc = transformer.readXmlDocument(nodesetStream);
-            XPathHelper.getInstance().setNamespaceBinding("uax", "http://opcfoundation.org/UA/2008/02/Types.xsd" );
-            XPathHelper.getInstance().setNamespaceBinding("si", "http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" );
 
             parser = new BrowsepathXPathBuilder(xmlDoc);
         }
@@ -40,16 +38,16 @@ public class BrowsepathXPathBuilderTest {
 
     @Test
     void simpleTest() {
-        String[] browsePath = {"1:TopologyElementType", "1:ParameterSet"};
+        String[] browsePath = {"1:ExampleObject", "1:ExampleIntegerVariable"};
         String nodeId = parser.getNodeIdFromBrowsePath(browsePath);
-        assertEquals("ns=1;i=5002", nodeId);
+        assertEquals("ns=1;i=1010", nodeId);
         String exp = parser.pathExpression(browsePath);
         List<Node> nodeFromExp =XPathHelper.getInstance().getNodes(xmlDoc, exp);
         assertNotNull(nodeFromExp);
         assertEquals(nodeFromExp.size(), 1);
         assertThat(nodeFromExp.get(0)).isInstanceOf(Element.class);
         assertEquals(nodeId, ((Element)nodeFromExp.get(0)).attribute("NodeId").getValue() );
-        assertEquals("http://opcfoundation.org/UA/DI/", parser.getNamespace(browsePath[0]));
+        assertEquals("http://iwu.fraunhofer.de/c32/arno", parser.getNamespace(browsePath[0]));
 
 
     }
