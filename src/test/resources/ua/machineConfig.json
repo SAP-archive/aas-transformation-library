@@ -1,0 +1,78 @@
+{
+	"version": "1.0.0",
+	"aasVersion": "3.0RC01",
+	"namespaceBindings": {
+		"opc": "http://opcfoundation.org/UA/2011/03/UANodeSet.xsd",
+		"uax": "http://opcfoundation.org/UA/2008/02/Types.xsd",
+		"s1":"http://opcfoundation.org/UA/Machinery/Types.xsd",
+		"s2":"http://opcfoundation.org/UA/DI/Types.xsd"
+	},
+	"configMappings": [
+		{
+			"from_xpath": "/opc:UANodeSet",
+			"idGeneration": {
+				"parameters": [
+					{
+						"from_string": ""
+					}
+				],
+				"finalizeFunction": "concatenate_and_hash",
+				"idGenerationName": "fooIdSM"
+			},
+			"submodels": [
+				{
+					"from_xpath": "opc:UAObject/opc:DisplayName[text()[starts-with(.,'DeviceTopology')]]/../..",
+					"semanticId": "http://device.semantic.com",
+					"idGeneration": {
+						"parameters": [
+							{
+								"from_idGenerationName": "fooIdSM"
+							},
+							{
+								"from_xpath": "opc:UAObject/opc:DisplayName[text()[starts-with(.,'DeviceTopology')]]"
+							}
+						],
+						"finalizeFunction": "concatenate"
+					},
+					"idShort_xpath": "opc:UAObject/opc:DisplayName[text()[starts-with(.,'DeviceTopology')]]",
+					"submodelElements": [
+						{
+							"from_xpath": "opc:UAVariable/opc:DisplayName[text()[starts-with(.,'Device')]]/..",
+							"semanticId": "0112/2///61987#ABA574#006",
+							"idShort_xpath" : "@NodeId",
+							"valueType": "string",
+							"valueXPath": "opc:DisplayName",
+							"@type": "Property"
+						}
+					]
+				}
+			],
+			"assetInformation": {
+				"idGeneration": {
+					"parameters": [
+						{
+							"from_string": "DeviceAssetId"
+						}
+					],
+					"finalizeFunction": "concatenate_and_hash",
+					"idGenerationName": "fooIdAsset"
+				},
+				"globalAssetIdReference": {
+					"valueId": "assetInformationDevice",
+					"keyType": "CUSTOM",
+					"keyElement": "ASSET"
+				}
+			},
+			"assetShell": {
+				"idGeneration": {
+					"parameters": [
+						{
+							"from_string": "deviceAASID"
+						}
+					]
+				},
+				"idShort_xpath": "string('devId')"
+			}
+		}
+	]
+}
