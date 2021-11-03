@@ -2,6 +2,7 @@ package com.sap.dsc.aas.lib.expressions;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.dom4j.Node;
@@ -45,7 +46,7 @@ public class XPathExpr implements Expression {
     }
 
     @Override
-    public Object evaluate() {
+    public List<Node> evaluate() {
         // evaluate multiple xpath expressions and create joined stream of all resulting nodes
         return args.stream().map(arg -> arg.evaluate()).flatMap(value -> {
             if (value instanceof String) {
@@ -55,6 +56,6 @@ public class XPathExpr implements Expression {
                 // invalid XPath
                 throw new IllegalArgumentException("Invalid XPath");
             }
-        });
+        }).collect(Collectors.toList());
     }
 }

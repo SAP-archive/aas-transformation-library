@@ -13,7 +13,6 @@ import io.adminshell.aas.v3.model.EmbeddedDataSpecification;
 import io.adminshell.aas.v3.model.LangString;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -102,7 +101,7 @@ public class MappingSpecificationParser {
                 }
             })
             // disabled for now until camel case enums are used
-            // .addModule(buildEnumModule())
+            .addModule(buildEnumModule())
             .addModule(buildImplementationModule())
             .addModule(buildCustomDeserializerModule())
             .build();
