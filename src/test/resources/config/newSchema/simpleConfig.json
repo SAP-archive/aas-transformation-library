@@ -82,7 +82,7 @@
         "@foreach": {
           "@caexAttributeName": "IdentificationData"
         },
-        "semanticId": "http://sap.com",
+        "semanticId_str": "http://sap.com",
         "@variables": {
           "submodel3Id": {
             "@xpath": "blabla"
@@ -109,7 +109,7 @@
             "@foreach": {
               "@caexAttributeName": "Manufacturer"
             },
-            "semanticId": "submodelElementSemanticId1",
+            "semanticId_str": "submodelElementSemanticId1",
             "modelType": "Property",
             "valueType": "STRING"
           },
@@ -117,7 +117,7 @@
             "@foreach": {
               "@xpath": "caex:Attribute[@Name='Manufacturer']"
             },
-            "semanticId": "submodelElementSemanticId2",
+            "semanticId_str": "submodelElementSemanticId2",
             "modelType": "Property",
             "valueType": "STRING",
             "@bind": {
@@ -143,7 +143,7 @@
         "@foreach": {
           "@xpath": "caex:Attribute[@Name='CommercialData']"
         },
-        "semanticId": "http://sap.com",
+        "semanticId_str": "http://sap.com",
         "@bind": {
           "id": {
             "@concatenate": [
@@ -162,7 +162,7 @@
               "@caexAttributeName": "ProductPriceDetails"
             },
             "modelType": "SubmodelElementCollection",
-            "semanticId": "SubmodelElementCollectionSemanticId",
+            "semanticId_str": "SubmodelElementCollectionSemanticId",
             "submodelElements": [
               {
                 "@foreach": {
@@ -185,7 +185,7 @@
               "@caexAttributeName": "ProductDetails"
             },
             "modelType": "SubmodelElementCollection",
-            "semanticId_ref": {
+            "semanticId": {
               "valueId": "ProductDetails",
               "keyType": "CUSTOM",
               "keyElement": "CONCEPT_DESCRIPTION"
@@ -214,7 +214,7 @@
               "@caexAttributeName": "PackagingAndTransportation"
             },
             "modelType": "Entity",
-            "semanticId": "PackAndTransport",
+            "semanticId_str": "PackAndTransport",
             "entityType": "SELF_MANAGED_ENTITY",
             "assetReference": {
               "valueId": "AssetIdExtern",
@@ -250,7 +250,7 @@
         "@foreach": {
           "@xpath": "caex:Attribute[@Name='GeneralTechnicalData']"
         },
-        "semanticId": "http://sap.com",
+        "semanticId_str": "http://sap.com",
         "@bind": {
           "id": {
             "@concatenate": [
@@ -269,7 +269,7 @@
               "@caexAttributeName": "AmbientTemperature"
             },
             "modelType": "Range",
-            "semanticId_ref": {
+            "semanticId": {
               "valueId": "AmbientTemperature",
               "keyType": "IRI",
               "keyElement": "RANGE"
@@ -296,7 +296,7 @@
         "@foreach": {
           "@caexAttributeName": "ParameterData"
         },
-        "semanticId": "http://sap.com",
+        "semanticId_str": "http://sap.com",
         "id": "$submodel3Id",
         "submodelElements": [
           {
@@ -312,7 +312,7 @@
         "@foreach": {
           "@xpath": "."
         },
-        "semanticId": "http://sap.com/Documents",
+        "semanticId_str": "http://sap.com/Documents",
         "@bind": {
           "idShort": "'Documents'"
         },
@@ -404,13 +404,13 @@
             }
           }
         },
-        "semanticId": "http://sap.com/operations",
+        "semanticId_str": "http://sap.com/operations",
         "submodelElements": [
           {
             "@foreach": {
               "@caexAttributeName": "OperationA"
             },
-            "semanticId": "ops",
+            "semanticId_str": "ops",
             "modelType": "Operation",
             "inputVariables": [
               {
@@ -444,7 +444,7 @@
             "@foreach": {
               "@caexAttributeName": "OperationA"
             },
-            "semanticId": "test",
+            "semanticId_str": "test",
             "modelType": "RelationshipElement",
             "@bind": {
               "idShort": {
@@ -466,7 +466,7 @@
             "@foreach": {
               "@caexAttributeName": "OperationA"
             },
-            "semanticId": "test/test/test",
+            "semanticId_str": "test/test/test",
             "modelType": "AnnotatedRelationshipElement",
             "@bind": {
               "idShort": {
@@ -502,7 +502,7 @@
             "@foreach": {
               "@xpath": "caex:Attribute[@Name='Manufacturer']"
             },
-            "semanticId": "submodelElementSemanticId2",
+            "semanticId_str": "submodelElementSemanticId2",
             "valueType": "STRING",
             "modelType": "Property",
             "@bind": {
@@ -516,7 +516,7 @@
               "@xpath": "caex:Attribute[@Name='ManufacturerURI']"
             },
             "@bind": {
-              "idShort_xpath": "'Browseable'"
+              "@xpath": "'Browseable'"
             },
             "modelType": "Capability"
           }

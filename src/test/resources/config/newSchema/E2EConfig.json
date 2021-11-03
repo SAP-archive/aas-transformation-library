@@ -1,19 +1,22 @@
 {
   "version": "1.0.0",
-  "aasVersion": "3.0RC01",
   "config": [
     {
-      "@header": {
-        "@vars": {
-          "assetName": "Name of the asset",
-          "submodelName": "Name of the submodel"
+      "@headers": {
+        "aasVersion": "3.0RC01",
+        "@variables": {
+          "assetName": {
+            "@const": "Name of the asset"
+          },
+          "submodelName": {
+            "@const": "Name of the submodel"
+          }
         },
         "@namespaces": {
           "ns1": "http://ns.org/1",
           "ns2": "http://ns.org/2",
           "caex": "http://www.dke.de/CAEX"
         }
-
       },
       "@mappings": {
         "@foreach": {
@@ -51,9 +54,9 @@
         "submodels": [
           {
             "@foreach": {
-              "caexAttributeName": "IdentificationData"
+              "@caexAttributeName": "IdentificationData"
             },
-            "semanticId_ref": {
+            "semanticId": {
               "valueId": "http://www.sap.com/ain/IdentificationData",
               "keyType": "IRI",
               "keyElement": "SUBMODEL"
@@ -85,13 +88,13 @@
                   "xpath": "."
                 },
                 "modelType": "SubmodelElementCollection",
-                "semanticId": "http://www.sap.com/ain/collection",
+                "semanticId_str": "http://www.sap.com/ain/collection",
                 "submodelElements": [
                   {
                     "@foreach": {
-                      "caexAttributeName": "Manufacturer"
+                      "@caexAttributeName": "Manufacturer"
                     },
-                    "semanticId": "0112/2///61987#ABA565",
+                    "semanticId_str": "0112/2///61987#ABA565",
                     "modelType": "Property",
                     "valueType": "string"
                   }

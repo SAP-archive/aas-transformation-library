@@ -1,11 +1,9 @@
 {
-  "version": "1.0.0",
-  "aasVersion": "3.0RC01",
   "@headers": {
-    "@variables": 
-      {
-        "manufacturerId": "The Id of the manufacturer, will be filled from the CliendId before calling the MEI Api"
-      },
+    "aasVersion": "3.0RC01",
+    "@variables": {
+      "manufacturerId": "The Id of the manufacturer, will be filled from the CliendId before calling the MEI Api"
+    },
     "@definitions": {
       "mappingIdGeneration": {
         "@concatenate_and_hash": [
@@ -45,7 +43,7 @@
   "configMappings": [
     {
       "@foreach": {
-        "@xpath":  "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
+        "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
       },
       "@bind": {
         "@id": {
