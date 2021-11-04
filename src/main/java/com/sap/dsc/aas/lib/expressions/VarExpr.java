@@ -21,6 +21,6 @@ public class VarExpr implements Expression {
 
 	@Override
 	public Object evaluate(TransformationContext ctx) {
-		return ctx.getVariables().get(name);
+		return ctx.getVariables().get(name).evaluate(ctx);
 	}
 }

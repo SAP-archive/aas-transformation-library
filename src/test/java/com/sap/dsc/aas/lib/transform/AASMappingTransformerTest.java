@@ -22,6 +22,7 @@ import com.sap.dsc.aas.lib.mapping.AASMappingTransformer;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
+import io.adminshell.aas.v3.dataformat.SerializationException;
 import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import io.adminshell.aas.v3.model.File;
@@ -141,12 +142,37 @@ public class AASMappingTransformerTest {
 		XPathHelper.getInstance().setNamespaceBinding("ns", "http://ns.org/");
 		// ACT
 		List<AssetAdministrationShellEnvironment> transform = aasMappingTransformer.transform(mapSpec, testDoc);
-		
+
 		// ASSERT
-		System.out.println(new JsonSerializer().write(transform.get(0)));
-		
-		
+//		System.out.println(new JsonSerializer().write(transform.get(0)));
+
 		Assertions.assertTrue(transform.get(0).getSubmodels().size() == 2);
+	}
+
+	@Test
+	void testVarsEvaluation() throws IOException, SerializationException {
+		// ARRANGE
+		MappingSpecification mapSpec = parser
+				.loadMappingSpecification("src/test/resources/mappings/generic/variablesTest.json");
+
+		// ACT
+		List<AssetAdministrationShellEnvironment> transform = aasMappingTransformer.transform(mapSpec, null);
+
+		// ASSERT
+		Submodel submodel = transform.get(0).getSubmodels().get(0);
+		String idShort = submodel.getIdShort();
+		Assertions.assertEquals("myvarforidshort", idShort);
+
+		Property property1 = (Property) transform.get(0).getSubmodels().get(0).getSubmodelElements().get(0);
+		Assertions.assertEquals("myoverriddenvarforidshort", property1.getIdShort());
+		Assertions.assertEquals("myvarforlateruse", property1.getValue());
+		Property property2 = (Property) transform.get(0).getSubmodels().get(0).getSubmodelElements().get(1);
+		Assertions.assertEquals("myoverriddenvarforidshort", property2.getIdShort());
+		Assertions.assertEquals("myvarforlateruse", property2.getValue());
+		Property property3 = (Property) transform.get(0).getSubmodels().get(0).getSubmodelElements().get(2);
+		Assertions.assertEquals("myoverriddenvarforidshort", property3.getIdShort());
+		Assertions.assertEquals("myvarforlateruse", property3.getValue());
+
 	}
 
 }
