@@ -27,13 +27,11 @@ import io.adminshell.aas.v3.model.*;
 import io.adminshell.aas.v3.model.impl.DefaultAssetAdministrationShell;
 import io.adminshell.aas.v3.model.impl.DefaultAssetAdministrationShellEnvironment;
 
-public class AssetAdministrationShellEnvDocumentTransformer extends AbstractTransformer {
+public class MappingSpecificationDocumentTransformer {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	public AssetAdministrationShellEnvDocumentTransformer(IdGenerator idGenerator,
-			PreconditionValidator preconditionValidator) {
-		super(idGenerator, preconditionValidator);
+	public MappingSpecificationDocumentTransformer() {
 	}
 
 	/**

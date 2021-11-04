@@ -1,4 +1,4 @@
-package com.sap.dsc.aas.lib.transform;
+package com.sap.dsc.aas.lib.mapping;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,21 +9,14 @@ import java.util.List;
 import javax.xml.XMLConstants;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.xml.sax.SAXException;
-
-import com.sap.dsc.aas.lib.exceptions.TransformationException;
-import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
-import com.sap.dsc.aas.lib.mapping.AASMappingTransformer;
-import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
+import com.sap.dsc.aas.lib.transform.XPathHelper;
 
 import io.adminshell.aas.v3.dataformat.SerializationException;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import io.adminshell.aas.v3.model.File;
 import io.adminshell.aas.v3.model.KeyElements;
