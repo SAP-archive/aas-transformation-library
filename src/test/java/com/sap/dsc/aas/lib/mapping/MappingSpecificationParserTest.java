@@ -43,7 +43,7 @@ public class MappingSpecificationParserTest {
 
         Mapping mapping = result.getMappings().get(0);
         assertThat(mapping.getAssetInformation() instanceof LegacyTemplate);
-        assertThat(((LegacyTemplate) mapping.getAssetInformation()).getKindTypeXPath()).contains("TYPE");
+        assertThat(((LegacyTemplate) mapping.getAssetInformation()).getKindTypeXPath()).contains("Type");
 
         assertThat(mapping.getSubmodels()).hasSize(6);
         mapping.getSubmodels().forEach(s -> assertThat(s).isInstanceOf(Template.class));
@@ -77,7 +77,7 @@ public class MappingSpecificationParserTest {
 
 		Mapping mapping = result.getMappings().get(0);
 		assertThat(mapping.getAssetInformation() instanceof LegacyTemplate);
-		assertThat(((LegacyTemplate) mapping.getAssetInformation()).getKindTypeXPath()).contains("TYPE");
+		assertThat(((LegacyTemplate) mapping.getAssetInformation()).getKindTypeXPath()).contains("Type");
 
 		SubmodelElement submodelElement = mapping.getSubmodels().get(0).getSubmodelElements().get(0);
 		Template temp = (Template) submodelElement;
