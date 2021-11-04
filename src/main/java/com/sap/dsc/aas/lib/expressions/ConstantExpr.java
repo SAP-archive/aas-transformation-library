@@ -1,5 +1,7 @@
 package com.sap.dsc.aas.lib.expressions;
 
+import com.sap.dsc.aas.lib.mapping.TransformationContext;
+
 /**
  * Represents a constant value.
  */
@@ -14,7 +16,7 @@ public class ConstantExpr implements Expression {
 	}
 
 	@Override
-	public Object evaluate() {
+	public Object evaluate(TransformationContext ctx) {
 		return value;
 	}
 

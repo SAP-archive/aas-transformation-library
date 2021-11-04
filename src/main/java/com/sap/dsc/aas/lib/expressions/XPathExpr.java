@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import org.dom4j.Node;
 
+import com.sap.dsc.aas.lib.mapping.TransformationContext;
 import com.sap.dsc.aas.lib.transform.XPathHelper;
 
 /**
@@ -28,33 +29,17 @@ public class XPathExpr implements Expression {
         this.args = args;
     }
 
-    /**
-     * Execute a function while temporary changing the context node.
-     *
-     * @param context The new context node
-     * @param func    The function to execute
-     * @return The result value of the function
-     */
-    public static Object withContext(Node context, Supplier<Object> func) {
-        Node last = currentContext.get();
-        try {
-            currentContext.set(context);
-            return func.get();
-        } finally {
-            currentContext.set(last);
-        }
-    }
-
     @Override
-    public List<Node> evaluate() {
+    public List<Node> evaluate(TransformationContext ctx) {
         // evaluate multiple xpath expressions and create joined stream of all resulting nodes
-        return args.stream().map(arg -> arg.evaluate()).flatMap(value -> {
-            if (value instanceof String) {
+        return args.stream().map(arg -> arg.evaluate(ctx)).flatMap(value -> {
+            if (value instanceof String && ctx.getContextItem().isPresent() && ctx.getContextItem().get() instanceof Node) {
                 // evaluate XPath against context node
-                return XPathHelper.getInstance().getNodes(currentContext.get(), (String) value).stream();
+            		return XPathHelper.getInstance().getNodes((Node) ctx.getContextItem().get(), (String) value).stream();            		
+            	
             } else {
-                // invalid XPath
-                throw new IllegalArgumentException("Invalid XPath");
+                // invalid XPath or no Node Context
+                throw new IllegalArgumentException("Invalid XPath or no Node Context is given.");
             }
         }).collect(Collectors.toList());
     }

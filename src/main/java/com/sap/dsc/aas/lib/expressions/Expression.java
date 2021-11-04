@@ -1,5 +1,7 @@
 package com.sap.dsc.aas.lib.expressions;
 
+import com.sap.dsc.aas.lib.mapping.TransformationContext;
+
 /**
  * Represents dynamic expressions within a template.
  */
@@ -9,5 +11,5 @@ public interface Expression {
      *
      * @return computed result
      */
-    Object evaluate();
+    Object evaluate(TransformationContext ctx);
 }

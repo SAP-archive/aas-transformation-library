@@ -42,10 +42,10 @@ public class AASMappingTransformer {
 		for (Mapping mapping : mappings) {
 			Expression foreachExpression = mapping.getForeachExpression();
 			if (foreachExpression != null) {
-				Object evaluate = mapping.getForeachExpression().evaluate();
+				Object evaluate = mapping.getForeachExpression().evaluate(TransformationContext.emptyContext());
 				List<Object> forItems = asList(evaluate);
 				for (Object forItem : forItems) {
-					TransformationContext ctx = new TransformationContext(forItem);
+					TransformationContext ctx = new TransformationContext(forItem, mapping);
 					aasEnv.add(transformSingleEnvironment(mapping, ctx));
 				}
 			} else {
@@ -83,15 +83,15 @@ public class AASMappingTransformer {
 		List<Object> inflated = new ArrayList<>();
 		Expression foreachExpression = template.getForeachExpression();
 		if (foreachExpression != null) {
-			Object evaluate = template.getForeachExpression().evaluate();
+			Object evaluate = template.getForeachExpression().evaluate(parentCtx);
 			List<Object> forItems = asList(evaluate);
 			for (Object forItem : forItems) {
-				TransformationContext ctx = new TransformationContext(forItem);
-				inflated.add(transformSingle(template, ctx));
+				TransformationContext childCtx = TransformationContext.buildContext(parentCtx, forItem, template);
+				inflated.add(transformSingle(template, childCtx));
 			}
 		} else {
-			TransformationContext ctx = TransformationContext.emptyContext();
-			inflated.add(transformSingle(template, parentCtx));
+			TransformationContext childCtx = TransformationContext.buildContext(parentCtx, parentCtx.getContextItem(), template);
+			inflated.add(transformSingle(template, childCtx));
 		}
 		return inflated;
 	}
@@ -100,7 +100,7 @@ public class AASMappingTransformer {
 		Class<?> aasInterface = getAASInterface(template);
 		Object transformedEntity = null;
 		if (template.getBindSpecification() != null) {
-			transformedEntity = createInstanceByBindings(template, aasInterface);
+			transformedEntity = createInstanceByBindings(template, aasInterface, ctx);
 		} else {
 			transformedEntity = newDefaultAASInstance(aasInterface);
 		}
@@ -113,16 +113,17 @@ public class AASMappingTransformer {
 		return transformedEntity;
 	}
 
-	private Object createInstanceByBindings(Template template, Class<?> aasInterface) {
+	private Object createInstanceByBindings(Template template, Class<?> aasInterface, TransformationContext ctx) {
 		Object transformedEntity;
 		Map<String, String> evaluatedBindings = new HashMap<>();
 		Set<Entry<String, Expression>> bindings = template.getBindSpecification().getBindings().entrySet();
 		for (Entry<String, Expression> binding : bindings) {
-			evaluatedBindings.put(binding.getKey(), (String) binding.getValue().evaluate());
+			evaluatedBindings.put(binding.getKey(), (String) binding.getValue().evaluate(ctx));
 		}
 		JsonDeserializer jsonDeserializer = new JsonDeserializer();
 		Field mapperField;
 		try {
+			//to discuss: get the mapper as property
 			mapperField = JsonDeserializer.class.getDeclaredField("mapper");
 			mapperField.setAccessible(true);
 			JsonMapper jsonMapper = (JsonMapper) mapperField.get(jsonDeserializer);

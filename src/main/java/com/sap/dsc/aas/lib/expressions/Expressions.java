@@ -32,8 +32,6 @@ public class Expressions {
     static final Map<String, Function<Object, Object>> functions = new HashMap<>();
 
     static final ValueUtils values = ValueUtils.getInstance();
-    static final ThreadLocal<Object> currentSubject = new ThreadLocal<>();
-    static final ThreadLocal<Map<String, Stack<Object>>> currentVars = ThreadLocal.withInitial(() -> new HashMap<>());
 
     static {
         functions.put("list", args -> valueToStream(args).collect(Collectors.toList()));
@@ -182,81 +180,4 @@ public class Expressions {
         return Math.round(x);
     }
 
-    public static Object withSubject(Object subject, Supplier<Object> func) {
-        Object last = currentSubject.get();
-        try {
-            currentSubject.set(subject);
-            return func.get();
-        } finally {
-            currentSubject.set(last);
-        }
-    }
-
-    public static Object getSubject() {
-        return currentSubject.get();
-    }
-
-    public static Object withVar(String name, Object value, Supplier<Object> func) {
-        Map<String, Stack<Object>> vars = currentVars.get();
-        Stack<Object> values = vars.computeIfAbsent(name, varName -> new Stack<>());
-        try {
-            values.push(value);
-            return func.get();
-        } catch (Throwable t) {
-            t.printStackTrace();
-            throw t;
-        } finally {
-            values.pop();
-        }
-    }
-
-    public static Object withVars(List<VarBinding> bindings, Supplier<Object> func) {
-        Map<String, Stack<Object>> vars = currentVars.get();
-        List<Stack<?>> stacks = bindings.stream().map(nameValue -> {
-            Stack<Object> valueStack = vars.computeIfAbsent(nameValue.variable, varName -> new Stack<>());
-            valueStack.push(nameValue.value);
-            return valueStack;
-        }).collect(Collectors.toList());
-        try {
-            return func.get();
-        } catch (Throwable t) {
-            t.printStackTrace();
-            throw t;
-        } finally {
-            stacks.forEach(stack -> stack.pop());
-        }
-    }
-
-    public static Object setVar(String name, Object value) {
-        Map<String, Stack<Object>> vars = currentVars.get();
-        Stack<Object> values = vars.computeIfAbsent(name, varName -> new Stack<>());
-        if (!values.isEmpty()) {
-            // remove current value
-            values.pop();
-        }
-        // set the new value
-        values.push(value);
-        return value;
-    }
-
-    public static Object getVar(String name) {
-        Map<String, Stack<Object>> vars = currentVars.get();
-        Stack<Object> values = vars.get(name);
-        if (values == null || values.isEmpty()) {
-            return null;
-        } else {
-            return values.peek();
-        }
-    }
-
-    public static class VarBinding {
-
-        protected String variable;
-        protected Object value;
-
-        public VarBinding(String variable, Object value) {
-            this.variable = variable;
-            this.value = value;
-        }
-    }
 }

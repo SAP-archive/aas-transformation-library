@@ -1,5 +1,7 @@
 package com.sap.dsc.aas.lib.expressions;
 
+import com.sap.dsc.aas.lib.mapping.TransformationContext;
+
 /**
  * Represents the value of a named variable.
  */
@@ -18,7 +20,7 @@ public class VarExpr implements Expression {
 	}
 
 	@Override
-	public Object evaluate() {
-		return Expressions.getVar(name);
+	public Object evaluate(TransformationContext ctx) {
+		return ctx.getVariables().get(name);
 	}
 }
