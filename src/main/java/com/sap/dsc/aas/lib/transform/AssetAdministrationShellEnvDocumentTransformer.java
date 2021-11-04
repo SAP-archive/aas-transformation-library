@@ -54,7 +54,7 @@ public class AssetAdministrationShellEnvDocumentTransformer extends AbstractTran
 
 		LOGGER.info("Transforming {} configMappings...", mappings.getMappings().size());
 
-		List<AssetAdministrationShellEnvironment> transformedEnvs = new AASMappingTransformer().transform(mappings);
+		List<AssetAdministrationShellEnvironment> transformedEnvs = new AASMappingTransformer().transform(mappings, document);
 		for (AssetAdministrationShellEnvironment envForFlattening : transformedEnvs) {
 			shellEnv.getAssetAdministrationShells()
 					.addAll(envForFlattening.getAssetAdministrationShells());

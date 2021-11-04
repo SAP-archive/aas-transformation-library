@@ -36,21 +36,22 @@ public class AASMappingTransformer {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	public List<AssetAdministrationShellEnvironment> transform(MappingSpecification mappingSpec) {
+	public List<AssetAdministrationShellEnvironment> transform(MappingSpecification mappingSpec,
+			Object initialContextItem) {
+		TransformationContext initialCtx = TransformationContext.buildContext(null, initialContextItem, null);
 		List<AssetAdministrationShellEnvironment> aasEnv = new ArrayList<>();
 		List<Mapping> mappings = mappingSpec.getMappings();
 		for (Mapping mapping : mappings) {
 			Expression foreachExpression = mapping.getForeachExpression();
 			if (foreachExpression != null) {
-				Object evaluate = mapping.getForeachExpression().evaluate(TransformationContext.emptyContext());
+				Object evaluate = mapping.getForeachExpression().evaluate(initialCtx);
 				List<Object> forItems = asList(evaluate);
 				for (Object forItem : forItems) {
-					TransformationContext ctx = new TransformationContext(forItem, mapping);
-					aasEnv.add(transformSingleEnvironment(mapping, ctx));
+					TransformationContext forCtx = TransformationContext.buildContext(initialCtx, forItem, mapping);
+					aasEnv.add(transformSingleEnvironment(mapping, forCtx));
 				}
 			} else {
-				TransformationContext ctx = TransformationContext.emptyContext();
-				aasEnv.add(transformSingleEnvironment(mapping, ctx));
+				aasEnv.add(transformSingleEnvironment(mapping, initialCtx));
 			}
 		}
 		return aasEnv;
@@ -90,7 +91,8 @@ public class AASMappingTransformer {
 				inflated.add(transformSingle(template, childCtx));
 			}
 		} else {
-			TransformationContext childCtx = TransformationContext.buildContext(parentCtx, parentCtx.getContextItem(), template);
+			TransformationContext childCtx = TransformationContext.buildContext(parentCtx, parentCtx.getContextItem(),
+					template);
 			inflated.add(transformSingle(template, childCtx));
 		}
 		return inflated;
@@ -118,12 +120,13 @@ public class AASMappingTransformer {
 		Map<String, String> evaluatedBindings = new HashMap<>();
 		Set<Entry<String, Expression>> bindings = template.getBindSpecification().getBindings().entrySet();
 		for (Entry<String, Expression> binding : bindings) {
-			evaluatedBindings.put(binding.getKey(), (String) binding.getValue().evaluate(ctx));
+			String evaluate = binding.getValue().evaluateAsString(ctx);
+			evaluatedBindings.put(binding.getKey(), evaluate);
 		}
 		JsonDeserializer jsonDeserializer = new JsonDeserializer();
 		Field mapperField;
 		try {
-			//to discuss: get the mapper as property
+			// to discuss: get the mapper as property
 			mapperField = JsonDeserializer.class.getDeclaredField("mapper");
 			mapperField.setAccessible(true);
 			JsonMapper jsonMapper = (JsonMapper) mapperField.get(jsonDeserializer);
