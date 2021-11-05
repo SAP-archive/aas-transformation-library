@@ -13,7 +13,6 @@ import io.adminshell.aas.v3.model.EmbeddedDataSpecification;
 import io.adminshell.aas.v3.model.LangString;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -41,8 +40,10 @@ import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.module.SimpleValueInstantiators;
-import com.sap.dsc.aas.lib.aml.config.jackson.BindingSpecificationDeserializer;
+import com.sap.dsc.aas.lib.expressions.Expression;
 import com.sap.dsc.aas.lib.exceptions.InvalidBindingException;
+import com.sap.dsc.aas.lib.mapping.jackson.BindingSpecificationDeserializer;
+import com.sap.dsc.aas.lib.mapping.jackson.ExpressionDeserializer;
 import com.sap.dsc.aas.lib.mapping.model.BindSpecification;
 import com.sap.dsc.aas.lib.mapping.model.LegacyTemplate;
 import com.sap.dsc.aas.lib.mapping.model.LegacyTemplateSupport;
@@ -56,7 +57,9 @@ public class MappingSpecificationParser {
 
     protected static Map<Class<?>, com.fasterxml.jackson.databind.JsonDeserializer> customDeserializers = Map.of(
         EmbeddedDataSpecification.class, new EmbeddedDataSpecificationDeserializer(),
-        BindSpecification.class, new BindingSpecificationDeserializer());
+        BindSpecification.class, new BindingSpecificationDeserializer(),
+        Expression.class, new ExpressionDeserializer());
+
     protected JsonMapper mapper;
     protected SimpleAbstractTypeResolver typeResolver;
 
@@ -98,7 +101,7 @@ public class MappingSpecificationParser {
                 }
             })
             // disabled for now until camel case enums are used
-            // .addModule(buildEnumModule())
+            .addModule(buildEnumModule())
             .addModule(buildImplementationModule())
             .addModule(buildCustomDeserializerModule())
             .build();
@@ -164,35 +167,32 @@ public class MappingSpecificationParser {
                                 LegacyTemplate config = new LegacyTemplateSupport(target);
                                 return Proxy.newProxyInstance(getClass().getClassLoader(),
                                     interfaces.toArray(new Class<?>[interfaces.size()]),
-                                    new InvocationHandler() {
-                                        @Override
-                                        public Object invoke(Object o, Method method, Object[] args) throws Throwable {
-                                            try {
-                                                // route to concrete object - either config or the underlying bean
-                                                if (Template.class.isAssignableFrom(method.getDeclaringClass())) {
-                                                    if (method.getParameterTypes().length == 1 &&
-                                                        BindSpecification.class.isAssignableFrom(method.getParameterTypes()[0])) {
-                                                        // validate bind specification
-                                                        BindSpecification bindSpec = (BindSpecification) args[0];
-                                                        Set<String> knownProperties = ctxt.getConfig().introspect(modelType)
-                                                            .findProperties()
-                                                            .stream().map(p -> p.getName()).collect(Collectors.toSet());
-                                                        Set<String> boundProperties = new HashSet<>(bindSpec.getBindings().keySet());
-                                                        boundProperties.removeAll(knownProperties);
-                                                        // TODO this is currently included for @this bindings
-                                                        // -> may be removed in the future
-                                                        boundProperties.remove("@this");
-                                                        if (!boundProperties.isEmpty()) {
-                                                            throw new InvalidBindingException(boundProperties);
-                                                        }
+                                    (o, method, args) -> {
+                                        try {
+                                            // route to concrete object - either template definition or the underlying bean
+                                            if (Template.class.isAssignableFrom(method.getDeclaringClass())) {
+                                                if (method.getParameterTypes().length == 1 &&
+                                                    BindSpecification.class.isAssignableFrom(method.getParameterTypes()[0])) {
+                                                    // validate bind specification
+                                                    BindSpecification bindSpec = (BindSpecification) args[0];
+                                                    Set<String> knownProperties = ctxt.getConfig().introspect(modelType)
+                                                        .findProperties()
+                                                        .stream().map(p -> p.getName()).collect(Collectors.toSet());
+                                                    Set<String> boundProperties = new HashSet<>(bindSpec.getBindings().keySet());
+                                                    boundProperties.removeAll(knownProperties);
+                                                    // TODO this is currently included for @this bindings
+                                                    // -> may be removed in the future
+                                                    boundProperties.remove("@this");
+                                                    if (!boundProperties.isEmpty()) {
+                                                        throw new InvalidBindingException(boundProperties);
                                                     }
-                                                    return method.invoke(config, args);
                                                 }
-                                                return method.invoke(target, args);
-                                            } catch (Throwable e) {
-                                                // can be used to set a breakpoint if something goes wrong
-                                                throw e;
+                                                return method.invoke(config, args);
                                             }
+                                            return method.invoke(target, args);
+                                        } catch (Throwable e) {
+                                            // can be used to set a breakpoint if something goes wrong
+                                            throw e;
                                         }
                                     });
                             }

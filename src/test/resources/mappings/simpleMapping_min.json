@@ -3,22 +3,6 @@
 	"aasVersion": "3.0RC01",
 	"mappings": [
 		{
-			"@definitions": {
-				"mappingIdGeneration": {
-					"concatenate_and_hash": [
-						{
-							"xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
-							"default": "DefaultManufacturer"
-						},
-						{
-							"constant": "/"
-						},
-						{
-							"xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
-						}
-					]
-				}
-			},
 			"from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
 			"idGeneration": {
 				"parameters": [
@@ -37,7 +21,7 @@
 				"idGenerationName": "mappingIdGeneration"
 			},
 			"assetInformation": {
-				"kindType_xpath": "TYPE",
+				"kindType_xpath": "Type",
 				"idGeneration": {
 					"parameters": [
 						{
@@ -56,8 +40,8 @@
 				},
 				"globalAssetIdReference": {
 					"valueId": "assetInformationGlobalAssetIdReference",
-					"keyType": "CUSTOM",
-					"keyElement": "ASSET"
+					"keyType": "Custom",
+					"keyElement": "Asset"
 				}
 			},
 			"submodels": [
