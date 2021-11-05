@@ -10,7 +10,7 @@ import com.sap.dsc.aas.lib.mapping.model.Template;
 public class TransformationContext {
 
 	private Map<String, Expression> definitions = new HashMap<>();
-	private Map<String, Expression> variables = new HashMap<>();
+	private Map<String, String> variables = new HashMap<>();
 	private Object ctxItem;
 
 	public TransformationContext(Object ctxItem) {
@@ -23,8 +23,11 @@ public class TransformationContext {
 			if (template.getDefinitions() != null) {
 				definitions.putAll(template.getDefinitions());
 			}
-			if (template.getDefinitions() != null) {
-				variables.putAll(template.getVariables());
+			if (template.getVariables() != null) {
+				template.getVariables().forEach((key,expr)-> {
+					String value = expr.evaluateAsString(this);
+					variables.put(key, value);
+				});
 			}
 		}
 	}
@@ -58,7 +61,10 @@ public class TransformationContext {
 				build.definitions.putAll(template.getDefinitions());
 			}
 			if (template.getVariables() != null) {
-				build.variables.putAll(template.getVariables());
+				template.getVariables().forEach((key,expr)-> {
+					String value = expr.evaluateAsString(build);
+					build.variables.put(key, value);
+				});
 			}
 		}
 		return build;
@@ -72,7 +78,7 @@ public class TransformationContext {
 		return definitions;
 	}
 
-	public Map<String, Expression> getVariables() {
+	public Map<String, String> getVariables() {
 		return variables;
 	}
 

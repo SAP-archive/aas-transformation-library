@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.sap.dsc.aas.lib.expressions.BuiltinCallExpr;
 import com.sap.dsc.aas.lib.expressions.ConstantExpr;
+import com.sap.dsc.aas.lib.expressions.DefExpr;
 import com.sap.dsc.aas.lib.expressions.Expression;
 import com.sap.dsc.aas.lib.expressions.Expressions;
 import com.sap.dsc.aas.lib.expressions.ListExpr;
@@ -82,7 +83,17 @@ public class ExpressionDeserializer extends JsonDeserializer<Expression> {
                                         jp.getValueAsString(), Expression.class);
                                 }
                                 break;
-                        }
+							case "def":
+								if (argsList.size() == 1 && argsList.get(0) instanceof ConstantExpr
+										&& ((ConstantExpr) argsList.get(0)).getValue() instanceof String) {
+									result = new DefExpr((String) ((ConstantExpr) argsList.get(0)).getValue());
+								} else {
+									throw new InvalidFormatException(jp,
+											"Only string constants are supported as definition names",
+											jp.getValueAsString(), Expression.class);
+								}
+								break;
+							}
                     }
 
                     if (result == null) {

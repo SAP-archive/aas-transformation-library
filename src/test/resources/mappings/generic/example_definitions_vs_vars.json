@@ -1,0 +1,49 @@
+{
+	"version": "1.0.0",
+	"aasVersion": "3.0RC01",
+	"mappings": [
+		{
+			"submodels": [
+				{
+					"@foreach": {
+						"@xpath": "/ns:root/ns:a"
+					},
+					"@vars": {
+						"localnamebyvar": {
+							"@xpath": "local-name()"
+						}
+					},
+					"@definitions": {
+						"localnamebydef": {
+							"@xpath": "local-name()"
+						}
+					},
+					"@bind": {
+						"idShort": {
+							"@var": "localnamebyvar"
+						},
+						"category": {
+							"@def": "localnamebydef"
+						}
+					},
+					"submodelElements": [
+						{
+							"@foreach": {
+								"@xpath": "ns:b"
+							},
+							"modelType": "Property",
+							"@bind": {
+								"idShort": {
+									"@var": "localnamebyvar"
+								},
+								"category": {
+									"@def": "localnamebydef"
+								}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

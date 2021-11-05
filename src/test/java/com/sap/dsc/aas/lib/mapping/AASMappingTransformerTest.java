@@ -165,6 +165,41 @@ public class AASMappingTransformerTest {
 		Property property3 = (Property) transform.get(0).getSubmodels().get(0).getSubmodelElements().get(2);
 		Assertions.assertEquals("myoverriddenvarforidshort", property3.getIdShort());
 		Assertions.assertEquals("myvarforlateruse", property3.getValue());
+	}
+
+	@Test
+	void testDefinitionsVsVariablesTransformation() throws Exception {
+		// ARRANGE
+		MappingSpecification mapSpec = parser
+				.loadMappingSpecification("src/test/resources/mappings/generic/example_definitions_vs_vars.json");
+
+		Document testDoc = null;
+		try (InputStream testResource = Files
+				.newInputStream(Paths.get("src/test/resources/mappings/generic/generic.xml"))) {
+
+			SAXReader reader = new SAXReader();
+			reader.setEncoding("UTF-8");
+			reader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+			testDoc = reader.read(testResource);
+		}
+
+		XPathHelper.getInstance().setNamespaceBinding("ns", "http://ns.org/");
+		// ACT
+		List<AssetAdministrationShellEnvironment> transform = aasMappingTransformer.transform(mapSpec, testDoc);
+
+		// ASSERT
+		Submodel submodel = transform.get(0).getSubmodels().get(0);
+		Assertions.assertNotNull(submodel);
+		// context is same, var and def evaluates as same
+		Assertions.assertEquals("a", submodel.getIdShort());//id => var
+		Assertions.assertEquals("a", submodel.getCategory());//category => def
+
+		// context now differs, var (transformed to idShort) is static and def
+		// reevaluates again, now to "b" since the context changed
+		SubmodelElement submodelElement = submodel.getSubmodelElements().get(0);
+		Assertions.assertEquals("a", submodelElement.getIdShort());//id => var
+		Assertions.assertEquals("b", submodelElement.getCategory());//category => def
 
 	}
 

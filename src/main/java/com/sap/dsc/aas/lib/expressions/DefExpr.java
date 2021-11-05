@@ -3,15 +3,15 @@ package com.sap.dsc.aas.lib.expressions;
 import com.sap.dsc.aas.lib.mapping.TransformationContext;
 
 /**
- * Represents the value of a named variable.
+ * Represents the value of a named definition.
  */
-public class VarExpr implements Expression {
+public class DefExpr implements Expression {
 	/**
-	 * The variable's name.
+	 * The definition's name.
 	 */
 	protected final String name;
 
-	public VarExpr(String name) {
+	public DefExpr(String name) {
 		this.name = name;
 	}
 
@@ -21,11 +21,11 @@ public class VarExpr implements Expression {
 
 	@Override
 	public Object evaluate(TransformationContext ctx) {
-		return ctx.getVariables().get(name);
+		return ctx.getDefinitions().get(name).evaluate(ctx);
 	}
-	
+
 	@Override
 	public String evaluateAsString(TransformationContext ctx) {
-		return ctx.getVariables().get(name);
+		return ctx.getDefinitions().get(name).evaluateAsString(ctx);
 	}
 }
