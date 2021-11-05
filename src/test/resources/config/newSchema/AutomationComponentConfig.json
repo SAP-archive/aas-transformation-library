@@ -219,7 +219,7 @@
                 "from_idName": "assetid"
               },
               {
-                "from_string": "_submodel1"
+                "@const": "_submodel1"
               }
             ]
           },
@@ -945,7 +945,7 @@
                 "from_idName": "assetid"
               },
               {
-                "from_string": "_submodel1"
+                "@const": "_submodel1"
               }
             ]
           },

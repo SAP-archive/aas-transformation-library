@@ -100,7 +100,6 @@
                 "keyType": "CUSTOM",
                 "keyElement": "SUBMODEL_ELEMENT"
               },
-              "from_attributeName": "Name",
               "@bind": {
                 "valueDefault": {
                   "@var": "manufacturerId"
