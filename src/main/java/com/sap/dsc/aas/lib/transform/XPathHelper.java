@@ -45,7 +45,6 @@ public class XPathHelper {
 		return createXPath(parentNode, xpathExpression).selectNodes(parentNode);
 	}
 
-
 	public String getStringValueOrNull(Node node, String xPath) {
 		Object result = createXPath(node, xPath).evaluate(node);
 		if (result instanceof String) {
@@ -91,11 +90,11 @@ public class XPathHelper {
 	 */
 	protected XPath createXPath(Node parentNode, String xpathExpression) {
 		XPath xpath = parentNode.createXPath(xpathExpression);
-        if(!namespaces.isEmpty())
-			xpath.setNamespaceURIs(namespaces);
+
+		xpath.setNamespaceURIs(namespaces);
+
 		return xpath;
 	}
-
 
 	private Map<String, String> namespaces = new HashMap<>();
 
