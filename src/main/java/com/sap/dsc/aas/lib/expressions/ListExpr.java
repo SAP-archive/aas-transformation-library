@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import com.sap.dsc.aas.lib.mapping.TransformationContext;
+
 /**
  * Represents a list constructor.
  */
@@ -27,11 +29,11 @@ public class ListExpr implements Expression {
 	}
 
 	@Override
-	public Object evaluate() {
+	public Object evaluate(TransformationContext ctx) {
 		List<Object> values = new ArrayList<>(args.length);
 		for (int i = 0; i < args.length; i++) {
 			Expression arg = args[i];
-			values.add(arg.evaluate());
+			values.add(arg.evaluate(ctx));
 		}
 		return values;
 	}

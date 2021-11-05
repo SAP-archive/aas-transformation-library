@@ -7,11 +7,11 @@
       "assetInformation": {
         "globalAssetIdReference": {
           "valueId": "assetInformationGlobalAssetIdReference",
-          "keyType": "CUSTOM",
-          "keyElement": "ASSET"
+          "keyType": "Custom",
+          "keyElement": "Asset"
         },
         "@bind" : {
-          "assetKind" : "TYPE",
+          "assetKind" : "Type",
           "unknownProp1" : 3,
           "unknownProp2" : "some value"
         }

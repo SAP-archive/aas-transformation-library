@@ -3,6 +3,8 @@ package com.sap.dsc.aas.lib.expressions;
 import java.util.List;
 import java.util.function.Function;
 
+import com.sap.dsc.aas.lib.mapping.TransformationContext;
+
 /**
  * Represents a call of a built-in function on one or more arguments.
  */
@@ -27,11 +29,11 @@ public class BuiltinCallExpr implements Expression {
 	}
 
 	@Override
-	public Object evaluate() {
+	public Object evaluate(TransformationContext ctx) {
 		Object[] values = new Object[args.length];
 		for (int i = 0; i < args.length; i++) {
 			Expression arg = args[i];
-			values[i] = arg.evaluate();
+			values[i] = arg.evaluate(ctx);
 		}
 		try {
 			return f.apply(values);

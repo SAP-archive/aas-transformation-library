@@ -3,22 +3,6 @@
   "aasVersion": "3.0RC01",
   "mappings": [
     {
-      "@definitions" : {
-        "mappingIdGeneration": {
-          "concatenate_and_hash": [
-            {
-              "xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
-              "default": "DefaultManufacturer"
-            },
-            {
-              "constant": "/"
-            },
-            {
-              "xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
-            }
-          ]
-        }
-      },
       "from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
       "idGeneration": {
         "parameters": [
@@ -37,7 +21,7 @@
         "idGenerationName": "mappingIdGeneration"
       },
       "assetInformation": {
-        "kindType_xpath": "TYPE",
+        "kindType_xpath": "Type",
         "idGeneration": {
           "parameters": [
             {
@@ -56,8 +40,8 @@
         },
         "globalAssetIdReference": {
           "valueId": "assetInformationGlobalAssetIdReference",
-          "keyType": "CUSTOM",
-          "keyElement": "ASSET"
+          "keyType": "Custom",
+          "keyElement": "Asset"
         }
       },
       "submodels": [
@@ -135,8 +119,8 @@
                 "keys": [
                   {
                     "value": "ProductDetails",
-                    "idType": "CUSTOM",
-                    "type": "CONCEPT_DESCRIPTION"
+                    "idType": "Custom",
+                    "type": "ConceptDescription"
                   }
                 ]
               },
@@ -151,10 +135,10 @@
               "from_attributeName": "PackagingAndTransportation",
               "modelType": "Entity",
               "semanticId_str": "PackAndTransport",
-              "entityType": "SELF_MANAGED_ENTITY",
+              "entityType": "SelfManagedEntity",
               "specificAssetId": {
                 "value": "AssetIdExtern",
-                "key": "ASSET"
+                "key": "Asset"
               },
               "statements": [
                 {
@@ -198,8 +182,8 @@
                 "keys": [
                   {
                     "value": "AmbientTemperature",
-                    "idType": "IRI",
-                    "type": "RANGE"
+                    "idType": "Iri",
+                    "type": "Range"
                   }
                 ]
               },
@@ -269,7 +253,7 @@
                     }
                   ]
                 },
-                "keyElement": "CONCEPT_DESCRIPTION"
+                "keyElement": "ConceptDescription"
               }
             },
             {
@@ -291,7 +275,7 @@
                     }
                   ]
                 },
-                "keyElement": "BLOB"
+                "keyElement": "Blob"
               }
             }
           ]
@@ -351,13 +335,13 @@
               "idShort_xpath": "'relElement'",
               "first": {
                 "valueId": "FOO",
-                "keyType": "IRI",
-                "keyElement": "CONCEPT_DESCRIPTION"
+                "keyType": "Iri",
+                "keyElement": "ConceptDescription"
               },
               "second": {
                 "valueId": "BAR",
-                "keyType": "IRI",
-                "keyElement": "CONCEPT_DESCRIPTION"
+                "keyType": "Iri",
+                "keyElement": "ConceptDescription"
               }
             },
             {
@@ -367,11 +351,11 @@
               "idShort_xpath": "'annoRelElement'",
               "first": {
                 "valueId": "abc",
-                "keyElement": "CONCEPT_DESCRIPTION"
+                "keyElement": "ConceptDescription"
               },
               "second": {
                 "valueId": "def",
-                "keyElement": "CONCEPT_DESCRIPTION"
+                "keyElement": "ConceptDescription"
               },
               "annotation": [
                 {

@@ -1,0 +1,33 @@
+{
+	"version": "1.0.0",
+	"aasVersion": "3.0RC01",
+	"mappings": [
+		{
+			"submodels": [
+				{
+					"@foreach": {
+						"@xpath": "/ns:root/ns:a"
+					},
+					"@bind": {
+						"idShort": {
+							"@xpath": "@name"
+						}
+					},
+					"submodelElements": [
+						{
+							"@foreach": {
+								"@xpath": "ns:b"
+							},
+							"modelType": "Property",
+							"@bind": {
+								"idShort": {
+									"@xpath": "@name"
+								}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}
