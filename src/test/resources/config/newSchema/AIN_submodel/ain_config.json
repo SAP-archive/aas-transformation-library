@@ -2,7 +2,7 @@
   "@headers": {
     "aasVersion": "3.0RC01",
     "@variables": {
-      "manufacturerId": "The Id of the manufacturer, will be filled from the CliendId before calling the MEI Api"
+      "manufacturerId": "The Id of the manufacturer, will be filled from the ClientId before calling the MEI Api"
     },
     "@definitions": {
       "mappingIdGeneration": {
@@ -46,7 +46,7 @@
         "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
       },
       "@bind": {
-        "@id": {
+        "id": {
           "@def": "mappingIdGeneration"
         }
       },
@@ -101,7 +101,11 @@
                 "keyElement": "SUBMODEL_ELEMENT"
               },
               "from_attributeName": "Name",
-              "valueDefault": "${{manufacturerId}}",
+              "@bind": {
+                "valueDefault": {
+                  "@var": "manufacturerId"
+                }
+              },
               "modelType": "Property",
               "valueType": "string"
             }
