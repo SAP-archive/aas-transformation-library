@@ -23,7 +23,7 @@ public abstract class AbstractConfigFromAttribute extends AbstractConfig {
     @JsonProperty("from_xpath")
     public void setXPath(String xPath) {
         if (this.xPath != null) {
-            throw new AlreadyDefinedException("from_attributeName");
+            throw new AlreadyDefinedException("from_xpath_builder");
         }
         this.xPath = xPath;
     }
