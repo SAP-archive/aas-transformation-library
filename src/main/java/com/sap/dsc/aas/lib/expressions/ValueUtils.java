@@ -2,6 +2,7 @@ package com.sap.dsc.aas.lib.expressions;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -529,7 +530,7 @@ public class ValueUtils {
 
 		case BIGDECIMAL:
 			return bigDecValue(v1).divide(bigDecValue(v2),
-					BigDecimal.ROUND_HALF_EVEN);
+					RoundingMode.HALF_EVEN);
 
 		case FLOAT:
 		case DOUBLE:
