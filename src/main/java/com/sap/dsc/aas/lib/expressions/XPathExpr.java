@@ -28,10 +28,9 @@ public class XPathExpr implements Expression {
 		// evaluate multiple xpath expressions and create joined stream of all resulting
 		// nodes
 		return args.stream().map(arg -> arg.evaluate(ctx)).flatMap(value -> {
-			if (value instanceof String && ctx.getContextItem().isPresent()
-					&& ctx.getContextItem().get() instanceof Node) {
+			if (value instanceof String && ctx.getContextItem() instanceof Node) {
 				// evaluate XPath against context node
-				return XPathHelper.getInstance().getNodes((Node) ctx.getContextItem().get(), (String) value).stream();
+				return XPathHelper.getInstance().getNodes((Node) ctx.getContextItem(), (String) value).stream();
 
 			} else {
 				// invalid XPath or no Node Context
@@ -43,9 +42,9 @@ public class XPathExpr implements Expression {
 	@Override
 	public String evaluateAsString(TransformationContext ctx) {
 		Optional<String> xpath = args.stream().map(arg -> arg.evaluateAsString(ctx)).findFirst();
-		if (xpath.isPresent() && ctx.getContextItem().isPresent() && ctx.getContextItem().get() instanceof Node) {
+		if (xpath.isPresent() && ctx.getContextItem() instanceof Node) {
 			return Objects.toString(
-					XPathHelper.getInstance().getStringValueOrNull((Node) ctx.getContextItem().get(), xpath.get()));
+					XPathHelper.getInstance().getStringValueOrNull((Node) ctx.getContextItem(), xpath.get()));
 		} else {
 			return "";
 		}

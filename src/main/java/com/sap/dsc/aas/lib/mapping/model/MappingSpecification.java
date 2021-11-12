@@ -10,11 +10,13 @@ import java.util.List;
 import com.sap.dsc.aas.lib.config.pojo.ConfigPlaceholder;
 import com.sap.dsc.aas.lib.config.pojo.Precondition;
 
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+
 public class MappingSpecification {
 
     private String version;
     private String aasVersion;
-    private List<Mapping> mappings;
+    private AssetAdministrationShellEnvironment aasEnvironmentMapping;
     private List<Precondition> preconditions;
     private List<ConfigPlaceholder> placeholders;
 
@@ -34,12 +36,12 @@ public class MappingSpecification {
         this.aasVersion = aasVersion;
     }
 
-    public List<Mapping> getMappings() {
-        return mappings;
+    public AssetAdministrationShellEnvironment getAasEnvironmentMapping() {
+        return aasEnvironmentMapping;
     }
 
-    public void setMappings(List<Mapping> mappings) {
-        this.mappings = mappings;
+    public void setAasEnvironmentMapping(AssetAdministrationShellEnvironment mapping) {
+        this.aasEnvironmentMapping = mapping;
     }
 
     public List<Precondition> getPreconditions() {

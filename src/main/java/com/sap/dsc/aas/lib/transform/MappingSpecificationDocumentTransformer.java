@@ -44,24 +44,17 @@ public class MappingSpecificationDocumentTransformer {
 	 */
 	public AssetAdministrationShellEnvironment createShellEnv(Document document, MappingSpecification mappings)
 			throws TransformationException {
-		AssetAdministrationShellEnvironment shellEnv = new DefaultAssetAdministrationShellEnvironment();
+		if (mappings.getAasEnvironmentMapping() != null) {
 
-		if (mappings == null) {
-			return shellEnv;
+			LOGGER.info("Transforming AAS Environment...");
+
+			AssetAdministrationShellEnvironment transformedEnvironment = new AASMappingTransformer()
+					.transform(mappings, document);
+
+			return transformedEnvironment;
+		} else {
+			throw new IllegalArgumentException("No AAS Environment specified!");
 		}
-
-		LOGGER.info("Transforming {} configMappings...", mappings.getMappings().size());
-
-		List<AssetAdministrationShellEnvironment> transformedEnvs = new AASMappingTransformer().transform(mappings, document);
-		for (AssetAdministrationShellEnvironment envForFlattening : transformedEnvs) {
-			shellEnv.getAssetAdministrationShells()
-					.addAll(envForFlattening.getAssetAdministrationShells());
-			shellEnv.getAssets().addAll(envForFlattening.getAssets());
-			shellEnv.getSubmodels().addAll(envForFlattening.getSubmodels());
-			shellEnv.getConceptDescriptions().addAll(envForFlattening.getConceptDescriptions());
-		}
-
-		return shellEnv;
 	}
 
 }

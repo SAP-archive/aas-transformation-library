@@ -21,63 +21,26 @@ import org.slf4j.LoggerFactory;
 import java.util.Set;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.sap.dsc.aas.lib.expressions.Expression;
-import com.sap.dsc.aas.lib.mapping.model.Mapping;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
 
 import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
 import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
-import io.adminshell.aas.v3.model.AssetAdministrationShell;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
-import io.adminshell.aas.v3.model.Submodel;
-import io.adminshell.aas.v3.model.impl.DefaultAssetAdministrationShellEnvironment;
 
 public class AASMappingTransformer {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	public List<AssetAdministrationShellEnvironment> transform(MappingSpecification mappingSpec,
-			Object initialContextItem) {
+	public AssetAdministrationShellEnvironment transform(MappingSpecification mappingSpec, Object initialContextItem) {
 		TransformationContext initialCtx = TransformationContext.buildContext(null, initialContextItem, null);
-		List<AssetAdministrationShellEnvironment> aasEnv = new ArrayList<>();
-		List<Mapping> mappings = mappingSpec.getMappings();
-		for (Mapping mapping : mappings) {
-			Expression foreachExpression = mapping.getForeachExpression();
-			if (foreachExpression != null) {
-				Object evaluate = mapping.getForeachExpression().evaluate(initialCtx);
-				List<Object> forItems = asList(evaluate);
-				for (Object forItem : forItems) {
-					TransformationContext forCtx = TransformationContext.buildContext(initialCtx, forItem, mapping);
-					aasEnv.add(transformSingleEnvironment(mapping, forCtx));
-				}
-			} else {
-				aasEnv.add(transformSingleEnvironment(mapping, initialCtx));
-			}
+		AssetAdministrationShellEnvironment aasEnvTemplate = mappingSpec.getAasEnvironmentMapping();
+		if (mappingSpec.getAasEnvironmentMapping() instanceof Template
+				&& ((Template) mappingSpec.getAasEnvironmentMapping()).getForeachExpression() != null) {
+			LOGGER.warn(
+					"@forEach expression on top level AAS Environment is not applicable. Only one AAS Environments will be returned!");
 		}
-		return aasEnv;
-	}
-
-	private AssetAdministrationShellEnvironment transformSingleEnvironment(Mapping mapping, TransformationContext ctx) {
-		DefaultAssetAdministrationShellEnvironment transformedEnviro = new DefaultAssetAdministrationShellEnvironment();
-
-		List<AssetAdministrationShell> transformedAASs = transform(mapping.getAssetShell(), ctx);
-		transformedEnviro.getAssetAdministrationShells().addAll(transformedAASs);
-
-		List<Submodel> submodels = mapping.getSubmodels();
-		for (Submodel submodel : submodels) {
-			List<Submodel> transformedSMs = transform(submodel, ctx);
-			transformedEnviro.getSubmodels().addAll(transformedSMs);
-		}
-
-		return transformedEnviro;
-	}
-
-	private List<Submodel> transform(Submodel submodel, TransformationContext ctx) {
-		if (!(submodel instanceof Template)) {
-			return Collections.singletonList(submodel);
-		} else {
-			return (List<Submodel>) inflateTemplate((Template) submodel, ctx);
-		}
+		return (AssetAdministrationShellEnvironment) asList(transformAny(aasEnvTemplate, initialCtx)).get(0);
 	}
 
 	private List<? extends Object> inflateTemplate(Template template, TransformationContext parentCtx) {
@@ -207,14 +170,6 @@ public class AASMappingTransformer {
 				| NoSuchMethodException | SecurityException e) {
 			LOGGER.error("Not able to create a default instance for " + defaultImplementation.getName(), e);
 			throw new IllegalArgumentException(e);
-		}
-	}
-
-	private List<AssetAdministrationShell> transform(AssetAdministrationShell aas, TransformationContext ctx) {
-		if (!(aas instanceof Template)) {
-			return Collections.singletonList(aas);
-		} else {
-			return (List<AssetAdministrationShell>) inflateTemplate((Template) aas, ctx);
 		}
 	}
 

@@ -3,7 +3,6 @@ package com.sap.dsc.aas.lib.mapping;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.base.Optional;
 import com.sap.dsc.aas.lib.expressions.Expression;
 import com.sap.dsc.aas.lib.mapping.model.Template;
 
@@ -70,8 +69,8 @@ public class TransformationContext {
 		return build;
 	}
 
-	public Optional<Object> getContextItem() {
-		return Optional.fromNullable(ctxItem);
+	public Object getContextItem() {
+		return ctxItem;
 	}
 
 	public Map<String, Expression> getDefinitions() {

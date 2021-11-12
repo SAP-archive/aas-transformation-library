@@ -36,17 +36,17 @@ class TransformationContextTest {
 	@Test
 	void testBuildContext() {
 		TransformationContext emtpyCtx = TransformationContext.buildContext(null, null, null);
-		Assertions.assertFalse(emtpyCtx.getContextItem().isPresent());
+		Assertions.assertFalse(emtpyCtx.getContextItem() != null);
 		Assertions.assertTrue(emtpyCtx.getDefinitions().size() == 0);
 		Assertions.assertTrue(emtpyCtx.getVariables().size() == 0);
 		
 		TransformationContext buildContext = TransformationContext.buildContext(emtpyCtx, "TestCtx", mockTemplate1);
-		Assertions.assertTrue(buildContext.getContextItem().get().equals("TestCtx"));
+		Assertions.assertTrue(buildContext.getContextItem().equals("TestCtx"));
 		Assertions.assertEquals(Expressions.getConstantByName("pi"), buildContext.getDefinitions().get("myDef"));
 		
 		//test for update
 		TransformationContext buildContext2 = TransformationContext.buildContext(buildContext, "NewCtx", mockTemplate2);
-		Assertions.assertTrue(buildContext2.getContextItem().get().equals("NewCtx"));
+		Assertions.assertTrue(buildContext2.getContextItem().equals("NewCtx"));
 		Assertions.assertEquals(Expressions.getConstantByName("NaN"), buildContext2.getDefinitions().get("myDef"));
 	}
 

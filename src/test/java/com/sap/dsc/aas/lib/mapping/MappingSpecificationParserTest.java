@@ -21,6 +21,7 @@ import com.sap.dsc.aas.lib.mapping.model.Mapping;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
 
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import io.adminshell.aas.v3.model.SubmodelElement;
 
 public class MappingSpecificationParserTest {
@@ -39,11 +40,11 @@ public class MappingSpecificationParserTest {
         assertThat(result).isNotNull();
         assertThat(result.getVersion()).isEqualTo("1.0.0");
         assertThat(result.getAasVersion()).isEqualTo("3.0RC01");
-        assertThat(result.getMappings()).isNotEmpty();
+        assertThat(result.getAasEnvironmentMapping()).isNotNull();
 
-        Mapping mapping = result.getMappings().get(0);
-        assertThat(mapping.getAssetInformation() instanceof LegacyTemplate);
-        assertThat(((LegacyTemplate) mapping.getAssetInformation()).getKindTypeXPath()).contains("Type");
+        AssetAdministrationShellEnvironment mapping = result.getAasEnvironmentMapping();
+        assertThat(mapping instanceof LegacyTemplate);
+        assertThat(((LegacyTemplate) mapping.getAssetAdministrationShells().get(0).getAssetInformation()).getKindTypeXPath()).contains("Type");
 
         assertThat(mapping.getSubmodels()).hasSize(6);
         mapping.getSubmodels().forEach(s -> assertThat(s).isInstanceOf(Template.class));
@@ -73,11 +74,11 @@ public class MappingSpecificationParserTest {
 		assertThat(result).isNotNull();
 		assertThat(result.getVersion()).isEqualTo("1.0.0");
 		assertThat(result.getAasVersion()).isEqualTo("3.0RC01");
-		assertThat(result.getMappings()).isNotEmpty();
+		assertThat(result.getAasEnvironmentMapping()).isNotNull();
 
-		Mapping mapping = result.getMappings().get(0);
-		assertThat(mapping.getAssetInformation() instanceof LegacyTemplate);
-		assertThat(((LegacyTemplate) mapping.getAssetInformation()).getKindTypeXPath()).contains("Type");
+		AssetAdministrationShellEnvironment mapping = result.getAasEnvironmentMapping();
+		assertThat(mapping instanceof LegacyTemplate);
+		assertThat(((LegacyTemplate) mapping.getAssetAdministrationShells().get(0).getAssetInformation()).getKindTypeXPath()).contains("Type");
 
 		SubmodelElement submodelElement = mapping.getSubmodels().get(0).getSubmodelElements().get(0);
 		Template temp = (Template) submodelElement;
@@ -90,7 +91,7 @@ public class MappingSpecificationParserTest {
         MappingSpecification result = parser
             .loadMappingSpecification("src/test/resources/mappings/simpleMapping_w_expressions.json");
 
-        Mapping mapping = result.getMappings().get(0);
+		AssetAdministrationShellEnvironment mapping = result.getAasEnvironmentMapping();
 
         SubmodelElement submodelElement = mapping.getSubmodels().get(0).getSubmodelElements().get(0);
         Template temp = (Template) submodelElement;

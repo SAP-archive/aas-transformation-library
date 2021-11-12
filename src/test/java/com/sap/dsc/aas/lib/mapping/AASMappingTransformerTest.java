@@ -43,11 +43,10 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/foreachTest.json");
 
 		// ACT
-		List<AssetAdministrationShellEnvironment> transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
 
 		// ASSERT
-		Assertions.assertEquals(1, transform.size());
-		List<Submodel> transformedSubmodels = transform.get(0).getSubmodels();
+		List<Submodel> transformedSubmodels = transform.getSubmodels();
 		Assertions.assertEquals(3, transformedSubmodels.size());
 		Assertions.assertNull(transformedSubmodels.get(0).getIdentification());
 		List<SubmodelElement> submodelElements = transformedSubmodels.get(0).getSubmodelElements();
@@ -70,10 +69,11 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/foreachTest2.json");
 
 		// ACT
-		List<AssetAdministrationShellEnvironment> transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
 
 		// ASSERT
-		String singleIdentifier = transform.get(0).getSubmodels().get(0).getIdentification().getIdentifier();
+		Submodel submodel = transform.getSubmodels().get(0);
+		String singleIdentifier = submodel.getIdentification().getIdentifier();
 		Assertions.assertEquals("https://test.org/transform_for_first_in_list", singleIdentifier);
 	}
 
@@ -84,10 +84,10 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/bindingsTest.json");
 
 		// ACT
-		List<AssetAdministrationShellEnvironment> transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
 
 		// ASSERT
-		Submodel submodel = transform.get(0).getSubmodels().get(0);
+		Submodel submodel = transform.getSubmodels().get(0);
 		String identifier = submodel.getIdentification().getIdentifier();
 		Assertions.assertEquals("https://test.org/id_via_bind", identifier);
 
@@ -106,10 +106,10 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/bindingsTest_w_errors.json");
 
 		// ACT
-		List<AssetAdministrationShellEnvironment> transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
 
 		// ASSERT
-		Submodel submodel = transform.get(0).getSubmodels().get(0);
+		Submodel submodel = transform.getSubmodels().get(0);
 		Property prop = (Property) submodel.getSubmodelElements().get(1);
 		KeyElements type = prop.getValueId().getKeys().get(0).getType();
 		Assertions.assertNull(type);
@@ -134,12 +134,12 @@ public class AASMappingTransformerTest {
 
 		XPathHelper.getInstance().setNamespaceBinding("ns", "http://ns.org/");
 		// ACT
-		List<AssetAdministrationShellEnvironment> transform = aasMappingTransformer.transform(mapSpec, testDoc);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, testDoc);
 
 		// ASSERT
 //		System.out.println(new JsonSerializer().write(transform.get(0)));
 
-		Assertions.assertTrue(transform.get(0).getSubmodels().size() == 2);
+		Assertions.assertEquals(2, transform.getSubmodels().size());
 	}
 
 	@Test
@@ -149,20 +149,20 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/variablesTest.json");
 
 		// ACT
-		List<AssetAdministrationShellEnvironment> transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
 
 		// ASSERT
-		Submodel submodel = transform.get(0).getSubmodels().get(0);
+		Submodel submodel = transform.getSubmodels().get(0);
 		String idShort = submodel.getIdShort();
 		Assertions.assertEquals("myvarforidshort", idShort);
 
-		Property property1 = (Property) transform.get(0).getSubmodels().get(0).getSubmodelElements().get(0);
+		Property property1 = (Property) transform.getSubmodels().get(0).getSubmodelElements().get(0);
 		Assertions.assertEquals("myoverriddenvarforidshort", property1.getIdShort());
 		Assertions.assertEquals("myvarforlateruse", property1.getValue());
-		Property property2 = (Property) transform.get(0).getSubmodels().get(0).getSubmodelElements().get(1);
+		Property property2 = (Property) transform.getSubmodels().get(0).getSubmodelElements().get(1);
 		Assertions.assertEquals("myoverriddenvarforidshort", property2.getIdShort());
 		Assertions.assertEquals("myvarforlateruse", property2.getValue());
-		Property property3 = (Property) transform.get(0).getSubmodels().get(0).getSubmodelElements().get(2);
+		Property property3 = (Property) transform.getSubmodels().get(0).getSubmodelElements().get(2);
 		Assertions.assertEquals("myoverriddenvarforidshort", property3.getIdShort());
 		Assertions.assertEquals("myvarforlateruse", property3.getValue());
 	}
@@ -186,10 +186,10 @@ public class AASMappingTransformerTest {
 
 		XPathHelper.getInstance().setNamespaceBinding("ns", "http://ns.org/");
 		// ACT
-		List<AssetAdministrationShellEnvironment> transform = aasMappingTransformer.transform(mapSpec, testDoc);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, testDoc);
 
 		// ASSERT
-		Submodel submodel = transform.get(0).getSubmodels().get(0);
+		Submodel submodel = transform.getSubmodels().get(0);
 		Assertions.assertNotNull(submodel);
 		// context is same, var and def evaluates as same
 		Assertions.assertEquals("a", submodel.getIdShort());//id => var
