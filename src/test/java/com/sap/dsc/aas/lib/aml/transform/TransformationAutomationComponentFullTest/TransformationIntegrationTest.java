@@ -7,6 +7,10 @@ package com.sap.dsc.aas.lib.aml.transform.TransformationAutomationComponentFullT
 
 import static com.google.common.truth.Truth.assertThat;
 
+import io.adminshell.aas.v3.dataformat.SerializationException;
+import io.adminshell.aas.v3.dataformat.Serializer;
+import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -24,14 +28,9 @@ import com.networknt.schema.SpecVersionDetector;
 import com.networknt.schema.ValidationMessage;
 import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
-import com.sap.dsc.aas.lib.config.ConfigLoader;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
-
-import io.adminshell.aas.v3.dataformat.SerializationException;
-import io.adminshell.aas.v3.dataformat.Serializer;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 public class TransformationIntegrationTest {
 
@@ -53,11 +52,9 @@ public class TransformationIntegrationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(AUTOMATION_COMPONENT_CONFIG_JSON);
 
-        ConfigTransformToAas config = configLoader.loadConfig(AUTOMATION_COMPONENT_CONFIG_JSON);
-
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
         Serializer serializer = new JsonSerializer();

@@ -5,27 +5,16 @@
  */
 package com.sap.dsc.aas.lib.transform;
 
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.dom4j.Document;
-import org.dom4j.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.dsc.aas.lib.mapping.AASMappingTransformer;
-import com.sap.dsc.aas.lib.mapping.model.Mapping;
-import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
-import com.sap.dsc.aas.lib.expressions.Expression;
-import com.sap.dsc.aas.lib.transform.idgeneration.IdGenerator;
-import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
-
-import io.adminshell.aas.v3.model.*;
-import io.adminshell.aas.v3.model.impl.DefaultAssetAdministrationShell;
-import io.adminshell.aas.v3.model.impl.DefaultAssetAdministrationShellEnvironment;
+import com.sap.dsc.aas.lib.mapping.AASMappingTransformer;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 public class MappingSpecificationDocumentTransformer {
 
@@ -37,8 +26,8 @@ public class MappingSpecificationDocumentTransformer {
 	/**
 	 * Map document based on the mapping configuration into one flat AAS env.
 	 *
-	 * @param document       The XML document
-	 * @param configMappings The mapping configuration
+	 * @param document The XML document
+	 * @param mappings The mapping configuration
 	 * @return Flat AAS env
 	 * @throws TransformationException If something goes wrong during transformation
 	 */

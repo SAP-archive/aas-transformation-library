@@ -5,7 +5,7 @@
  */
 package com.sap.dsc.aas.lib.config.pojo;
 
-import java.util.Collections;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sap.dsc.aas.lib.exceptions.AlreadyDefinedException;
@@ -14,15 +14,15 @@ import io.adminshell.aas.v3.model.KeyElements;
 import io.adminshell.aas.v3.model.KeyType;
 
 public class ConfigReference {
-    private ConfigIdGeneration idGeneration;
+    private Map<String, Object> idGeneration;
     private KeyType keyType = KeyType.CUSTOM;
     private KeyElements keyElement;
 
-    public ConfigIdGeneration getIdGeneration() {
+    public Map<String, Object> getIdGeneration() {
         return idGeneration;
     }
 
-    public void setIdGeneration(ConfigIdGeneration idGeneration) {
+    public void setIdGeneration(Map<String, Object> idGeneration) {
         this.idGeneration = idGeneration;
     }
 
@@ -30,10 +30,7 @@ public class ConfigReference {
         if (this.idGeneration != null) {
             throw new AlreadyDefinedException("idGeneration");
         }
-        this.idGeneration = new ConfigIdGeneration();
-        ConfigIdGenerationParameter parameter = new ConfigIdGenerationParameter();
-        parameter.setValueDefault(valueId);
-        this.idGeneration.setParameters(Collections.singletonList(parameter));
+        // do nothing
     }
 
     public KeyType getKeyType() {

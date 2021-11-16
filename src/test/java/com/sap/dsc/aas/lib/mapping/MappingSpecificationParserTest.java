@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sap.dsc.aas.lib.exceptions.InvalidBindingException;
 import com.sap.dsc.aas.lib.mapping.model.LegacyTemplate;
-import com.sap.dsc.aas.lib.mapping.model.Mapping;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
 
@@ -38,8 +37,8 @@ public class MappingSpecificationParserTest {
         MappingSpecification result = parser.loadMappingSpecification("src/test/resources/mappings/simpleMapping.json");
 
         assertThat(result).isNotNull();
-        assertThat(result.getVersion()).isEqualTo("1.0.0");
-        assertThat(result.getAasVersion()).isEqualTo("3.0RC01");
+        assertThat(result.getHeader().getVersion()).isEqualTo("1.0.0");
+        assertThat(result.getHeader().getAasVersion()).isEqualTo("3.0RC01");
         assertThat(result.getAasEnvironmentMapping()).isNotNull();
 
         AssetAdministrationShellEnvironment mapping = result.getAasEnvironmentMapping();
@@ -72,8 +71,8 @@ public class MappingSpecificationParserTest {
 				.loadMappingSpecification("src/test/resources/mappings/simpleMapping_min.json");
 
 		assertThat(result).isNotNull();
-		assertThat(result.getVersion()).isEqualTo("1.0.0");
-		assertThat(result.getAasVersion()).isEqualTo("3.0RC01");
+		assertThat(result.getHeader().getVersion()).isEqualTo("1.0.0");
+		assertThat(result.getHeader().getAasVersion()).isEqualTo("3.0RC01");
 		assertThat(result.getAasEnvironmentMapping()).isNotNull();
 
 		AssetAdministrationShellEnvironment mapping = result.getAasEnvironmentMapping();

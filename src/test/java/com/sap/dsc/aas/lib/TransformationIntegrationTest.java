@@ -9,6 +9,33 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import io.adminshell.aas.v3.dataformat.DeserializationException;
+import io.adminshell.aas.v3.dataformat.Deserializer;
+import io.adminshell.aas.v3.dataformat.SerializationException;
+import io.adminshell.aas.v3.dataformat.Serializer;
+import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
+import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
+import io.adminshell.aas.v3.model.AnnotatedRelationshipElement;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+import io.adminshell.aas.v3.model.BasicEvent;
+import io.adminshell.aas.v3.model.Blob;
+import io.adminshell.aas.v3.model.Capability;
+import io.adminshell.aas.v3.model.Entity;
+import io.adminshell.aas.v3.model.EntityType;
+import io.adminshell.aas.v3.model.File;
+import io.adminshell.aas.v3.model.Key;
+import io.adminshell.aas.v3.model.KeyElements;
+import io.adminshell.aas.v3.model.KeyType;
+import io.adminshell.aas.v3.model.LangString;
+import io.adminshell.aas.v3.model.MultiLanguageProperty;
+import io.adminshell.aas.v3.model.Operation;
+import io.adminshell.aas.v3.model.Range;
+import io.adminshell.aas.v3.model.Reference;
+import io.adminshell.aas.v3.model.ReferenceElement;
+import io.adminshell.aas.v3.model.RelationshipElement;
+import io.adminshell.aas.v3.model.Submodel;
+import io.adminshell.aas.v3.model.SubmodelElement;
+import io.adminshell.aas.v3.model.SubmodelElementCollection;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -27,16 +54,8 @@ import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersionDetector;
 import com.networknt.schema.ValidationMessage;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
-import com.sap.dsc.aas.lib.config.ConfigLoader;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
-
-import io.adminshell.aas.v3.dataformat.DeserializationException;
-import io.adminshell.aas.v3.dataformat.Deserializer;
-import io.adminshell.aas.v3.dataformat.SerializationException;
-import io.adminshell.aas.v3.dataformat.Serializer;
-import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.*;
+import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 public class TransformationIntegrationTest {
 
@@ -55,11 +74,10 @@ public class TransformationIntegrationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigTransformToAas config = configLoader.loadConfig(CONFIG_JSON);
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(CONFIG_JSON);
 
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
     }
 
     @Test
@@ -67,11 +85,10 @@ public class TransformationIntegrationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigTransformToAas config = configLoader.loadConfig(AUTOMATION_COMPONENT_CONFIG_JSON);
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(AUTOMATION_COMPONENT_CONFIG_JSON);
 
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
 
         System.out.println(new JsonSerializer().write(shellEnv));
     }
