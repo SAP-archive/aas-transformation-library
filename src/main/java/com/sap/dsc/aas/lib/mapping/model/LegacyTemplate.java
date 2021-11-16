@@ -7,9 +7,9 @@ package com.sap.dsc.aas.lib.mapping.model;
 
 import io.adminshell.aas.v3.model.KeyElements;
 import io.adminshell.aas.v3.model.KeyType;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sap.dsc.aas.lib.config.pojo.ConfigIdGeneration;
 import com.sap.dsc.aas.lib.config.pojo.ConfigReference;
 
 /**
@@ -55,9 +55,9 @@ public interface LegacyTemplate extends Template {
 
     void setMimeTypeXPath(String mimeTypeXPath);
 
-    ConfigIdGeneration getIdGeneration();
+    Map<String, Object> getIdGeneration();
 
-    void setIdGeneration(ConfigIdGeneration idGeneration);
+    void setIdGeneration(Map<String, Object> idGeneration);
 
     KeyType getKeyType();
 
