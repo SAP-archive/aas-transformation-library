@@ -14,11 +14,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Set;
+import java.util.function.Function;
+
+import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.sap.dsc.aas.lib.expressions.Expression;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
@@ -29,6 +35,11 @@ import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public class AASMappingTransformer {
+
+	private static class InstanceByBindings {
+		Object instance;
+		List<BeanPropertyDefinition> propertiesByBinding = Collections.emptyList();
+	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -51,23 +62,24 @@ public class AASMappingTransformer {
 			List<Object> forItems = asList(evaluate);
 			for (Object forItem : forItems) {
 				TransformationContext childCtx = TransformationContext.buildContext(parentCtx, forItem, template);
-				inflated.add(transformSingle(template, childCtx));
+				inflated.add(transformWithBindings(template, childCtx));
 			}
 		} else {
 			TransformationContext childCtx = TransformationContext.buildContext(parentCtx, parentCtx.getContextItem(),
 					template);
-			inflated.add(transformSingle(template, childCtx));
+			inflated.add(transformWithBindings(template, childCtx));
 		}
 		return inflated;
 	}
 
-	private Object transformSingle(Template template, TransformationContext ctx) {
+	private Object transformWithBindings(Template template, TransformationContext ctx) {
 		Class<?> aasInterface = getAASInterface(template);
-		Object transformedEntity = null;
+		InstanceByBindings transformedEntity = null;
 		if (template.getBindSpecification() != null) {
 			transformedEntity = createInstanceByBindings(template, aasInterface, ctx);
 		} else {
-			transformedEntity = newDefaultAASInstance(aasInterface);
+			transformedEntity = new InstanceByBindings();
+			transformedEntity.instance = newDefaultAASInstance(aasInterface);
 		}
 		try {
 			transformProperties(template, ctx, transformedEntity);
@@ -75,12 +87,13 @@ public class AASMappingTransformer {
 				| IllegalArgumentException | InvocationTargetException e) {
 			LOGGER.error("Failed to transform properties for " + transformedEntity.getClass().getName(), e);
 		}
-		return transformedEntity;
+		return transformedEntity.instance;
 	}
 
-	private Object createInstanceByBindings(Template template, Class<?> aasInterface, TransformationContext ctx) {
+	private InstanceByBindings createInstanceByBindings(Template template, Class<?> aasInterface,
+			TransformationContext ctx) {
 		Object transformedEntity;
-		Map<String, String> evaluatedBindings = new HashMap<>();
+		Map<String, Object> evaluatedBindings = new HashMap<>();
 		Set<Entry<String, Expression>> bindings = template.getBindSpecification().getBindings().entrySet();
 		for (Entry<String, Expression> binding : bindings) {
 			String evaluate = binding.getValue().evaluateAsString(ctx);
@@ -94,22 +107,56 @@ public class AASMappingTransformer {
 			mapperField.setAccessible(true);
 			JsonMapper jsonMapper = (JsonMapper) mapperField.get(jsonDeserializer);
 			transformedEntity = jsonMapper.convertValue(evaluatedBindings, aasInterface);
+			InstanceByBindings instanceByBindings = new InstanceByBindings();
+			instanceByBindings.instance = transformedEntity;
+			setPropertiesByBindings(aasInterface, instanceByBindings, evaluatedBindings, jsonMapper);
+			return instanceByBindings;
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			LOGGER.error("Failed to read binding specification, evaluated as '{}' for model '{}'. Error: '{}'",
 					evaluatedBindings, aasInterface.getName(), e.getMessage());
-			transformedEntity = newDefaultAASInstance(aasInterface);
+			InstanceByBindings instanceByBindings = new InstanceByBindings();
+			instanceByBindings.instance = newDefaultAASInstance(aasInterface);
+			return instanceByBindings;
 		}
-		return transformedEntity;
 	}
 
-	private void transformProperties(Template template, TransformationContext ctx, Object transformationTarget)
+	private void setPropertiesByBindings(Class<?> aasInterface, InstanceByBindings instanceByBindings,
+			Map<String, Object> evaluatedBindings, JsonMapper jsonMapper) {
+		Map<String, BeanPropertyDefinition> propertyDefinitions = findPropertyDefinitions(aasInterface, jsonMapper);
+		Set<String> expectedKeys = propertyDefinitions.keySet();
+		Set<String> keysOfBinding = evaluatedBindings.keySet();
+		for (String keyOfBinding : keysOfBinding) {
+			if (!expectedKeys.contains(keyOfBinding)) {
+				LOGGER.warn("Key '{}' is used in bindings but {} contains '{}'.", keyOfBinding, aasInterface.getName(),
+						expectedKeys);
+			}
+		}
+		List<String> keysNotBinded = expectedKeys.stream().filter(k -> !keysOfBinding.contains(k))
+				.collect(Collectors.toList());
+		for (String keyNotUsed : keysNotBinded) {
+			propertyDefinitions.remove(keyNotUsed);
+		}
+		instanceByBindings.propertiesByBinding = new ArrayList<>(propertyDefinitions.values());
+	}
+
+	private Map<String, BeanPropertyDefinition> findPropertyDefinitions(Class<?> aasInterface, JsonMapper jsonMapper) {
+		JavaType constructType = jsonMapper.getTypeFactory().constructType(aasInterface);
+		BeanDescription beanDescription = jsonMapper.getSerializationConfig().introspect(constructType);
+		Map<String, BeanPropertyDefinition> findProperties = beanDescription.findProperties().stream()
+				.collect(Collectors.toMap(bpd -> bpd.getName(), Function.identity()));
+		return findProperties;
+	}
+
+	private void transformProperties(Template template, TransformationContext ctx,
+			InstanceByBindings instanceByBindings)
 			throws IntrospectionException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		Object transformationTarget = instanceByBindings.instance;
 		PropertyDescriptor[] propertyDescriptors = Introspector.getBeanInfo(transformationTarget.getClass())
 				.getPropertyDescriptors();
 		for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
 			Method readMethod = propertyDescriptor.getReadMethod();
 			Method writeMethod = propertyDescriptor.getWriteMethod();
-			if (readMethod != null && writeMethod != null) {
+			if (readMethod != null && writeMethod != null && notSetByBindings(instanceByBindings, writeMethod)) {
 				Object templateReadProperty = template.getClass().getMethod(readMethod.getName()).invoke(template);
 				Object transformedTemplateReadProperty = transformAny(templateReadProperty, ctx);
 
@@ -133,6 +180,11 @@ public class AASMappingTransformer {
 				}
 			}
 		}
+	}
+
+	private boolean notSetByBindings(InstanceByBindings instanceByBindings, Method writeMethod) {
+		return !instanceByBindings.propertiesByBinding.stream().map(bpd -> bpd.getSetter().getAnnotated().getName())
+				.anyMatch(name -> name.equals(writeMethod.getName()));
 	}
 
 	private Object transformAny(Object templateReadProperty, TransformationContext ctx) {

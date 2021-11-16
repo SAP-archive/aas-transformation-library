@@ -192,14 +192,31 @@ public class AASMappingTransformerTest {
 		Submodel submodel = transform.getSubmodels().get(0);
 		Assertions.assertNotNull(submodel);
 		// context is same, var and def evaluates as same
-		Assertions.assertEquals("a", submodel.getIdShort());//id => var
-		Assertions.assertEquals("a", submodel.getCategory());//category => def
+		Assertions.assertEquals("a", submodel.getIdShort());// id => var
+		Assertions.assertEquals("a", submodel.getCategory());// category => def
 
 		// context now differs, var (transformed to idShort) is static and def
 		// reevaluates again, now to "b" since the context changed
 		SubmodelElement submodelElement = submodel.getSubmodelElements().get(0);
-		Assertions.assertEquals("a", submodelElement.getIdShort());//id => var
-		Assertions.assertEquals("b", submodelElement.getCategory());//category => def
+		Assertions.assertEquals("a", submodelElement.getIdShort());// id => var
+		Assertions.assertEquals("b", submodelElement.getCategory());// category => def
+
+	}
+
+	@Test
+	void testBindingsNonStringValues() throws Exception {
+		// ARRANGE
+		MappingSpecification mapSpec = parser
+				.loadMappingSpecification("src/test/resources/mappings/generic/bindingsTest_nonStrings.json");
+
+		// ACT
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
+
+		// ASSERT
+		Submodel submodel = transform.getSubmodels().get(0);
+		SubmodelElementCollection smc = (SubmodelElementCollection) submodel.getSubmodelElements().get(0);
+		Assertions.assertTrue(smc.getOrdered());
+		Assertions.assertTrue(smc.getAllowDuplicates());
 
 	}
 
