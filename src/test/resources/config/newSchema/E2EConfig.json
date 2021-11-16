@@ -71,17 +71,13 @@
             "keys": [
               {
                 "@concatenate": [
+                  "submodel ",
                   {
-                    "string": "submodel "
+                    "@var": "submodelName"
                   },
+                  " of asset ",
                   {
-                    "var": "submodelName"
-                  },
-                  {
-                    "string": " of asset "
-                  },
-                  {
-                    "var": "assetName"
+                    "@var": "assetName"
                   }
                 ]
               }
@@ -131,7 +127,6 @@
       }
     ],
     "conceptDescriptions": []
-
   }
 }
 

@@ -1,6 +1,6 @@
 {
   "@header": {
-    "@namespaceBindings": {
+    "@namespaces": {
       "caex": "http://www.dke.de/CAEX"
     },
     "@definitions": {
@@ -33,44 +33,47 @@
         ]
       }
     },
-    "@vars": {
-      "manufacturerId": "The Id of the manufacturer, will be filled from the CliendId before calling the MEI Api"
-    }
+    "@variables": {
+    },
+    "@parameters": [
+      "manufacturerId"
+    ]
   },
-  "@mappings": {
-    "@foreach": {
-      "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
-    },
-    "@bind": {
-      "id": {
-        "@def": "automationComponentId"
-      }
-    },
-    "assetShell": {
-      "id": "shellId",
-      "@bind": {
-        "idShort": {
-          "@xpath": "@Name"
+  "assetAdministrationShellEnvironment": {
+    "assetAdministrationShells": [
+      {
+        "@foreach": {
+          "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
+        },
+        "@bind": {
+          "identification": {
+            "keys": [
+              {
+                "id": {
+                  "@def": "automationComponentId"
+                },
+                "idType": "IdShort"
+              }
+            ]
+          },
+          "idShort": {
+            "@xpath": "@Name"
+          }
+        },
+        "assetInformation": {
+          "@bind": {
+            "kindType": {
+              "@xpath": "TYPE"
+            }
+          },
+          "globalAssetIdReference": {
+            "valueId": "assetInformationGlobalAssetIdReference",
+            "keyType": "CUSTOM",
+            "keyElement": "ASSET"
+          }
         }
       }
-    },
-    "assetInformation": {
-      "@bind": {
-        "kindType": {
-          "@xpath": "TYPE"
-        }
-      },
-      "@bind": {
-        "id": {
-          "@def": "assetId"
-        }
-      },
-      "globalAssetIdReference": {
-        "valueId": "assetInformationGlobalAssetIdReference",
-        "keyType": "CUSTOM",
-        "keyElement": "ASSET"
-      }
-    },
+    ],
     "submodels": [
       {
         "@foreach": {
@@ -1260,6 +1263,9 @@
           }
         ]
       }
+    ],
+    "conceptDescriptions": [
+
     ]
   }
 }

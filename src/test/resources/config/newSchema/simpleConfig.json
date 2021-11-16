@@ -45,10 +45,10 @@
   "assetAdministrationShellEnvironment": {
     "assets": [
       {
-        "@bind": {
-          "identification": {
-            "keys": [
-              {
+        "identification": {
+          "keys": [
+            {
+              "@bind": {
                 "id": {
                   "@concatenate": [
                     {
@@ -58,8 +58,8 @@
                 },
                 "idType": "Iri"
               }
-            ]
-          },
+            }
+          ],
           "idShort": {
             "@xpath": "@Name"
           }
@@ -74,28 +74,27 @@
         "@bind": {
           "idShort": {
             "@xpath": "@Name"
-          },
-          "identification": {
-            "keys": [
-              {
+          }
+        },
+        "identification": {
+          "keys": [
+            {
+              "@bind": {
                 "id": {
                   "@def": "mappingIdGeneration"
-                },
-                "idType": "Iri"
-              }
-            ]
-          }
+                }
+              },
+              "idType": "Iri"
+            }
+          ]
         },
         "assetInformation": {
           "@bind": {
             "kindType": {
               "@xpath": "'TYPE'"
-            },
-            "id": {
-              "@def": "assetIdGeneration"
             }
           },
-          "globalAssetIdReference": {
+          "globalAssetId": {
             "valueId": "assetInformationGlobalAssetIdReference",
             "keyType": "CUSTOM",
             "keyElement": "ASSET"
@@ -123,10 +122,10 @@
             "@xpath": "this is an updated Variable"
           }
         },
-        "@bind": {
-          "identification": {
-            "keys": [
-              {
+        "identification": {
+          "keys": [
+            {
+              "@bind": {
                 "id": {
                   "@concatenate": [
                     {
@@ -139,11 +138,11 @@
                       "@var": "submodel3Id"
                     }
                   ]
-                },
-                "idType": "Iri"
-              }
-            ]
-          }
+                }
+              },
+              "idType": "Iri"
+            }
+          ]
         },
         "idShort": "submodelShortId1",
         "submodelElements": [
@@ -169,8 +168,18 @@
             "@foreach": {
               "@xpath": "caex:Attribute[@Name='Manufacturer']"
             },
-            "semanticId_str": "submodelElementSemanticId2",
-            "modelType": "Property",
+            "semanticId": {
+              "keys": [
+                {
+                  "idType": "IdShort",
+                  "type": "ReferenceElement",
+                  "value": "submodelElementSemanticId2"
+                }
+              ]
+            },
+            "modelType": {
+              "name": "Property"
+            },
             "valueType": "STRING",
             "@bind": {
               "value": {
@@ -182,7 +191,9 @@
             "@foreach": {
               "@xpath": "caex:Attribute[@Name='ManufacturerURI']"
             },
-            "modelType": "Capability",
+            "modelType": {
+              "name": "Capability"
+            },
             "@bind": {
               "idShort": {
                 "@xpath": "'Browseable'"
@@ -204,10 +215,10 @@
             }
           ]
         },
-        "@bind": {
-          "identification": {
-            "keys": [
-              {
+        "identification": {
+          "keys": [
+            {
+              "@bind": {
                 "id": {
                   "@concatenate": [
                     {
@@ -217,11 +228,11 @@
                       "@def": "assetIdGeneration"
                     }
                   ]
-                },
-                "idType": "Iri"
-              }
-            ]
-          }
+                }
+              },
+              "idType": "Iri"
+            }
+          ]
         },
         "submodelElements": [
           {
@@ -281,8 +292,8 @@
                 "modelType": {
                   "name": "MultiLanguageProperty"
                 },
-                "@bind": {
-                  "values": {
+                "values": {
+                  "@bind": {
                     "lang": {
                       "@xpath": "'en'"
                     },
@@ -361,24 +372,22 @@
             }
           ]
         },
-        "@bind": {
-          "identification": {
-            "keys": [
-              {
+        "identification": {
+          "keys": [
+            {
+              "@bind": {
                 "id": {
                   "@concatenate": [
                     {
                       "@def": "assetIdGeneration"
                     },
-                    {
-                      "@const": "_generalTechnicalData"
-                    }
+                    "_generalTechnicalData"
                   ]
-                },
-                "idTYpe": "Iri"
-              }
-            ]
-          }
+                }
+              },
+              "idTYpe": "Iri"
+            }
+          ]
         },
         "submodelElements": [
           {
@@ -424,17 +433,17 @@
             }
           ]
         },
-        "@bind": {
-          "identification": {
-            "keys": [
-              {
+        "identification": {
+          "keys": [
+            {
+              "@bind": {
                 "id": {
                   "@var": "$submodel3Id"
-                },
-                "idType": "IdShort"
-              }
-            ]
-          }
+                }
+              },
+              "idType": "IdShort"
+            }
+          ]
         },
         "submodelElements": [
           {
@@ -462,100 +471,104 @@
           ]
         },
         "idShort": "Documents",
-        "@bind": {
-          "identification": {
-            "keys": [
-              {
+        "identification": {
+          "keys": [
+            {
+              "@bind": {
                 "id": {
                   "@vars": "submodelDocsId"
-                },
-                "idType": "idShort"
-              }
-            ]
-          }
+                }
+              },
+              "idType": "idShort"
+            }
+          ]
         },
-          "submodelElements": [
-            {
-              "@foreach": {
-                "@xpath": "caex:InternalElement[@Name='Manuals']/caex:InternalElement[@Name='Betriebsanleitung']/caex:ExternalInterface[@Name='ExternalDataReference']"
+        "submodelElements": [
+          {
+            "@foreach": {
+              "@xpath": "caex:InternalElement[@Name='Manuals']/caex:InternalElement[@Name='Betriebsanleitung']/caex:ExternalInterface[@Name='ExternalDataReference']"
+            },
+            "modelType": {
+              "name": "File"
+            },
+            "@bind": {
+              "idShort": {
+                "@xpath": "'Betriebsanleitung'"
               },
-              "modelType": {
-                "name": "File"
+              "value": {
+                "@xpath": "caex:Attribute[@Name='refURI']/caex:Value"
               },
-              "@bind": {
-                "idShort": {
-                  "@xpath": "'Betriebsanleitung'"
-                },
-                "value": {
-                  "@xpath": "caex:Attribute[@Name='refURI']/caex:Value"
-                },
-                "mimeType": {
-                  "@xpath": "caex:Attribute[@Name='MIMEType']/caex:Value"
-                }
+              "mimeType": {
+                "@xpath": "caex:Attribute[@Name='MIMEType']/caex:Value"
+              }
+            }
+          },
+          {
+            "@foreach": {
+              "@xpath": "caex:InternalElement[@Name='STEPGeometry']/caex:ExternalInterface[@Name='ExternalDataReference']"
+            },
+            "modelType": {
+              "name": "ReferenceElement"
+            },
+            "@bind": {
+              "idShort": {
+                "@xpath": "'STEPGeometry'"
               }
             },
-            {
-              "@foreach": {
-                "@xpath": "caex:InternalElement[@Name='STEPGeometry']/caex:ExternalInterface[@Name='ExternalDataReference']"
-              },
-              "modelType": {
-                "name": "ReferenceElement"
-              },
-              "@bind": {
-                "idShort": {
-                  "@xpath": "'STEPGeometry'"
-                },
-                "value": {
-                  "keys": [
-                    {
-                      "id": {
-                        "@xpath": "caex:Attribute[@Name='refURI']/caex:Value"
-                      },
-                      "keyElement": {
-                        "@const": "CONCEPT_DESCRIPTION"
-                      }
+            "value": {
+              "keys": [
+                {
+                  "@bind": {
+                    "id": {
+                      "@xpath": "caex:Attribute[@Name='refURI']/caex:Value"
                     }
-                  ]
-                }
-              }
-            },
-            {
-              "@foreach": {
-                "@xpath": "caex:InternalElement[@Name='ManualsBIN']/caex:InternalElement[@Name='BetriebsanleitungBIN']/caex:ExternalInterface[@Name='ExternalDataReference']"
-              },
-              "modelType": {
-                "modelType": "Blob"
-              },
-              "@bind": {
-                "idShort": {
-                  "@xpath": "'BetriebsanleitungBIN'"
-                },
-                "value": {
-                  "@xpath": "caex:Attribute[@Name='refURI']/caex:Value"
-                },
-                "mimeType": {
-                  "@xpath": "caex:Attribute[@Name='MIMEType']/caex:Value"
-                }
-              }
-            },
-            {
-              "@foreach": {
-                "@xpath": "caex:InternalElement[@Name='ManualsBasicEvent']/caex:InternalElement[@Name='SampleBasicEvent']/caex:ExternalInterface[@Name='ExternalDataReference']"
-              },
-              "modelType": {
-                "name": "BasicEvent"
-              },
-              "@bind": {
-                "idShort": {
-                  "@xpath": "'SampleBasicEvent'"
-                },
-                "observed": {
-                  "id": {
-                    "@xpath": "caex:Attribute[@Name='refURI']/caex:Value"
+                  },
+                  "keyElement": {
+                    "@const": "CONCEPT_DESCRIPTION"
                   }
                 }
+              ]
+            }
+          },
+          {
+            "@foreach": {
+              "@xpath": "caex:InternalElement[@Name='ManualsBIN']/caex:InternalElement[@Name='BetriebsanleitungBIN']/caex:ExternalInterface[@Name='ExternalDataReference']"
+            },
+            "modelType": {
+              "modelType": "Blob"
+            },
+            "@bind": {
+              "idShort": {
+                "@xpath": "'BetriebsanleitungBIN'"
+              },
+              "value": {
+                "@xpath": "caex:Attribute[@Name='refURI']/caex:Value"
+              },
+              "mimeType": {
+                "@xpath": "caex:Attribute[@Name='MIMEType']/caex:Value"
               }
-            }]},
+            }
+          },
+          {
+            "@foreach": {
+              "@xpath": "caex:InternalElement[@Name='ManualsBasicEvent']/caex:InternalElement[@Name='SampleBasicEvent']/caex:ExternalInterface[@Name='ExternalDataReference']"
+            },
+            "modelType": {
+              "name": "BasicEvent"
+            },
+            "@bind": {
+              "idShort": {
+                "@xpath": "'SampleBasicEvent'"
+              },
+              "observed": {
+                "id": {
+                  "@xpath": "caex:Attribute[@Name='refURI']/caex:Value"
+                }
+              }
+            }
+          }
+        ]
+      },
       {
         "@foreach": {
           "@xpath": "."
@@ -563,20 +576,24 @@
         "@bind": {
           "idShort": {
             "@xpath": "'Operations'"
-          },
-          "id": {
-            "keys": [
-              {
-                "id": {
-                  "@concatenate": {
-                    "@def": "assetIdGeneration",
-                    "@const": "_operations"
-                  }
-                },
-                "keyType": "Iri"
-              }
-            ]
           }
+        },
+        "id": {
+          "keys": [
+            {
+              "@bind": {
+                "id": {
+                  "@concatenate": [
+                    {
+                      "@def": "assetIdGeneration"
+                    },
+                    "_operations"
+                  ]
+                }
+              },
+              "keyType": "Iri"
+            }
+          ]
         },
         "semanticId": {
           "keys": [
