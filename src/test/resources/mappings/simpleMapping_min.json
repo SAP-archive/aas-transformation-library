@@ -1,88 +1,86 @@
 {
-	"version": "1.0.0",
-	"aasVersion": "3.0RC01",
-	"mappings": [
-		{
-			"from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
-			"idGeneration": {
-				"parameters": [
-					{
-						"from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
-						"from_string": "DefaultManufacturer"
-					},
-					{
-						"from_string": "/"
-					},
-					{
-						"from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
-					}
-				],
-				"finalizeFunction": "concatenate_and_hash",
-				"idGenerationName": "mappingIdGeneration"
-			},
-			"assetInformation": {
-				"kindType_xpath": "Type",
-				"idGeneration": {
-					"parameters": [
-						{
-							"from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
-							"from_string": "DefaultManufacturer"
-						},
-						{
-							"from_string": "/"
-						},
-						{
-							"from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
-						}
-					],
-					"finalizeFunction": "concatenate_and_hash",
-					"idGenerationName": "assetIdGeneration"
-				},
-				"globalAssetIdReference": {
-					"valueId": "assetInformationGlobalAssetIdReference",
-					"keyType": "Custom",
-					"keyElement": "Asset"
-				}
-			},
-			"submodels": [
-				{
-					"from_xpath": ".",
-					"idShort_xpath": "'Documents'",
-					"semanticId_str": "http://sap.com/Documents",
-					"idGeneration": {
-						"parameters": [
-							{
-								"from_string": "Documents"
-							}
-						],
-						"idGenerationName": "submodelDocuments"
-					},
-					"submodelElements": [
-						{
-							"from_xpath": "caex:InternalElement[@Name='Manuals']/caex:InternalElement[@Name='Betriebsanleitung']/caex:ExternalInterface[@Name='ExternalDataReference']",
-							"idShort_xpath": "'Betriebsanleitung'",
-							"modelType": "File",
-							"valueXPath": "caex:Attribute[@Name='refURI']/caex:Value",
-							"mimeTypeXPath": "caex:Attribute[@Name='MIMEType']/caex:Value",
-							"@bind": {
-								"idShort": "'Betriebsanleitung'",
-								"value": "caex:Attribute[@Name='refURI']/caex:Value",
-								"mimeType": "caex:Attribute[@Name='MIMEType']/caex:Value"
-							}
-						}
-					]
-				}
-			],
-			"assetShell": {
-				"idGeneration": {
-					"parameters": [
-						{
-							"from_string": "shellId"
-						}
-					]
-				},
-				"idShort_xpath": "@Name"
-			}
-		}
-	]
+  "version": "1.0.0",
+  "aasVersion": "3.0RC01",
+  "aasEnvironmentMapping": {
+    "from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
+    "idGeneration": {
+      "parameters": [
+        {
+          "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
+          "from_string": "DefaultManufacturer"
+        },
+        {
+          "from_string": "/"
+        },
+        {
+          "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+        }
+      ],
+      "finalizeFunction": "concatenate_and_hash",
+      "idGenerationName": "mappingIdGeneration"
+    },
+    "submodels": [
+      {
+        "from_xpath": ".",
+        "idShort_xpath": "'Documents'",
+        "semanticId_str": "http://sap.com/Documents",
+        "idGeneration": {
+          "parameters": [
+            {
+              "from_string": "Documents"
+            }
+          ],
+          "idGenerationName": "submodelDocuments"
+        },
+        "submodelElements": [
+          {
+            "from_xpath": "caex:InternalElement[@Name='Manuals']/caex:InternalElement[@Name='Betriebsanleitung']/caex:ExternalInterface[@Name='ExternalDataReference']",
+            "idShort_xpath": "'Betriebsanleitung'",
+            "modelType": "File",
+            "valueXPath": "caex:Attribute[@Name='refURI']/caex:Value",
+            "mimeTypeXPath": "caex:Attribute[@Name='MIMEType']/caex:Value",
+            "@bind": {
+              "idShort": "'Betriebsanleitung'",
+              "value": "caex:Attribute[@Name='refURI']/caex:Value",
+              "mimeType": "caex:Attribute[@Name='MIMEType']/caex:Value"
+            }
+          }
+        ]
+      }
+    ],
+    "assetAdministrationShells": {
+      "idGeneration": {
+        "parameters": [
+          {
+            "from_string": "shellId"
+          }
+        ]
+      },
+      "idShort_xpath": "@Name",
+      "assetInformation": {
+        "kindType_xpath": "Type",
+        "idGeneration": {
+          "parameters": [
+            {
+              "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
+              "from_string": "DefaultManufacturer"
+            },
+            {
+              "from_string": "/"
+            },
+            {
+              "from_xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+            }
+          ],
+          "finalizeFunction": "concatenate_and_hash",
+          "idGenerationName": "assetIdGeneration"
+        },
+        "globalAssetIdReference": {
+          "valueId": "assetInformationGlobalAssetIdReference",
+          "keyType": "Custom",
+          "keyElement": "Asset"
+        }
+      }
+    }
+  }
 }
