@@ -78,7 +78,7 @@ public class UANodeSetTransformer extends DocumentTransformer {
 	@Override
 	public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
         MappingSpecification mapping) throws TransformationException {
-		XPathHelper.getInstance().addNamespaceBindings(mapping.getHeader().getNamespaces());
+		setNamespaces(mapping.getHeader().getNamespaces());
         preconditionValidator.setPreconditions(mapping.getHeader().getPreconditions());
 		return super.createShellEnv(validXmlDocument, mapping);
 	}

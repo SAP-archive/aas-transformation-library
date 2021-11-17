@@ -7,6 +7,7 @@ package com.sap.dsc.aas.lib.transform;
 
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.lang.invoke.MethodHandles;
+import java.util.Map;
 
 import org.dom4j.Document;
 import org.slf4j.Logger;
@@ -44,6 +45,10 @@ public class MappingSpecificationDocumentTransformer {
 		} else {
 			throw new IllegalArgumentException("No AAS Environment specified!");
 		}
+	}
+	
+	public void setNamespaces(Map<String, String> namespaces) {
+		XPathHelper.getInstance().addNamespaceBindings(namespaces);
 	}
 
 }

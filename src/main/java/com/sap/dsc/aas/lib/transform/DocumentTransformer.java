@@ -1,6 +1,7 @@
 package com.sap.dsc.aas.lib.transform;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import org.dom4j.Document;
 
@@ -22,6 +23,7 @@ public abstract class DocumentTransformer extends MappingSpecificationDocumentTr
 	 */
 	public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping)
 			throws TransformationException {
+		setNamespaces(mapping.getHeader().getNamespaces());
 		Document readXmlDocument = readXmlDocument(inStream);
 		validateDocument(readXmlDocument);
 		afterValidation(readXmlDocument, mapping);
