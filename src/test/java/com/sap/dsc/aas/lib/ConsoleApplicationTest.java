@@ -107,7 +107,7 @@ public class ConsoleApplicationTest {
     @Test
     void validConfig() throws IOException {
         classUnderTest.loadConfig(CONFIG_FILE_PATH);
-        assertThat(classUnderTest.config).isNotNull();
+        assertThat(classUnderTest.mapping).isNotNull();
     }
 
     @Test

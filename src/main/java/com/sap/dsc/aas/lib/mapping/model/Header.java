@@ -1,21 +1,24 @@
-/* 
-  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
+/*
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved.
 
-  SPDX-License-Identifier: Apache-2.0 
+  SPDX-License-Identifier: Apache-2.0
  */
-package com.sap.dsc.aas.lib.config.pojo;
+package com.sap.dsc.aas.lib.mapping.model;
 
 import java.util.List;
 import java.util.Map;
 
-public class ConfigTransformToAas {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sap.dsc.aas.lib.config.pojo.ConfigPlaceholder;
+import com.sap.dsc.aas.lib.config.pojo.Precondition;
 
+public class Header extends TemplateSupport {
+
+    protected Map<String, String> namespaces;
     private String version;
     private String aasVersion;
-    private List<ConfigMapping> configMappings;
     private List<Precondition> preconditions;
     private List<ConfigPlaceholder> placeholders;
-    private Map<String, String> namespaceBindings;
 
     public String getVersion() {
         return version;
@@ -33,12 +36,18 @@ public class ConfigTransformToAas {
         this.aasVersion = aasVersion;
     }
 
-    public List<ConfigMapping> getConfigMappings() {
-        return configMappings;
+    public Map<String, String> getNamespaces() {
+        return namespaces;
     }
 
-    public void setConfigMappings(List<ConfigMapping> configMappings) {
-        this.configMappings = configMappings;
+    @JsonProperty("@namespaces")
+    public void setNamespaces(Map<String, String> namespaces) {
+        this.namespaces = namespaces;
+    }
+
+    @Override
+    public void setBindSpecification(BindSpecification bindSpecification) {
+        throw new UnsupportedOperationException("@bind ist not allowed in header");
     }
 
     public List<Precondition> getPreconditions() {
@@ -56,12 +65,4 @@ public class ConfigTransformToAas {
     public void setPlaceholders(List<ConfigPlaceholder> placeholders) {
         this.placeholders = placeholders;
     }
-
-    public Map<String, String> getNamespaceBindings() {
-		return namespaceBindings;
-	}
-
-	public void setNamespaceBindings(Map<String, String> namespaceBindings) {
-		this.namespaceBindings = namespaceBindings;
-	}
 }

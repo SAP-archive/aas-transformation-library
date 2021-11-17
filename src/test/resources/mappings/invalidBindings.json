@@ -1,21 +1,23 @@
 {
-  "version": "1.0.0",
-  "aasVersion": "3.0RC01",
-  "mappings": [
-    {
-      "from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
+  "@header": {
+    "version": "1.0.0",
+    "aasVersion": "3.0RC01"
+  },
+  "aasEnvironmentMapping": {
+    "from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
+    "assetAdministrationShells": {
       "assetInformation": {
         "globalAssetIdReference": {
           "valueId": "assetInformationGlobalAssetIdReference",
           "keyType": "Custom",
           "keyElement": "Asset"
         },
-        "@bind" : {
-          "assetKind" : "Type",
-          "unknownProp1" : 3,
-          "unknownProp2" : "some value"
+        "@bind": {
+          "assetKind": "Type",
+          "unknownProp1": 3,
+          "unknownProp2": "some value"
         }
       }
     }
-  ]
+  }
 }

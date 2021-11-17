@@ -8,6 +8,13 @@ package com.sap.dsc.aas.lib.aml.transform;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import io.adminshell.aas.v3.dataformat.DeserializationException;
+import io.adminshell.aas.v3.dataformat.SerializationException;
+import io.adminshell.aas.v3.dataformat.Serializer;
+import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
+import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+import io.adminshell.aas.v3.model.Property;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -21,19 +28,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.sap.dsc.aas.lib.TestUtils;
-import com.sap.dsc.aas.lib.config.ConfigLoader;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.placeholder.PlaceholderHandling;
 import com.sap.dsc.aas.lib.placeholder.exceptions.PlaceholderValueMissingException;
-
-import io.adminshell.aas.v3.dataformat.DeserializationException;
-import io.adminshell.aas.v3.dataformat.SerializationException;
-import io.adminshell.aas.v3.dataformat.Serializer;
-import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
-import io.adminshell.aas.v3.model.Property;
 
 public class AINSubmodelTransformationTest {
 
@@ -45,7 +44,7 @@ public class AINSubmodelTransformationTest {
     private static JsonSchemaValidator validator;
     private static Serializer serializer;
     private AmlTransformer amlTransformer;
-    private ConfigLoader configLoader;
+    private MappingSpecificationParser mappingParser;
     private InputStream amlInputStream;
     private PlaceholderHandling placeholderHandling;
     private String SAMPLE_MANUFACTURER_ID = "sampleReplacedManufacturerId";
@@ -56,7 +55,7 @@ public class AINSubmodelTransformationTest {
         amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         amlTransformer = new AmlTransformer();
-        configLoader = new ConfigLoader();
+        mappingParser = new MappingSpecificationParser();
         validator = new JsonSchemaValidator();
         serializer = new JsonSerializer();
         placeholderHandling = new PlaceholderHandling();
@@ -67,8 +66,8 @@ public class AINSubmodelTransformationTest {
     void validateTransformedAINSubmodelAgainstAASJSONSchema()
         throws IOException, TransformationException, SerializationException, DeserializationException {
 
-        ConfigTransformToAas config = configLoader.loadConfig(AIN_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(AIN_SUBMODEL_CONFIG_JSON);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
         // replace the placeholder assigning a sample value
         Map<String, String> placeholderValues = new HashMap<>();
         placeholderValues.put("manufacturerId", SAMPLE_MANUFACTURER_ID);
@@ -95,8 +94,8 @@ public class AINSubmodelTransformationTest {
     @DisplayName("Missing ManufacturerId placeholder when transforming Custom AIN Submodel")
     void missingManufacturerIdPlaceholder() throws IOException, TransformationException {
 
-        ConfigTransformToAas config = configLoader.loadConfig(AIN_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(AIN_SUBMODEL_CONFIG_JSON);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
         // replace the placeholder assigning a sample value
         Map<String, String> placeholderValues = new HashMap<>();
         placeholderValues.put("nan", SAMPLE_MANUFACTURER_ID);

@@ -4,13 +4,13 @@ import java.io.InputStream;
 
 import org.dom4j.Document;
 
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
-public abstract class DocumentTransformer {
+public abstract class DocumentTransformer extends MappingSpecificationDocumentTransformer {
 
 	/**
 	 * Transforms an XML file to AAS. We expect the XML file to be UTF-8 encoded.
@@ -20,7 +20,7 @@ public abstract class DocumentTransformer {
 	 * @return
 	 * @throws TransformationException
 	 */
-	public AssetAdministrationShellEnvironment transform(InputStream inStream, ConfigTransformToAas mapping)
+	public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping)
 			throws TransformationException {
 		Document readXmlDocument = readXmlDocument(inStream);
 		validateDocument(readXmlDocument);
@@ -34,7 +34,7 @@ public abstract class DocumentTransformer {
 	 * @param readXmlDocument
 	 * @param mapping
 	 */
-	protected abstract void afterValidation(Document readXmlDocument, ConfigTransformToAas mapping);
+	protected abstract void afterValidation(Document readXmlDocument, MappingSpecification mapping);
 
 	/**actual transformation done after a successful XML read and validation action
 	 * 
@@ -43,7 +43,6 @@ public abstract class DocumentTransformer {
 	 * @return
 	 * @throws TransformationException
 	 */
-	protected abstract AssetAdministrationShellEnvironment createShellEnv(Document readXmlDocument, ConfigTransformToAas mapping) throws TransformationException;
 
 	/**
 	 * Parses and XML Document from InputStream.
