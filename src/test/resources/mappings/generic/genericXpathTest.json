@@ -1,7 +1,10 @@
 {
 	"@header": {
 		"version": "1.0.0",
-		"aasVersion": "3.0RC01"
+		"aasVersion": "3.0RC01",
+		"@namespaces": {
+			"ns": "http://ns.org/"
+		}
 	},
 	"aasEnvironmentMapping": {
 		"submodels": [
