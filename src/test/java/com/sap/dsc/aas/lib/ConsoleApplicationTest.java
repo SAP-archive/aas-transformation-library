@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.sap.dsc.aas.lib.aml.helper.AmlxPackageCreator;
+
 import io.adminshell.aas.v3.dataformat.DeserializationException;
 import io.adminshell.aas.v3.dataformat.Deserializer;
 import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
@@ -38,9 +39,11 @@ public class ConsoleApplicationTest {
     private final PrintStream originalErr = System.err;
 
     private final String HELP_CONTENT = "usage: transform";
-    private final String CONFIG_FILE_PATH = "src/test/resources/config/simpleConfig.json";
+    // private final String CONFIG_FILE_PATH = "src/test/resources/config/simpleConfig.json";
+    private final String CONFIG_FILE_PATH = "src/test/resources/mappings/generic/genericXpathTest.json";
     private final String EMPTY_CONFIG_FILE_PATH = "src/test/resources/config/emptyConfig.json";
     private final String AML_FILE_PATH = "src/test/resources/aml/full_AutomationComponent.aml";
+    private final String GENERIC_FILE_PATH = "src/test/resources/mappings/generic/generic.xml";
 
     private ConsoleApplication classUnderTest;
 
@@ -190,6 +193,20 @@ public class ConsoleApplicationTest {
         // Delete created directories
         Files.delete(Paths.get("minimal_AutomationMLComponent_WithDocuments/files/"));
         Files.delete(Paths.get("minimal_AutomationMLComponent_WithDocuments/"));
+    }
+
+    @Test
+    void validConfigAndGeneric() throws Exception {
+        File genericFile = new File(GENERIC_FILE_PATH);
+        String genericFileDir = genericFile.getAbsolutePath();
+        String outputFileName = classUnderTest.deriveOutputFileName(genericFileDir);
+        File outputFile = new File(outputFileName);
+
+        ConsoleApplication.main(new String[] {"-c", CONFIG_FILE_PATH, "-xml", genericFileDir});
+
+        assertThat(getPrinted()).contains("Loaded config version");
+        assertThat(getPrinted()).contains("Wrote AAS file");
+        assertTrue(outputFile.exists());
     }
 
 }
