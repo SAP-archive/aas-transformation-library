@@ -128,6 +128,10 @@ public class Expressions {
         });
 
         // special functions for ID generation
+        functions.put("concatenate", args -> {
+            Stream<Object> stream = (Stream<Object>) valueToStream(args);
+            return stream.map(Object::toString).collect(Collectors.joining());
+        });
 		functions.put("concatenate_and_hash", args -> {
 			Stream<Object> stream = (Stream<Object>) valueToStream(args);
 			String concatenated = stream.map(Object::toString).collect(Collectors.joining());
