@@ -15,50 +15,73 @@
       "ns1": "http://ns.org/1",
       "ns2": "http://ns.org/2",
       "caex": "http://www.dke.de/CAEX"
-    }
-  },
-  "@mappings": {
-    "@foreach": {
-      "@xpath": "//caex:SystemUnitClass"
     },
+    "@parameters": [
+      "assetName",
+      "submodelName"
+    ]
+  },
+  "assetAdministrationShellEnvironment": {
+    "assetAdministrationShells": [
+      {
+        "@foreach": {
+          "@xpath": "//caex:SystemUnitClass"
+        },
+        "assetInformation": {
+          "@bind": {
+            "kindType": {
+              "@xpath": "'TYPE'"
+            }
+          },
+          "id": "assetInformationId",
+          "globalAssetIdReference": {
+            "valueId": "assetInformationGlobalAssetIdReference",
+            "keyType": "CUSTOM",
+            "keyElement": "ASSET"
+          }
+        }
+      }
+    ],
     "submodels": [
       {
         "@foreach": {
           "@caexAttributeName": "IdentificationData"
         },
-        "semanticId_str": "http://sap.com",
-        "id": {
-          "@concatenate": [
+        "semanticId": {
+          "keys": [
             {
-              "string": "submodel "
-            },
+              "idType": "Iri",
+              "type": "Submodel",
+              "value": "http://sap.com"
+            }
+          ]
+        },
+        "@bind": {
+          "keys": [
             {
-              "var": "submodelName"
-            },
-            {
-              "string": " of asset "
-            },
-            {
-              "var": "assetName"
+              "id": {
+                "@concatenate": [
+                  {
+                    "@const": "submodel "
+                  },
+                  {
+                    "@param": "submodelName"
+                  },
+                  {
+                    "@const": " of asset "
+                  },
+                  {
+                    "@param": "assetName"
+                  }
+                ]
+              },
+              "idType": "Custom"
             }
           ]
         },
         "submodelElements": []
       }
     ],
-    "assetInformation": {
-      "@bind": {
-        "kindType": {
-          "@xpath": "'TYPE'"
-        }
-      },
-      "id": "assetInformationId",
-      "globalAssetIdReference": {
-        "valueId": "assetInformationGlobalAssetIdReference",
-        "keyType": "CUSTOM",
-        "keyElement": "ASSET"
-      }
-    },
-    "assetShell": {}
+    "conceptDescriptions": []
   }
 }

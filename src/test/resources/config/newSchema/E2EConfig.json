@@ -1,24 +1,21 @@
 {
-  "version": "1.0.0",
-  "config": [
-    {
-      "@headers": {
-        "aasVersion": "3.0RC01",
-        "@variables": {
-          "assetName": {
-            "@const": "Name of the asset"
-          },
-          "submodelName": {
-            "@const": "Name of the submodel"
-          }
-        },
-        "@namespaces": {
-          "ns1": "http://ns.org/1",
-          "ns2": "http://ns.org/2",
-          "caex": "http://www.dke.de/CAEX"
-        }
-      },
-      "@mappings": {
+  "@header": {
+    "aasVersion": "3.0RC01",
+    "@variables": {
+    },
+    "@namespaces": {
+      "ns1": "http://ns.org/1",
+      "ns2": "http://ns.org/2",
+      "caex": "http://www.dke.de/CAEX"
+    },
+    "@parameters": [
+      "assetName",
+      "submodelName"
+    ]
+  },
+  "assetAdministrationShellEnvironment": {
+    "assetAdministrationShells": [
+      {
         "@foreach": {
           "xpath": "//caex:SystemUnitClass"
         },
@@ -27,83 +24,110 @@
             "kindType": {
               "@xpath": "'TYPE'"
             },
-            "id": {
-              "@var": "assetName"
-            },
-            "globalAssetIdReference": {
-              "valueId": {
-                "@var": "assetName"
-              },
-              "keyType": "CUSTOM",
-              "keyElement": "ASSET"
-            }
-          }
-        },
-        "assetShell": {
-          "@bind": {
-            "id": {
-              "@var": "assetName"
-            },
-            "idShort": {
-              "@xpath": {
-                "@var": "assetName"
-              }
-            }
-          }
-        },
-        "submodels": [
-          {
-            "@foreach": {
-              "@caexAttributeName": "IdentificationData"
-            },
-            "semanticId": {
-              "valueId": "http://www.sap.com/ain/IdentificationData",
-              "keyType": "IRI",
-              "keyElement": "SUBMODEL"
-            },
-            "id": {
-              "@concatenate": [
+            "globalAssetId": {
+              "keys": [
                 {
-                  "string": "submodel "
-                },
-                {
-                  "var": "submodelName"
-                },
-                {
-                  "string": " of asset "
-                },
-                {
-                  "var": "assetName"
+                  "valueId": {
+                    "@param": "assetName"
+                  },
+                  "keyType": "CUSTOM",
+                  "keyElement": "ASSET"
                 }
               ]
-            },
-            "@bind": {
-              "idShort": {
-                "@xpath": "'IdentificationData'"
-              }
-            },
-            "submodelElements": [
+            }
+          }
+        },
+        "@bind": {
+          "identification": {
+            "keys": [
               {
-                "@foreach": {
-                  "xpath": "."
+                "id": {
+                  "@param": "assetName"
                 },
-                "modelType": "SubmodelElementCollection",
-                "semanticId_str": "http://www.sap.com/ain/collection",
-                "submodelElements": [
+                "idType": "Custom"
+              }
+            ]
+          },
+          "idShort": {
+            "@xpath": {
+              "@var": "assetName"
+            }
+          }
+        }
+      }
+    ],
+    "submodels": [
+      {
+        "@foreach": {
+          "@caexAttributeName": "IdentificationData"
+        },
+        "semanticId": {
+          "valueId": "http://www.sap.com/ain/IdentificationData",
+          "keyType": "IRI",
+          "keyElement": "SUBMODEL"
+        },
+        "@bind": {
+          "id": {
+            "keys": [
+              {
+                "@concatenate": [
+                  "submodel ",
                   {
-                    "@foreach": {
-                      "@caexAttributeName": "Manufacturer"
-                    },
-                    "semanticId_str": "0112/2///61987#ABA565",
-                    "modelType": "Property",
-                    "valueType": "string"
+                    "@var": "submodelName"
+                  },
+                  " of asset ",
+                  {
+                    "@var": "assetName"
                   }
                 ]
               }
             ]
           }
+        },
+        "idShort": "IdentificationData",
+        "submodelElements": [
+          {
+            "@foreach": {
+              "xpath": "."
+            },
+            "modelType": {
+              "name": "SubmodelElementCollection"
+            },
+            "semanticId": {
+              "keys": [
+                {
+                  "idType": "Iri",
+                  "type": "Submodel",
+                  "value": "http://www.sap.com/ain/collection"
+                }
+              ]
+            },
+            "submodelElements": [
+              {
+                "@foreach": {
+                  "@caexAttributeName": "Manufacturer"
+                },
+                "semanticId": {
+                  "keys": [
+                    {
+                      "idType": "Irdi",
+                      "type": "Property",
+                      "value": "0112/2///61987#ABA565"
+                    }
+                  ]
+                },
+                "modelType": {
+                  "name": "Property"
+                },
+                "valueType": "string"
+              }
+            ]
+          }
         ]
       }
-    }
-  ]
+    ],
+    "conceptDescriptions": []
+  }
 }
+
+
