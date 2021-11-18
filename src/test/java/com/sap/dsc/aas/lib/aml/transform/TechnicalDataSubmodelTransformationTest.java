@@ -6,8 +6,15 @@
 package com.sap.dsc.aas.lib.aml.transform;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import io.adminshell.aas.v3.dataformat.SerializationException;
+import io.adminshell.aas.v3.dataformat.Serializer;
+import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
+import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -19,17 +26,16 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.*;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaException;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SchemaValidatorsConfig;
+import com.networknt.schema.SpecVersionDetector;
+import com.networknt.schema.ValidationMessage;
 import com.sap.dsc.aas.lib.TestUtils;
-import com.sap.dsc.aas.lib.config.ConfigLoader;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
-
-import io.adminshell.aas.v3.dataformat.SerializationException;
-import io.adminshell.aas.v3.dataformat.Serializer;
-import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 public class TechnicalDataSubmodelTransformationTest {
 
@@ -52,10 +58,9 @@ public class TechnicalDataSubmodelTransformationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigTransformToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_JSON);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
         validator = new JsonSchemaValidator();
         serializer = new JsonSerializer();
 
@@ -97,10 +102,9 @@ public class TechnicalDataSubmodelTransformationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigTransformToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_MISSING_MANUFACTURER_NAME);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_MISSING_MANUFACTURER_NAME);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -132,10 +136,9 @@ public class TechnicalDataSubmodelTransformationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigTransformToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_MISSING_IDENTIFICATION_DATA);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_MISSING_IDENTIFICATION_DATA);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
 

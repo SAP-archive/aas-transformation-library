@@ -6,6 +6,7 @@
 package com.sap.dsc.aas.lib.transform;
 
 import java.io.InputStream;
+
 import javax.xml.XMLConstants;
 
 import org.dom4j.Document;
@@ -13,13 +14,11 @@ import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.xml.sax.SAXException;
 
-import com.sap.dsc.aas.lib.transform.idgeneration.IdGenerator;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 /**
  * Can transform any XML Document. Does not contain any validation despite
@@ -29,15 +28,13 @@ import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 public class GenericDocumentTransformer extends DocumentTransformer {
 
 	private PreconditionValidator preconditionValidator;
-	private IdGenerator idGenerator;
 
 	public GenericDocumentTransformer() {
-		this(new IdGenerator(), new PreconditionValidator());
+		this(new PreconditionValidator());
 	}
 
-	public GenericDocumentTransformer(IdGenerator idGenerator, PreconditionValidator validator) { // tests
+	public GenericDocumentTransformer(PreconditionValidator validator) { // tests
 		this.preconditionValidator = validator;
-		this.idGenerator = idGenerator;
 	}
 
 	@Override
@@ -69,17 +66,7 @@ public class GenericDocumentTransformer extends DocumentTransformer {
 	}
 
 	@Override
-	protected void afterValidation(Document readXmlDocument, ConfigTransformToAas mapping) {
+	protected void afterValidation(Document readXmlDocument, MappingSpecification mapping) {
 		return;
-	}
-
-	@Override
-	protected AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
-			ConfigTransformToAas mapping) throws TransformationException {
-		XPathHelper.getInstance().addNamespaceBindings(mapping.getNamespaceBindings());
-		preconditionValidator.setPreconditions(mapping.getPreconditions());
-		idGenerator.prepareGraph(validXmlDocument, mapping.getConfigMappings());
-		return new AssetAdministrationShellEnvTransformer(idGenerator, preconditionValidator)
-				.createShellEnv(validXmlDocument, mapping.getConfigMappings());
 	}
 }

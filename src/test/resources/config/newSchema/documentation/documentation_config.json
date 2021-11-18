@@ -1,0 +1,369 @@
+{
+  "@header": {
+    "aasVersion": "3.0RC01",
+    "@definitions": {
+      "mappingIdGeneration": {
+        "@concatenate_and_hash": [
+          {
+            "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
+            "default": "DefaultManufacturer"
+          },
+          {
+            "@const": "/"
+          },
+          {
+            "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+          }
+        ]
+      },
+      "assetIdGeneration": {
+        "@concatenate_and_hash": [
+          {
+            "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
+            "default": "DefaultManufacturer"
+          },
+          {
+            "@const": "/"
+          },
+          {
+            "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
+          }
+        ]
+      }
+    },
+    "@namespaces": {
+      "ns1": "http://ns.org/1",
+      "ns2": "http://ns.org/2",
+      "caex": "http://www.dke.de/CAEX"
+    }
+  },
+  "@mappings": {
+    "@foreach": {
+      "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
+    },
+    "@bind": {
+      "id": {
+        "@def": "mappingIdGeneration"
+      }
+    },
+    "assetInformation": {
+      "@bind": {
+        "kindType": {
+          "@xpath": "TYPE"
+        },
+        "id": {
+          "@def": "assetIdGeneration"
+        }
+      },
+      "globalAssetIdReference": {
+        "valueId": "assetInformationGlobalAssetIdReference",
+        "keyType": "CUSTOM",
+        "keyElement": "ASSET"
+      }
+    },
+    "assetShell": {
+      "id": "shellId",
+      "@bind": {
+        "idShort": {
+          "@xpath": "@Name"
+        }
+      }
+    },
+    "submodels": [
+      {
+        "@foreach": {
+          "@xpath": "."
+        },
+        "@bind": {
+          "idShort": {
+            "@xpath": "'AIN_Document_Submodel'"
+          }
+        },
+        "semanticId": {
+          "valueId": "https://sap.com/ain/documentation",
+          "keyType": "CUSTOM",
+          "keyElement": "SUBMODEL"
+        },
+        "id": "DocumentationSubmodelId",
+        "submodelElements": [
+          {
+            "@foreach": {
+              "@xpath": "caex:InternalElement[@Name='TestOtherFilesCollection']/caex:InternalElement[@Name]"
+            },
+            "modelType": "SubmodelElementCollection",
+            "semanticId_str": "http://www.sap.com/ain/documentation/collection",
+            "submodelElements": [
+              {
+                "@foreach": {
+                  "@xpath": "."
+                },
+                "@bind": {
+                  "idShort": {
+                    "@xpath": "'DocumentID'"
+                  },
+                  "value": {
+                    "@xpath": "@ID"
+                  }
+                },
+                "semanticId": {
+                  "valueId": "http://www.sap.com/ain/documentation/document/@ID",
+                  "keyType": "CUSTOM",
+                  "keyElement": "SUBMODEL_ELEMENT"
+                },
+                "modelType": "Property",
+                "valueType": "string"
+              },
+              {
+                "@foreach": {
+                  "@xpath": "."
+                },
+                "@bind": {
+                  "mimeType": {
+                    "@xpath": "caex:ExternalInterface[@Name='ExternalDataReference']/caex:Attribute[@Name='MIMEType']/caex:Value"
+                  },
+                  "value": {
+                    "@xpath": "caex:ExternalInterface[@Name='ExternalDataReference']/caex:Attribute[@Name='refURI']/caex:Value"
+                  }
+                },
+                "semanticId": {
+                  "valueId": "http://www.sap.com/ain/documentation/document/file/@ID",
+                  "keyType": "CUSTOM",
+                  "keyElement": "SUBMODEL_ELEMENT"
+                },
+                "modelType": "File"
+              },
+              {
+                "@foreach": {
+                  "@xpath": "."
+                },
+                "@bind": {
+                  "value": {
+                    "@xpath": "@LifecyclePhase"
+                  },
+                  "idShort": {
+                    "@xpath": "'LifecyclePhase'"
+                  }
+                },
+                "semanticId": {
+                  "valueId": "http://www.sap.com/ain/documentation/document/@LifecyclePhase",
+                  "keyType": "CUSTOM",
+                  "keyElement": "SUBMODEL_ELEMENT"
+                },
+                "modelType": "Property",
+                "valueType": "string"
+              },
+              {
+                "@foreach": {
+                  "@xpath": "."
+                },
+                "@bind": {
+                  "idShort": {
+                    "@xpath": "'DocumentName'"
+                  },
+                  "value": {
+                    "@xpath": "@Name"
+                  }
+                },
+                "semanticId": {
+                  "valueId": "http://www.sap.com/ain/documentation/document/@Name",
+                  "keyType": "CUSTOM",
+                  "keyElement": "SUBMODEL_ELEMENT"
+                },
+                "modelType": "Property",
+                "valueType": "string"
+              },
+              {
+                "@foreach": {
+                  "@xpath": "."
+                },
+                "@bind": {
+                  "idShort": {
+                    "@xpath": "'Categories'"
+                  }
+                },
+                "modelType": "SubmodelElementCollection",
+                "semanticId_str": "http://www.sap.com/ain/documentation/categories",
+                "submodelElements": [
+                  {
+                    "@foreach": {
+                      "@xpath": "."
+                    },
+                    "@bind": {
+                      "idShort": {
+                        "@xpath": "'CategoryCode'"
+                      },
+                      "value": {
+                        "@xpath": "@CategoryCode"
+                      }
+                    },
+                    "semanticId": {
+                      "valueId": "http://www.sap.com/ain/documentation/document/@CategoryCode",
+                      "keyType": "CUSTOM",
+                      "keyElement": "SUBMODEL_ELEMENT"
+                    },
+                    "modelType": "Property",
+                    "valueType": "string"
+                  },
+                  {
+                    "@foreach": {
+                      "@xpath": "."
+                    },
+                    "@bind": {
+                      "idShort": {
+                        "@xpath": "'FileName'"
+                      },
+                      "value": {
+                        "@xpath": "@Name"
+                      }
+                    },
+                    "semanticId": {
+                      "valueId": "http://www.sap.com/ain/documentation/document/@FileName",
+                      "keyType": "CUSTOM",
+                      "keyElement": "SUBMODEL_ELEMENT"
+                    },
+                    "modelType": "Property",
+                    "valueType": "string"
+                  },
+                  {
+                    "@foreach": {
+                      "@xpath": "."
+                    },
+                    "@bind": {
+                      "idShort": {
+                        "@xpath": "'LanguageCode'"
+                      },
+                      "value": {
+                        "@xpath": "@LanguageCode"
+                      }
+                    },
+                    "semanticId": {
+                      "valueId": "http://www.sap.com/ain/documentation/document/@LanguageCode",
+                      "keyType": "CUSTOM",
+                      "keyElement": "SUBMODEL_ELEMENT"
+                    },
+                    "modelType": "Property",
+                    "valueType": "string"
+                  }
+                ]
+              },
+              {
+                "@foreach": {
+                  "@xpath": "."
+                },
+                "@bind": {
+                  "idShort": {
+                    "@xpath": "'Description'"
+                  }
+                },
+                "modelType": "SubmodelElementCollection",
+                "semanticId_str": "http://www.sap.com/ain/documentation/description",
+                "submodelElements": [
+                  {
+                    "@foreach": {
+                      "@xpath": "."
+                    },
+                    "@bind": {
+                      "idShort": {
+                        "@xpath": "'ShortDescription'"
+                      },
+                      "value": {
+                        "@xpath": "@ShortDescription"
+                      }
+                    },
+                    "semanticId": {
+                      "valueId": "http://www.sap.com/ain/documentation/document/@ShortDescription",
+                      "keyType": "CUSTOM",
+                      "keyElement": "SUBMODEL_ELEMENT"
+                    },
+                    "modelType": "Property",
+                    "valueType": "string"
+                  },
+                  {
+                    "@foreach": {
+                      "@xpath": "."
+                    },
+                    "@bind": {
+                      "idShort": {
+                        "@xpath": "'LongDescription'"
+                      },
+                      "value": {
+                        "@xpath": "@LongDescription"
+                      }
+                    },
+                    "semanticId": {
+                      "valueId": "http://www.sap.com/ain/documentation/document/@LongDescription",
+                      "keyType": "CUSTOM",
+                      "keyElement": "SUBMODEL_ELEMENT"
+                    },
+                    "modelType": "Property",
+                    "valueType": "string"
+                  },
+                  {
+                    "@foreach": {
+                      "@xpath": "."
+                    },
+                    "@bind": {
+                      "idShort": {
+                        "@xpath": "'LanguageCode'"
+                      },
+                      "value": {
+                        "@xpath": "@LanguageCode"
+                      }
+                    },
+                    "semanticId": {
+                      "valueId": "http://www.sap.com/ain/documentation/document/@LanguageCode",
+                      "keyType": "CUSTOM",
+                      "keyElement": "SUBMODEL_ELEMENT"
+                    },
+                    "modelType": "Property",
+                    "valueType": "string"
+                  },
+                  {
+                    "@foreach": {
+                      "@xpath": "."
+                    },
+                    "@bind": {
+                      "idShort": {
+                        "@xpath": "'DataSensitivity'"
+                      },
+                      "value": {
+                        "@xpath": "@DataSensitivity"
+                      }
+                    },
+                    "semanticId": {
+                      "valueId": "http://www.sap.com/ain/documentation/document/@DataSensitivity",
+                      "keyType": "CUSTOM",
+                      "keyElement": "SUBMODEL_ELEMENT"
+                    },
+                    "modelType": "Property",
+                    "valueType": "string"
+                  },
+                  {
+                    "@foreach": {
+                      "@xpath": "."
+                    },
+                    "@bind": {
+                      "idShort": {
+                        "@xpath": "'Confidentiality'"
+                      },
+                      "value": {
+                        "@xpath": "@Confidentiality"
+                      }
+                    },
+                    "semanticId": {
+                      "valueId": "http://www.sap.com/ain/documentation/document/@Confidentiality ",
+                      "keyType": "CUSTOM",
+                      "keyElement": "SUBMODEL_ELEMENT"
+                    },
+                    "modelType": "Property",
+                    "valueType": "string"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
