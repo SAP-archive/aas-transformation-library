@@ -158,7 +158,6 @@ public class ConsoleApplication {
 				.longOpt(OPTION_NAME_PLACEHOLDER_VALUES).hasArg().argName("PLACEHOLDER_VALUES_JSON").build());
 
 		OptionGroup optionGroup = new OptionGroup();
-		optionGroup.setRequired(true);
 		optionGroup.addOption(Option.builder("a").desc("AML input file").longOpt(OPTION_NAME_AML_INPUT_FILE).hasArg()
 				.argName("AML_INPUT_FILE").build());
 		optionGroup.addOption(Option.builder("amlx").desc("AMLX input file").longOpt(OPTION_NAME_AMLX_INPUT_FILE)
@@ -167,10 +166,11 @@ public class ConsoleApplication {
 				.hasArg().argName("NODESET_INPUT_FILE").build());
         optionGroup.addOption(Option.builder("xml").desc("Generic input file").longOpt(OPTION_NAME_GENERIC_INPUT_FILE)
                 .hasArg().argName("GENERIC_INPUT_FILE").build());
-		optionGroup.addOption(Option.builder("p").desc("Print placeholders with description")
-				.longOpt(OPTION_NAME_PRINT_PLACEHOLDERS).build());
 
 		options.addOptionGroup(optionGroup);
+
+        options.addOption(Option.builder("p").desc("Print placeholders with description")
+                .longOpt(OPTION_NAME_PRINT_PLACEHOLDERS).build());
 
 		final CommandLineParser parser = new DefaultParser();
 		ConsoleApplication application = null;
