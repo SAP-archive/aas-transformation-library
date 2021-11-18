@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.deser.ValueInstantiator;
@@ -40,11 +41,12 @@ import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.module.SimpleValueInstantiators;
-import com.sap.dsc.aas.lib.expressions.Expression;
 import com.sap.dsc.aas.lib.exceptions.InvalidBindingException;
+import com.sap.dsc.aas.lib.expressions.Expression;
 import com.sap.dsc.aas.lib.mapping.jackson.BindingSpecificationDeserializer;
 import com.sap.dsc.aas.lib.mapping.jackson.ExpressionDeserializer;
 import com.sap.dsc.aas.lib.mapping.model.BindSpecification;
+import com.sap.dsc.aas.lib.mapping.model.LangStringTemplate;
 import com.sap.dsc.aas.lib.mapping.model.LegacyTemplate;
 import com.sap.dsc.aas.lib.mapping.model.LegacyTemplateSupport;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
@@ -136,7 +138,25 @@ public class MappingSpecificationParser {
             @Override
             public ValueInstantiator findValueInstantiator(DeserializationConfig config, BeanDescription beanDesc,
                 ValueInstantiator defaultInstantiator) {
-                if (ReflectionHelper.isModelInterface(beanDesc.getType().getRawClass())) {
+                // LangString class
+                if (LangString.class.isAssignableFrom(beanDesc.getType().getRawClass())) {
+                    return new ValueInstantiator.Delegating(defaultInstantiator) {
+                        @Override
+                        public boolean canInstantiate() {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean canCreateUsingDefault() {
+                            return true;
+                        }
+
+                        public Object createUsingDefault(DeserializationContext ctxt) throws IOException {
+                            return new LangStringTemplate();
+                        }
+                    };
+                    // support model interfaces
+                } else if (ReflectionHelper.isModelInterface(beanDesc.getType().getRawClass())) {
                     JavaType modelType = typeResolver.findTypeMapping(config, beanDesc.getType());
                     return new ValueInstantiator.Delegating(defaultInstantiator) {
                         @Override
@@ -204,12 +224,21 @@ public class MappingSpecificationParser {
         });
         module.setDeserializerModifier(new BeanDeserializerModifier() {
             @Override
+            public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config, BeanDescription beanDescription,
+                JsonDeserializer<?> deserializer) {
+                // if (Submodel.class.isAssignableFrom(beanDescription.getBeanClass())) {
+                //    return new SubmodelDeserializer(deserializer);
+                //}
+                return deserializer;
+            }
+
+            @Override
             public List<BeanPropertyDefinition> updateProperties(DeserializationConfig config, BeanDescription beanDesc,
                 List<BeanPropertyDefinition> propDefs) {
                 // include all config properties
                 if (!LegacyTemplate.class.isAssignableFrom(beanDesc.getBeanClass()) &&
-                    ReflectionHelper.isModelInterfaceOrDefaultImplementation(beanDesc.getBeanClass())
-                    && !LangString.class.isAssignableFrom(beanDesc.getBeanClass())) {
+                    (ReflectionHelper.isModelInterfaceOrDefaultImplementation(beanDesc.getBeanClass()) ||
+                        LangString.class.isAssignableFrom(beanDesc.getBeanClass()))) {
                     Set<String> existingProps = propDefs.stream().map(propDef -> propDef.getName()).collect(Collectors.toSet());
                     List<BeanPropertyDefinition> compoundDefs = new ArrayList<>(propDefs);
                     compoundDefs.addAll(
