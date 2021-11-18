@@ -43,6 +43,20 @@ public class AASMappingTransformer {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+	/**
+	 * Transforms a Template based AssetAdministrationShellEnvironment to a pure
+	 * AssetAdministrationShellEnvironment
+	 * 
+	 * @param mappingSpec        MappingSpecification containing a complete
+	 *                           AssetAdministrationShellEnvironment in which all
+	 *                           AAS Objects might implement the Template Interface
+	 * @param initialContextItem Object which might provide a data context to
+	 *                           extract data and transform it into the
+	 *                           AssetAdministrationShellEnvironment using Template
+	 *                           logic
+	 * @return AssetAdministrationShellEnvironment which is the transformation
+	 *         result of the Template based attributes
+	 */
 	public AssetAdministrationShellEnvironment transform(MappingSpecification mappingSpec, Object initialContextItem) {
 		TransformationContext initialCtx = TransformationContext.buildContext(null, initialContextItem, null);
 		AssetAdministrationShellEnvironment aasEnvTemplate = mappingSpec.getAasEnvironmentMapping();
