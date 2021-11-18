@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "aasVersion": "3.0RC01",
+  "mappings": [
+    {
+      "submodels": [
+        {
+          "@foreach": {
+            "@uaChildren": [
+              "3:Machines"
+            ]
+          },
+          "@bind": {
+            "idShort": {
+              "@xpath": "DisplayName"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
