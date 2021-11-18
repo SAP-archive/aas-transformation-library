@@ -33,6 +33,7 @@ import com.sap.dsc.aas.lib.mapping.model.Template;
 import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
 import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+import io.adminshell.aas.v3.model.LangString;
 
 public class AASMappingTransformer {
 
@@ -225,6 +226,9 @@ public class AASMappingTransformer {
 	}
 
 	private Class<?> getAASInterface(Object obj) {
+		if (obj instanceof LangString) {
+			return LangString.class;
+		}
 		return ReflectionHelper.getAasInterface(obj.getClass());
 	}
 
