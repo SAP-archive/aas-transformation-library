@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.sap.dsc.aas.lib.expressions.BuiltinCallExpr;
+import com.sap.dsc.aas.lib.expressions.CaexAttributeNameExpr;
 import com.sap.dsc.aas.lib.expressions.ConstantExpr;
 import com.sap.dsc.aas.lib.expressions.DefExpr;
 import com.sap.dsc.aas.lib.expressions.Expression;
@@ -73,6 +74,17 @@ public class ExpressionDeserializer extends JsonDeserializer<Expression> {
                             case "xpath":
                                 result = new XPathExpr(argsList);
                                 break;
+							case "caexAttributeName":
+								if (argsList.size() == 1 && argsList.get(0) instanceof ConstantExpr
+										&& ((ConstantExpr) argsList.get(0)).getValue() instanceof String) {
+									String attributeName = (String) ((ConstantExpr) argsList.get(0)).getValue();
+									result = new CaexAttributeNameExpr(attributeName);
+								} else {
+									throw new InvalidFormatException(jp,
+											"Only string constants are supported as variable names",
+											jp.getValueAsString(), Expression.class);
+								}
+								break;
                             case "var":
                                 if (argsList.size() == 1 &&
                                     argsList.get(0) instanceof ConstantExpr &&
