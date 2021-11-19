@@ -23,7 +23,9 @@ public abstract class DocumentTransformer extends MappingSpecificationDocumentTr
 	 */
 	public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping)
 			throws TransformationException {
-		setNamespaces(mapping.getHeader().getNamespaces());
+		if (mapping.getHeader() != null) {
+			setNamespaces(mapping.getHeader().getNamespaces());
+		}
 		Document readXmlDocument = readXmlDocument(inStream);
 		validateDocument(readXmlDocument);
 		afterValidation(readXmlDocument, mapping);
