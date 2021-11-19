@@ -22,6 +22,7 @@ import com.sap.dsc.aas.lib.expressions.Expressions;
 import com.sap.dsc.aas.lib.expressions.ListExpr;
 import com.sap.dsc.aas.lib.expressions.VarExpr;
 import com.sap.dsc.aas.lib.expressions.XPathExpr;
+import com.sap.dsc.aas.lib.expressions.*;
 
 public class ExpressionDeserializer extends JsonDeserializer<Expression> {
 
@@ -85,6 +86,12 @@ public class ExpressionDeserializer extends JsonDeserializer<Expression> {
 											jp.getValueAsString(), Expression.class);
 								}
 								break;
+                            case "uaBrowsePath":
+                                result = new BrowsePathExpr(argsList);
+                                break;
+                            case "uaChildren":
+                                result = new UaChildrenExpr(argsList);
+                                break;
                             case "var":
                                 if (argsList.size() == 1 &&
                                     argsList.get(0) instanceof ConstantExpr &&
