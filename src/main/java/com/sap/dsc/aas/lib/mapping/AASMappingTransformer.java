@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.sap.dsc.aas.lib.expressions.Expression;
+import com.sap.dsc.aas.lib.mapping.model.Header;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
 
@@ -59,7 +60,7 @@ public class AASMappingTransformer {
 	 *         result of the Template based attributes
 	 */
 	public AssetAdministrationShellEnvironment transform(MappingSpecification mappingSpec, Object initialContextItem) {
-		TransformationContext initialCtx = TransformationContext.buildContext(null, initialContextItem, null);
+		TransformationContext initialCtx = createInitialContext(initialContextItem, mappingSpec.getHeader());
 		AssetAdministrationShellEnvironment aasEnvTemplate = mappingSpec.getAasEnvironmentMapping();
 		if (mappingSpec.getAasEnvironmentMapping() instanceof Template
 				&& ((Template) mappingSpec.getAasEnvironmentMapping()).getForeachExpression() != null) {
@@ -67,6 +68,10 @@ public class AASMappingTransformer {
 					"@forEach expression on top level AAS Environment is not applicable. Only one AAS Environments will be returned!");
 		}
 		return (AssetAdministrationShellEnvironment) asList(transformAny(aasEnvTemplate, initialCtx)).get(0);
+	}
+
+	private TransformationContext createInitialContext(Object initialContextItem, Header header) {
+		return TransformationContext.buildContext(null, initialContextItem, header);
 	}
 
 	private List<? extends Object> inflateTemplate(Template template, TransformationContext parentCtx) {
