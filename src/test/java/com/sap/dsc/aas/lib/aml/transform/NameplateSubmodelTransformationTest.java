@@ -92,7 +92,7 @@ public class NameplateSubmodelTransformationTest {
         String serializedShellEnv = serializer.write(shellEnv);
 
         Set<String> errors = validator.validateSchema(serializedShellEnv);
-        errors.stream().forEach(System.out::print);
+        errors.stream().forEach(System.out::println);
         assertThat(errors.size()).isEqualTo(0);
 
     }

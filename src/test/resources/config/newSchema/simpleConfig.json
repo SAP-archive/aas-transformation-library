@@ -58,7 +58,7 @@
 				"assetInformation": {
 					"@bind": {
 						"assetKind": {
-							"@xpath": "'TYPE'"
+							"@xpath": "'Type'"
 						}
 					},
 					"globalAssetId": {
@@ -505,7 +505,7 @@
 							]
 						}
 					},
-					"keyType": "Iri"
+					"idType": "Iri"
 				},
 				"semanticId": {
 					"keys": [
