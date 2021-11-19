@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -135,6 +136,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     }
 
     @Test
+    @Disabled("Disabled until preconditions are supported")
     @DisplayName("Test a precondition check with forAll which fails")
     void preconditionCheckFailsForAll() throws TransformationException {
         this.classUnderTest = new AmlTransformer(new PreconditionValidator());
@@ -153,6 +155,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     }
 
     @Test
+    @Disabled("Disabled until preconditions are supported")
     @DisplayName("Test a precondition check with forEach which fails")
     void preconditionCheckFailsForEachAll() throws TransformationException {
         this.classUnderTest = new AmlTransformer(new PreconditionValidator());
