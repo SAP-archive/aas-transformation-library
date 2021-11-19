@@ -104,7 +104,7 @@ public class AASMappingTransformer {
 		try {
 			transformProperties(template, ctx, transformedEntity);
 		} catch (NoSuchMethodException | SecurityException | IntrospectionException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException e) {
+				| InvocationTargetException e) {
 			LOGGER.error("Failed to transform properties for " + transformedEntity.getClass().getName(), e);
 		}
 		return transformedEntity.instance;

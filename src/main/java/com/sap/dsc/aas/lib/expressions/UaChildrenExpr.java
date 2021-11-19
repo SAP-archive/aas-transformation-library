@@ -18,8 +18,7 @@ public class UaChildrenExpr implements Expression {
 
     @Override
     public List<Node> evaluate(TransformationContext ctx) {
-        if(!ctx.getContextItem().isPresent()
-                || !(ctx.getContextItem().get() instanceof Node)) {
+        if(!(ctx.getContextItem() instanceof Node)) {
             throw new IllegalArgumentException("no Node Context is given.");
         }
         List<String> path = args.stream().map(arg -> arg.evaluate(ctx))
