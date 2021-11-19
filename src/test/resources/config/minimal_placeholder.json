@@ -1,19 +1,69 @@
 {
-  "version": "1.0.0",
-  "aasVersion": "3.0RC01",
-  "placeholders": [
-    {
-      "name": "assetName",
-      "description": "Name of the asset"
-    },
-    {
-      "name": "submodelName",
-      "description": "Name of the submodel"
+  "@header": {
+    "aasVersion": "3.0RC01",
+    "@parameters": {
+      "assetName": "Name of the asset",
+      "submodelName": "Name of the submodel"
     }
-  ],
+  },
+  "aasEnvironmentMapping": {
+    "assetAdministrationShells": [
+      {
+        "@foreach": {
+          "@xpath": "//caex:SystemUnitClass"
+        },
+        "assetInformation": {
+          "@bind": {
+            "kindType": {
+              "@xpath": "TYPE"
+            }
+          },
+          "identification": {
+            "keys": [
+              {
+                "id": "assetInformationId",
+                "idType": "Custom"
+              }
+            ]
+          },
+          "globalAssetId": {
+            "value": "assetInformationGlobalAssetIdReference",
+            "idType": "CUSTOM",
+            "type": "ASSET"
+          }
+        }
+      }
+    ],
+    "submodels": [
+      {
+        "@foreach": {
+          "@caexAttributeName": "IdentificationData"
+        },
+        "idShort": "http://sap.com",
+        "identification": {
+          "@bind": {
+            "id": {
+              "@concatenate": [
+                "submodel ",
+                {
+                  "@param": "submodelName"
+                },
+                " of asset ",
+                {
+                  "@param": "assetName"
+                }
+              ]
+            }
+          }
+        },
+        "submodelElements": []
+      }
+    ],
+    "conceptDescriptions": [
+    ]
+  },
   "configMappings": [
     {
-      "from_xpath": "//caex:SystemUnitClass",
       "submodels": [
         {
           "from_attributeName": "IdentificationData",
@@ -27,23 +77,7 @@
           },
           "submodelElements": []
         }
-      ],
-      "assetInformation": {
-        "kindType_xpath": "TYPE",
-        "idGeneration": {
-          "parameters": [
-            {
-              "from_string": "assetInformationId"
-            }
-          ]
-        },
-        "globalAssetIdReference": {
-          "valueId": "assetInformationGlobalAssetIdReference",
-          "keyType": "CUSTOM",
-          "keyElement": "ASSET"
-        }
-      },
-      "assetShell": {}
+      ]
     }
   ]
 }
