@@ -43,7 +43,7 @@ public class ConsoleApplicationTest {
     private final String HELP_CONTENT = "usage: transform";
     // private final String CONFIG_FILE_PATH = "src/test/resources/config/simpleConfig.json";
     private final String CONFIG_FILE_PATH = "src/test/resources/mappings/generic/genericXpathTest.json";
-    private final String EMPTY_CONFIG_FILE_PATH = "src/test/resources/config/emptyConfig.json";
+    private final String EMPTY_CONFIG_FILE_PATH = "src/test/resources/config/newschema/emptyConfig.json";
     private final String AML_FILE_PATH = "src/test/resources/aml/full_AutomationComponent.aml";
     private final String GENERIC_FILE_PATH = "src/test/resources/mappings/generic/generic.xml";
 
@@ -145,7 +145,7 @@ public class ConsoleApplicationTest {
 
     @Test
     void getPlaceholderList() {
-        ConsoleApplication.main(new String[] {"-p", "-c", "src/test/resources/config/minimal_placeholder.json"});
+        ConsoleApplication.main(new String[] {"-p", "-c", "src/test/resources/config/newschema/minimal_placeholder.json"});
         assertThat(getPrinted()).contains("Found 2 placeholders:");
         assertThat(getPrinted()).contains("assetName: Name of the asset");
         assertThat(getPrinted()).contains("submodelName: Name of the submodel");
@@ -156,27 +156,6 @@ public class ConsoleApplicationTest {
         ConsoleApplication.main(new String[] {"-c", CONFIG_FILE_PATH, "--print-placeholders"});
         assertThat(getPrinted()).contains("Found 1 placeholders:");
         assertThat(getPrinted()).contains("genericPlaceholder: A generic placeholder");
-    }
-
-    @Test
-    void replacePlaceholders() throws IOException, DeserializationException {
-        ConsoleApplication.main(new String[] {"-a", AML_FILE_PATH, "-c", "src/test/resources/config/minimal_placeholder.json", "-P",
-            "{\"assetName\":\"myAssetId\",\"submodelName\":\"mySubmodelId\"}"});
-
-        String outputFileName = classUnderTest.deriveOutputFileName(AML_FILE_PATH);
-        Path path = Paths.get(outputFileName);
-        File outputFile = path.toFile();
-        assertThat(outputFile.exists()).isTrue();
-
-        String aasJson = Files.readString(path);
-
-        Deserializer deserializer = new JsonDeserializer();
-        AssetAdministrationShellEnvironment assetShellEnv = deserializer.read(aasJson);
-
-        assertThat(assetShellEnv).isNotNull();
-        assertThat(assetShellEnv.getSubmodels().get(0).getIdentification().getIdentifier())
-            .isEqualTo("submodel mySubmodelId of asset myAssetId");
-        assertThat(outputFile.delete()).isTrue();
     }
 
     @Test

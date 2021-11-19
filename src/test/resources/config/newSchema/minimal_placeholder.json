@@ -1,87 +1,23 @@
 {
-  "@header": {
-    "aasVersion": "3.0RC01",
-    "@definitions": {
-    },
-    "@variables": {
-      "assetName": {
-        "@const": "Name of the asset"
-      },
-      "submodelName": {
-        "@const": "Name of the submodel"
-      }
-    },
-    "@namespaceBindings": {
-      "ns1": "http://ns.org/1",
-      "ns2": "http://ns.org/2",
-      "caex": "http://www.dke.de/CAEX"
-    },
-    "@parameters": [
-      "assetName",
-      "submodelName"
-    ]
-  },
-  "assetAdministrationShellEnvironment": {
-    "assetAdministrationShells": [
-      {
-        "@foreach": {
-          "@xpath": "//caex:SystemUnitClass"
-        },
-        "assetInformation": {
-          "@bind": {
-            "kindType": {
-              "@xpath": "'TYPE'"
-            }
-          },
-          "id": "assetInformationId",
-          "globalAssetIdReference": {
-            "valueId": "assetInformationGlobalAssetIdReference",
-            "keyType": "CUSTOM",
-            "keyElement": "ASSET"
-          }
-        }
-      }
-    ],
-    "submodels": [
-      {
-        "@foreach": {
-          "@caexAttributeName": "IdentificationData"
-        },
-        "semanticId": {
-          "keys": [
-            {
-              "idType": "Iri",
-              "type": "Submodel",
-              "value": "http://sap.com"
-            }
-          ]
-        },
-        "@bind": {
-          "keys": [
-            {
-              "id": {
-                "@concatenate": [
-                  {
-                    "@const": "submodel "
-                  },
-                  {
-                    "@param": "submodelName"
-                  },
-                  {
-                    "@const": " of asset "
-                  },
-                  {
-                    "@param": "assetName"
-                  }
-                ]
-              },
-              "idType": "Custom"
-            }
-          ]
-        },
-        "submodelElements": []
-      }
-    ],
-    "conceptDescriptions": []
-  }
+	"@header": {
+		"aasVersion": "3.0RC01",
+		"placeholders": [
+			{
+				"name": "assetName",
+				"description": "Name of the asset"
+			},
+			{
+				"name": "submodelName",
+				"description": "Name of the submodel"
+			}
+		]
+	},
+	"aasEnvironmentMapping": {
+		"assetAdministrationShells": [
+		],
+		"submodels": [
+		],
+		"conceptDescriptions": [
+		]
+	}
 }
