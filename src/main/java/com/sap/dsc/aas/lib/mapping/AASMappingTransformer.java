@@ -240,6 +240,9 @@ public class AASMappingTransformer {
 	private Object newDefaultAASInstance(Class<?> aasInterface) {
 		Class<?> defaultImplementation = ReflectionHelper.getDefaultImplementation(aasInterface);
 		try {
+			if (defaultImplementation == null && aasInterface.isAssignableFrom(LangString.class)) {
+				return LangString.class.getConstructor().newInstance();
+			}
 			return defaultImplementation.getConstructor().newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
