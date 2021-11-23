@@ -1,7 +1,9 @@
 {
   "@header": {
-    "version": "1.0.0",
-    "aasVersion": "3.0RC01"
+    "aasVersion": "3.0RC01",
+    "@namespaces": {
+      "caex": "http://www.dke.de/CAEX"
+    }
   },
   "aasEnvironmentMapping": {
     "@definitions": {
@@ -17,10 +19,11 @@
         ]
       }
     },
-    "@foreach": {
-      "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
-    },
+
     "assetAdministrationShells": {
+      "@foreach": {
+        "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
+      },
       "@bind": {
         "idShort": {
           "@xpath": "@Name"
@@ -48,6 +51,11 @@
         "@foreach": {
           "@xpath": "caex:Attribute[@Name='CommercialData']/caex:Attribute[@Name='ManufacturerDetails']"
         },
+        "@bind": {
+			"idShort": {
+				"@xpath": "@Name"
+			}
+		},
         "semanticId": {
           "keys": [
             {

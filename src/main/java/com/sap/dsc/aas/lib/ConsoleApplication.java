@@ -5,11 +5,6 @@
  */
 package com.sap.dsc.aas.lib;
 
-import io.adminshell.aas.v3.dataformat.DeserializationException;
-import io.adminshell.aas.v3.dataformat.SerializationException;
-import io.adminshell.aas.v3.dataformat.Serializer;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -44,7 +39,14 @@ import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.placeholder.PlaceholderHandling;
+import com.sap.dsc.aas.lib.transform.GenericDocumentTransformer;
 import com.sap.dsc.aas.lib.ua.transform.UANodeSetTransformer;
+
+import io.adminshell.aas.v3.dataformat.DeserializationException;
+import io.adminshell.aas.v3.dataformat.SerializationException;
+import io.adminshell.aas.v3.dataformat.Serializer;
+import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public class ConsoleApplication {
 
@@ -56,6 +58,7 @@ public class ConsoleApplication {
 	private static final String OPTION_NAME_AML_INPUT_FILE = "aml";
 	private static final String OPTION_NAME_AMLX_INPUT_FILE = "amlx";
 	private static final String OPTION_NAME_NODESET_INPUT_FILE = "ua";
+    private static final String OPTION_NAME_GENERIC_INPUT_FILE = "xml";
 
 	private static final String OPTION_NAME_PRINT_PLACEHOLDERS = "print-placeholders";
 	private static final String OPTION_NAME_PLACEHOLDER_VALUES = "placeholder-values";
@@ -94,6 +97,7 @@ public class ConsoleApplication {
 			throws TransformationException, IOException {
 		AmlxPackage amlxPackage = new AmlxPackageReader().readAmlxPackage(Paths.get(amlxInputFileName).toFile());
 		try (InputStream amlInputStream = amlxPackage.getRootAmlFile().getInputStream()) {
+            LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
 			return transformAml(amlInputStream);
 		}
 	}
@@ -104,6 +108,13 @@ public class ConsoleApplication {
 			return new UANodeSetTransformer().transform(nodesetStream, mapping);
 		}
 	}
+
+    private AssetAdministrationShellEnvironment transformGeneric(String genericInputFileName) throws IOException, TransformationException {
+        try (InputStream genericStream = Files.newInputStream(Paths.get(genericInputFileName))) {
+            LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
+            return new GenericDocumentTransformer().transform(genericStream, mapping);
+        }
+    }
 
 	private void writeAasToFile(String aasOutputFileName, AssetAdministrationShellEnvironment aasEnv) {
 		try (OutputStream fileOutputStream = Files.newOutputStream(Paths.get(aasOutputFileName))) {
@@ -147,17 +158,19 @@ public class ConsoleApplication {
 				.longOpt(OPTION_NAME_PLACEHOLDER_VALUES).hasArg().argName("PLACEHOLDER_VALUES_JSON").build());
 
 		OptionGroup optionGroup = new OptionGroup();
-		optionGroup.setRequired(true);
 		optionGroup.addOption(Option.builder("a").desc("AML input file").longOpt(OPTION_NAME_AML_INPUT_FILE).hasArg()
 				.argName("AML_INPUT_FILE").build());
 		optionGroup.addOption(Option.builder("amlx").desc("AMLX input file").longOpt(OPTION_NAME_AMLX_INPUT_FILE)
 				.hasArg().argName("AMLX_INPUT_FILE").build());
 		optionGroup.addOption(Option.builder("ua").desc("UA NodeSet input file").longOpt(OPTION_NAME_NODESET_INPUT_FILE)
 				.hasArg().argName("NODESET_INPUT_FILE").build());
-		optionGroup.addOption(Option.builder("p").desc("Print placeholders with description")
-				.longOpt(OPTION_NAME_PRINT_PLACEHOLDERS).build());
+        optionGroup.addOption(Option.builder("xml").desc("Generic input file").longOpt(OPTION_NAME_GENERIC_INPUT_FILE)
+                .hasArg().argName("GENERIC_INPUT_FILE").build());
 
 		options.addOptionGroup(optionGroup);
+
+        options.addOption(Option.builder("p").desc("Print placeholders with description")
+                .longOpt(OPTION_NAME_PRINT_PLACEHOLDERS).build());
 
 		final CommandLineParser parser = new DefaultParser();
 		ConsoleApplication application = null;
@@ -202,6 +215,10 @@ public class ConsoleApplication {
 				String nodesetInputFileName = commandLine.getOptionValue(OPTION_NAME_NODESET_INPUT_FILE);
 				aasOutputFileName = deriveOutputFileName(nodesetInputFileName);
 				writeAasToFile(aasOutputFileName, aasEnvReplaced);
+            } else if (commandLine.hasOption(OPTION_NAME_GENERIC_INPUT_FILE)) {
+                String genericInputFileName = commandLine.getOptionValue(OPTION_NAME_GENERIC_INPUT_FILE);
+                aasOutputFileName = deriveOutputFileName(genericInputFileName);
+                writeAasToFile(aasOutputFileName, aasEnvReplaced);
 			}
 		} catch (InvalidConfigException | TransformationException | IOException ex) {
 			LOGGER.error(ex.getMessage(), ex);
@@ -235,6 +252,9 @@ public class ConsoleApplication {
 			} else if (commandLine.hasOption(OPTION_NAME_NODESET_INPUT_FILE)) {
 				String nodesetInputFileName = commandLine.getOptionValue(OPTION_NAME_NODESET_INPUT_FILE);
 				return transformNodeSet(nodesetInputFileName);
+            } else if (commandLine.hasOption(OPTION_NAME_GENERIC_INPUT_FILE)) {
+                String genericInputFileName = commandLine.getOptionValue(OPTION_NAME_GENERIC_INPUT_FILE);
+                return transformGeneric(genericInputFileName);
 			}
 		} catch (IOException | TransformationException | InvalidConfigException ex) {
 			LOGGER.error(ex.getMessage(), ex);

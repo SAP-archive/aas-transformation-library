@@ -1,7 +1,16 @@
 {
 	"@header": {
 		"version": "1.0.0",
-		"aasVersion": "3.0RC01"
+		"aasVersion": "3.0RC01",
+		"@namespaces": {
+			"ns": "http://ns.org/"
+		},
+		"placeholders": [
+			{
+				"name": "genericPlaceholder",
+				"description": "A generic placeholder"
+			}
+		]
 	},
 	"aasEnvironmentMapping": {
 		"submodels": [
@@ -20,6 +29,7 @@
 							"@xpath": "ns:b"
 						},
 						"modelType": "Property",
+						"value": "${{genericPlaceholder}}",
 						"@bind": {
 							"idShort": {
 								"@xpath": "@name"

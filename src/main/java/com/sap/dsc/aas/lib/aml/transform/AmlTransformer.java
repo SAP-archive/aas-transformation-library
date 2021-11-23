@@ -89,7 +89,7 @@ public class AmlTransformer extends DocumentTransformer {
 	@Override
 	public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
 			MappingSpecification mapping) throws TransformationException {
-		XPathHelper.getInstance().addNamespaceBindings(mapping.getHeader().getNamespaces());
+		setNamespaces(mapping.getHeader().getNamespaces());
         preconditionValidator.setPreconditions(mapping.getHeader().getPreconditions());
         // idGenerator.prepareGraph(validXmlDocument, mapping.getConfigMappings());
         return super.createShellEnv(validXmlDocument, mapping);

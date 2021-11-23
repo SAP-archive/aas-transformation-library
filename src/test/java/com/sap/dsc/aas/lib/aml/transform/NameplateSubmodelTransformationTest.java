@@ -38,7 +38,7 @@ import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 public class NameplateSubmodelTransformationTest {
 
     public static final String NAMEPLATE_CONFIG_JSON = "src/test/resources/config/nameplate/nameplateConfig.json";
-    public static final String SIMPLE_CONFIG_JSON = "src/test/resources/config/simpleConfig.json";
+    public static final String SIMPLE_CONFIG_JSON = "src/test/resources/config/newschema/simpleConfig.json";
     public static final String NAMEPLATE_CONFIG_MISSING_ADDRESS = "src/test/resources/config/nameplate/nameplateConfigMissingAddress.json";
     public static final String NAMEPLATE_CONFIG_WRONG_ADDRESS_WRONG_SEMANTICID =
         "src/test/resources/config/nameplate/nameplateConfigWrongAddressSemanticId.json";
@@ -92,7 +92,7 @@ public class NameplateSubmodelTransformationTest {
         String serializedShellEnv = serializer.write(shellEnv);
 
         Set<String> errors = validator.validateSchema(serializedShellEnv);
-        errors.stream().forEach(System.out::print);
+        errors.stream().forEach(System.out::println);
         assertThat(errors.size()).isEqualTo(0);
 
     }

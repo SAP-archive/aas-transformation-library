@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
+import com.sap.dsc.aas.lib.transform.GenericDocumentTransformer;
 import com.sap.dsc.aas.lib.transform.XPathHelper;
 
 import io.adminshell.aas.v3.dataformat.SerializationException;
@@ -125,21 +126,13 @@ public class AASMappingTransformerTest {
 		try (InputStream testResource = Files
 				.newInputStream(Paths.get("src/test/resources/mappings/generic/generic.xml"))) {
 
-			SAXReader reader = new SAXReader();
-			reader.setEncoding("UTF-8");
-			reader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-			reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-			testDoc = reader.read(testResource);
+			// ACT
+			AssetAdministrationShellEnvironment transform = new GenericDocumentTransformer().transform(testResource, mapSpec);
+			// ASSERT
+			Assertions.assertEquals(2, transform.getSubmodels().size());
 		}
+		
 
-		XPathHelper.getInstance().setNamespaceBinding("ns", "http://ns.org/");
-		// ACT
-		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, testDoc);
-
-		// ASSERT
-//		System.out.println(new JsonSerializer().write(transform.get(0)));
-
-		Assertions.assertEquals(2, transform.getSubmodels().size());
 	}
 
 	@Test
@@ -192,14 +185,31 @@ public class AASMappingTransformerTest {
 		Submodel submodel = transform.getSubmodels().get(0);
 		Assertions.assertNotNull(submodel);
 		// context is same, var and def evaluates as same
-		Assertions.assertEquals("a", submodel.getIdShort());//id => var
-		Assertions.assertEquals("a", submodel.getCategory());//category => def
+		Assertions.assertEquals("a", submodel.getIdShort());// id => var
+		Assertions.assertEquals("a", submodel.getCategory());// category => def
 
 		// context now differs, var (transformed to idShort) is static and def
 		// reevaluates again, now to "b" since the context changed
 		SubmodelElement submodelElement = submodel.getSubmodelElements().get(0);
-		Assertions.assertEquals("a", submodelElement.getIdShort());//id => var
-		Assertions.assertEquals("b", submodelElement.getCategory());//category => def
+		Assertions.assertEquals("a", submodelElement.getIdShort());// id => var
+		Assertions.assertEquals("b", submodelElement.getCategory());// category => def
+
+	}
+
+	@Test
+	void testBindingsNonStringValues() throws Exception {
+		// ARRANGE
+		MappingSpecification mapSpec = parser
+				.loadMappingSpecification("src/test/resources/mappings/generic/bindingsTest_nonStrings.json");
+
+		// ACT
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
+
+		// ASSERT
+		Submodel submodel = transform.getSubmodels().get(0);
+		SubmodelElementCollection smc = (SubmodelElementCollection) submodel.getSubmodelElements().get(0);
+		Assertions.assertTrue(smc.getOrdered());
+		Assertions.assertTrue(smc.getAllowDuplicates());
 
 	}
 
