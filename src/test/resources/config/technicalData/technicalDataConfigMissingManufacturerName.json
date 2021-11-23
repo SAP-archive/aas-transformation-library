@@ -25,9 +25,7 @@
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
             "@const": "DefaultManufacturer"
           },
-          {
-            "@const": "/"
-          },
+          "/",
           {
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
           }
@@ -52,7 +50,7 @@
         },
         "assetInformation": {
           "@bind": {
-            "kindType": {
+            "assetKind": {
               "@xpath": "TYPE"
             }
           },
@@ -97,9 +95,7 @@
                 {
                   "@def": "assetIdGeneration"
                 },
-                {
-                  "@const": "_submodel1"
-                }
+                "_submodel1"
               ]
             }
           },

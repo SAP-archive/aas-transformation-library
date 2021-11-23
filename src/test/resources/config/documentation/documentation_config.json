@@ -8,9 +8,7 @@
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
             "default": "DefaultManufacturer"
           },
-          {
-            "@const": "/"
-          },
+          "/",
           {
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
           }
@@ -22,9 +20,7 @@
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
             "default": "DefaultManufacturer"
           },
-          {
-            "@const": "/"
-          },
+          "/",
           {
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
           }
@@ -53,20 +49,18 @@
         },
         "assetInformation": {
           "@bind": {
-            "kindType": {
+            "assetKind": {
               "@xpath": "TYPE"
             }
           },
-          "identification": {
-            "id": {
-              "@def": "assetIdGeneration"
-            },
-            "idType": "Iri"
-          },
           "globalAssetId": {
-            "value": "assetInformationGlobalAssetIdReference",
-            "idType": "Custom",
-            "type": "Asset"
+            "keys": [
+              {
+                "value": "assetInformationGlobalAssetIdReference",
+                "idType": "Custom",
+                "type": "Asset"
+              }
+            ]
           }
         },
         "@bind": {
@@ -116,7 +110,7 @@
                 }
               ]
             },
-            "submodelElements": [
+            "value": [
               {
                 "@foreach": {
                   "@xpath": "."
@@ -241,7 +235,7 @@
                     }
                   ]
                 },
-                "submodelElements": [
+                "value": [
                   {
                     "@foreach": {
                       "@xpath": "."
@@ -343,7 +337,7 @@
                     }
                   ]
                 },
-                "submodelElements": [
+                "value": [
                   {
                     "@foreach": {
                       "@xpath": "."

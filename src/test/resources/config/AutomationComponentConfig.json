@@ -10,9 +10,7 @@
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
             "@const": "DefaultManufacturer"
           },
-          {
-            "@const": "/"
-          },
+          "/",
           {
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
           }
@@ -24,9 +22,7 @@
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
             "default": "DefaultManufacturer"
           },
-          {
-            "@const": "/"
-          },
+          "/",
           {
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='ManufacturerUri']/caex:Value"
           }
@@ -60,7 +56,7 @@
         },
         "assetInformation": {
           "@bind": {
-            "kindType": {
+            "assetKind": {
               "@xpath": "TYPE"
             }
           },
@@ -704,9 +700,7 @@
               {
                 "@def": "assetid"
               },
-              {
-                "@const": "_submodel"
-              }
+              "_submodel"
             ]
           }
         },

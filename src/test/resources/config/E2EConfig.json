@@ -21,7 +21,7 @@
         },
         "assetInformation": {
           "@bind": {
-            "kindType": {
+            "assetKind": {
               "@xpath": "'TYPE'"
             },
             "globalAssetId": {
