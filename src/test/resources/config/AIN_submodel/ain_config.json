@@ -1,5 +1,5 @@
 {
-  "@headers": {
+  "@header": {
     "aasVersion": "3.0RC01",
     "@parameters": {
       "manufacturerId": "The Id of the manufacturer, will be filled from the ClientId before calling the MEI Api"
@@ -50,19 +50,7 @@
           }
         },
         "assetInformation": {
-          "@bind": {
-            "assetKind": {
-              "@xpath": "TYPE"
-            }
-          },
-          "identification": {
-            "@bind": {
-              "id": {
-                "@def": "assetIdGeneration"
-              }
-            },
-            "idType": "Iri"
-          },
+          "assetKind": "Type",
           "globalAssetId": {
             "keys": [
               {
@@ -83,7 +71,7 @@
     "submodels": [
       {
         "@foreach": {
-          "@xpath": "caex:Attribute[@Name='CommercialData']/caex:Attribute[@Name='ManufacturerDetails']"
+          "@xpath": "//caex:Attribute[@Name='CommercialData']/caex:Attribute[@Name='ManufacturerDetails']"
         },
         "@bind": {
           "idShort": {
@@ -106,7 +94,7 @@
         "submodelElements": [
           {
             "@foreach": {
-              "@caexAttributeValue": "Name"
+              "@caexAttributeName": "Name"
             },
             "idShort": "manufacturerId",
             "semanticId": {
@@ -120,7 +108,7 @@
             },
             "@bind": {
               "value": {
-                "@param": "manufacturerId"
+                "@var": "manufacturerId"
               }
             },
             "modelType": {

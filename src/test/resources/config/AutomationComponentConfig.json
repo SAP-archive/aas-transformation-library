@@ -8,7 +8,7 @@
         "@concatenate_and_hash": [
           {
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
-            "@const": "DefaultManufacturer"
+            "default": "DefaultManufacturer"
           },
           "/",
           {

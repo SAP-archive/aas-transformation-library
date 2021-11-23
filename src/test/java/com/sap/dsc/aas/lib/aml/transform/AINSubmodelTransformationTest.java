@@ -37,7 +37,6 @@ import com.sap.dsc.aas.lib.placeholder.exceptions.PlaceholderValueMissingExcepti
 public class AINSubmodelTransformationTest {
 
     public static final String AIN_SUBMODEL_CONFIG_JSON = "src/test/resources/config/AIN_submodel/ain_config.json";
-    public static final String SIMPLE_CONFIG_JSON = "src/test/resources/config/nameplate/nameplateConfig.json";
     public static final String AML_INPUT = "src/test/resources/aml/full_AutomationComponent.aml";
 
     private static AssetAdministrationShellEnvironment shellEnv;
