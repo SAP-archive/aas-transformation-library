@@ -5,7 +5,7 @@
 		"@namespaces": {
 			"ns": "http://ns.org/"
 		},
-		"placeholders": [
+		"@parameters": [
 			{
 				"name": "genericPlaceholder",
 				"description": "A generic placeholder"

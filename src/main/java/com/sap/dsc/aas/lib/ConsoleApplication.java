@@ -33,7 +33,7 @@ import com.sap.dsc.aas.lib.aml.amlx.AmlxPackage;
 import com.sap.dsc.aas.lib.aml.amlx.AmlxPackagePart;
 import com.sap.dsc.aas.lib.aml.amlx.AmlxPackageReader;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
-import com.sap.dsc.aas.lib.config.pojo.ConfigPlaceholder;
+import com.sap.dsc.aas.lib.mapping.model.Parameter;
 import com.sap.dsc.aas.lib.exceptions.InvalidConfigException;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
@@ -266,7 +266,7 @@ public class ConsoleApplication {
 	private void printPlaceholders() {
 		if (commandLine.hasOption(OPTION_NAME_PRINT_PLACEHOLDERS)) {
 			LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
-			List<ConfigPlaceholder> placeholders = mapping.getHeader().getPlaceholders();
+			List<Parameter> placeholders = mapping.getHeader().getParameters();
 
 			LOGGER.info("Found {} placeholders:", placeholders.size());
 			placeholders
