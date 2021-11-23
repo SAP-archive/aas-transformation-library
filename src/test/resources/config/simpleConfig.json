@@ -62,9 +62,13 @@
             }
           },
           "globalAssetId": {
-            "value": "assetInformationGlobalAssetIdReference",
-            "idType": "Custom",
-            "type": "Asset"
+            "keys": [
+              {
+                "value": "assetInformationGlobalAssetIdReference",
+                "idType": "Custom",
+                "type": "Asset"
+              }
+            ]
           }
         }
       }
@@ -234,9 +238,11 @@
               "name": "SubmodelElementCollection"
             },
             "semanticId": {
-              "value": "ProductDetails",
-              "idType": "Custom",
-              "type": "ConceptDescription"
+              "keys": {
+                "value": "ProductDetails",
+                "idType": "Custom",
+                "type": "ConceptDescription"
+              }
             },
             "value": [
               {
@@ -269,9 +275,11 @@
               "name": "Entity"
             },
             "semanticId": {
-              "value": "PackAndTransport",
-              "idType": "IdShort",
-              "type": "Property"
+              "keys": {
+                "value": "PackAndTransport",
+                "idType": "IdShort",
+                "type": "Property"
+              }
             },
             "entityType": "SelfManagedEntity",
             "globalAssetId": {
@@ -350,9 +358,11 @@
               "name": "Range"
             },
             "semanticId": {
-              "value": "AmbientTemperature",
-              "idType": "Iri",
-              "type": "Range"
+              "keys": {
+                "value": "AmbientTemperature",
+                "idType": "Iri",
+                "type": "Range"
+              }
             },
             "valueType": "Integer",
             "@bind": {

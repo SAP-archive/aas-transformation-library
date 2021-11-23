@@ -55,17 +55,13 @@
           }
         },
         "assetInformation": {
-          "@bind": {
-            "assetKind": {
-              "@xpath": "TYPE"
-            }
-          },
+          "assetKind": "Type",
           "globalAssetId": {
             "keys": [
               {
                 "value": "assetInformationGlobalAssetIdReference",
-                "idType": "CUSTOM",
-                "type": "ASSET"
+                "idType": "Custom",
+                "type": "Asset"
               }
             ]
           }
@@ -82,19 +78,24 @@
             {
               "value": " ",
               "idType": "Irdi",
-              "type": "SUBMODEL"
+              "type": "Submodel"
             }
           ]
         },
-        "@bind": {
-          "id": {
-            "@concatenate": [
-              {
-                "@def": "assetid"
-              },
-              "_submodel1"
-            ]
+        "identification": {
+          "@bind": {
+            "id": {
+              "@concatenate": [
+                {
+                  "@def": "assetId"
+                },
+                "_submodel1"
+              ]
+            }
           },
+          "idType": "Custom"
+        },
+        "@bind": {
           "idShort": {
             "@xpath": "'IdentificationData'"
           }
@@ -302,7 +303,7 @@
             "id": {
               "@concatenate": [
                 {
-                  "@def": "assetid"
+                  "@def": "assetId"
                 },
                 "_submodel1"
               ]
@@ -337,7 +338,7 @@
                 }
               ]
             },
-            "submodelElements": [
+            "value": [
               {
                 "semanticId": {
                   "keys": [
@@ -367,7 +368,7 @@
                     {
                       "value": "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerPartNumber/1/1",
                       "idType": "Irdi",
-                      "type": "SUBMODEL_ELEMENT"
+                      "type": "SubmodelElement"
                     }
                   ]
                 },
@@ -393,7 +394,7 @@
                     {
                       "value": "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerOrderCode/1/1",
                       "idType": "Irdi",
-                      "type": "SUBMODEL_ELEMENT"
+                      "type": "SubmodelElement"
                     }
                   ]
                 },
@@ -413,17 +414,17 @@
                     {
                       "value": "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerProductDesignation/1/1",
                       "idType": "Irdi",
-                      "type": "SUBMODEL_ELEMENT"
+                      "type": "SubmodelElement"
                     }
                   ]
                 },
                 "@foreach": {
                   "@xpath": "caex:Attribute[@Name='DeviceClass']"
                 },
-                "values": [
+                "value": [
                   {
                     "@bind": {
-                      "lang": {
+                      "language": {
                         "@xpath": "'us-us"
                       },
                       "value": {
@@ -464,7 +465,7 @@
                 }
               ]
             },
-            "submodelElements": [
+            "value": [
               {
                 "@foreach": {
                   "@caexAttributeName": "AmbientTemperature"
@@ -483,10 +484,10 @@
                   ]
                 },
                 "@bind": {
-                  "minValue": {
+                  "min": {
                     "@xpath": "caex:Attribute[@Name='TemperatureMin']/caex:Value"
                   },
-                  "maxValue": {
+                  "max": {
                     "@xpath": "caex:Attribute[@Name='TemperatureMax']/caex:Value"
                   }
                 }
@@ -586,7 +587,7 @@
                     {
                       "value": "0112/2///61987#ABA640#006",
                       "idType": "Irdi",
-                      "type": "SUBMODEL"
+                      "type": "Submodel"
                     }
                   ]
                 },
@@ -690,19 +691,24 @@
           "@xpath": "caex:Attribute[@Name='CommercialData']"
         },
         "semanticId": {
-          "value": "https://admin-shell.io/SemanticIdNotAvailable/1/1",
-          "idType": "Iri",
-          "type": "SUBMODEL"
-        },
-        "@bind": {
-          "id": {
-            "@concatenate": [
-              {
-                "@def": "assetid"
-              },
-              "_submodel"
-            ]
+          "keys": {
+            "value": "https://admin-shell.io/SemanticIdNotAvailable/1/1",
+            "idType": "Iri",
+            "type": "Submodel"
           }
+        },
+        "identification": {
+          "@bind": {
+            "id": {
+              "@concatenate": [
+                {
+                  "@def": "assetId"
+                },
+                "_submodel1"
+              ]
+            }
+          },
+          "idType": "Custom"
         },
         "submodelElements": [
           {
@@ -718,11 +724,13 @@
               "name": "SubmodelElementCollection"
             },
             "semanticId": {
-              "value": "https://admin-shell.io/SemanticIdNotAvailable/1/1",
-              "idType": "Ird",
-              "type": "SubmodelElementCollection"
+              "keys": {
+                "value": "https://admin-shell.io/SemanticIdNotAvailable/1/1",
+                "idType": "Irdi",
+                "type": "SubmodelElementCollection"
+              }
             },
-            "submodelElements": [
+            "value": [
               {
                 "@foreach": {
                   "@caexAttributeName": "GTIN"
@@ -751,7 +759,9 @@
                   "@caexAttributeName": "CustomsTariffNumber"
                 },
                 "@bind": {
-                  "@xpath": " 'TARIC' "
+                  "idShort": {
+                    "@xpath": " 'TARIC' "
+                  }
                 },
                 "semanticId": {
                   "keys": [
@@ -800,11 +810,13 @@
               "name": "SubmodelElementCollection"
             },
             "semanticId": {
-              "value": "https://admin-shell.io/SemanticIdNotAvailable/1/1",
-              "idType": "Irdi",
-              "type": "SubmodelElementCollection"
+              "keys": {
+                "value": "https://admin-shell.io/SemanticIdNotAvailable/1/1",
+                "idType": "Irdi",
+                "type": "SubmodelElementCollection"
+              }
             },
-            "submodelElements": [
+            "value": [
               {
                 "@foreach": {
                   "@caexAttributeName": "DescriptionShort"
@@ -1007,7 +1019,7 @@
                 }
               ]
             },
-            "submodelElements": [
+            "value": [
               {
                 "@foreach": {
                   "@caexAttributeName": "OrderUnit"
@@ -1036,7 +1048,7 @@
                   "@caexAttributeName": "ContentUnit"
                 },
                 "@bind": {
-                  "@idShort": {
+                  "idShort": {
                     "@xpath": " 'ContentUnit' "
                   }
                 },
@@ -1218,7 +1230,9 @@
             ]
           },
           {
-            "@caexAttributeName": "ProductPriceDetails",
+            "@foreach": {
+              "@caexAttributeName": "ProductPriceDetails"
+            },
             "modelType": {
               "name": "SubmodelElementCollection"
             },
@@ -1231,7 +1245,7 @@
                 }
               ]
             },
-            "submodelElements": [
+            "value": [
               {
                 "@foreach": {
                   "@caexAttributeName": "ValidStartDate"
@@ -1299,7 +1313,7 @@
                 "modelType": {
                   "name": "SubmodelElementCollection"
                 },
-                "submodelElements": [
+                "value": [
                   {
                     "@foreach": {
                       "@caexAttributeName": "PriceAmount"
@@ -1347,12 +1361,12 @@
                     "valueType": "string"
                   },
                   {
-                    "foreach": {
+                    "@foreach": {
                       "@caexAttributeName": "PriceCurrency"
                     },
                     "@bind": {
                       "idShort": {
-                        "@path": " 'PriceCurrency' "
+                        "@xpath": " 'PriceCurrency' "
                       }
                     },
                     "semanticId": {
@@ -1439,7 +1453,7 @@
                     "valueType": "string"
                   },
                   {
-                    "foreach": {
+                    "@foreach": {
                       "@caexAttributeName": "Territory"
                     },
                     "@bind": {
@@ -1485,7 +1499,7 @@
             "id": {
               "@concatenate": [
                 {
-                  "@def": "assetid"
+                  "@def": "assetId"
                 },
                 "_submodel1"
               ]
@@ -1517,13 +1531,13 @@
                 "@xpath": " 'ManufacturerName' "
               }
             },
-            "values": [
+            "value": [
               {
                 "@bind": {
-                  "lang": {
+                  "language": {
                     "@xpath": "'en-us'"
                   },
-                  "value": {
+                  "text": {
                     "@xpath": "caex:Value"
                   }
                 }
@@ -1538,7 +1552,7 @@
               "keys": {
                 "value": "0173-1#02-AAW338#001",
                 "idType": "Irdi",
-                "type": "SUBMODEL_ELEMENT"
+                "type": "SubmodelElement"
               }
             },
             "@foreach": {
@@ -1549,13 +1563,13 @@
                 "@xpath": " 'ManufacturerProductDesignation' "
               }
             },
-            "values": [
+            "value": [
               {
                 "@bind": {
-                  "lang": {
+                  "language": {
                     "@xpath": "'en-us'"
                   },
-                  "value": {
+                  "text": {
                     "@xpath": "caex:Value"
                   }
                 }
@@ -1586,7 +1600,7 @@
             "modelType": {
               "name": "SubmodelElementCollection"
             },
-            "submodelElements": [
+            "value": [
               {
                 "@foreach": {
                   "@caexAttributeName": "Address1"
@@ -1596,13 +1610,13 @@
                     "@xpath": " 'Street' "
                   }
                 },
-                "values": [
+                "value": [
                   {
                     "@bind": {
-                      "lang": {
+                      "language": {
                         "@xpath": "'en-us'"
                       },
-                      "value": {
+                      "text": {
                         "@xpath": "caex:Value"
                       }
                     }
@@ -1630,13 +1644,13 @@
                     "@xpath": " 'Zipcode' "
                   }
                 },
-                "values": [
+                "value": [
                   {
                     "@bind": {
-                      "lang": {
+                      "language": {
                         "@xpath": "'en-us'"
                       },
-                      "value": {
+                      "text": {
                         "@xpath": "caex:Value"
                       }
                     }
@@ -1664,16 +1678,16 @@
                     "@xpath": " 'CityTown' "
                   }
                 },
-                "values": [
-                  {
-                    "lang": {
+                "value": {
+                  "@bind": {
+                    "language": {
                       "@xpath": "'en-us'"
                     },
-                    "value": {
+                    "text": {
                       "@xpath": "caex:Value"
                     }
                   }
-                ],
+                },
                 "semanticId": {
                   "keys": [
                     {
@@ -1696,13 +1710,13 @@
                     "@xpath": " 'NationalCode' "
                   }
                 },
-                "values": [
+                "value": [
                   {
                     "@bind": {
-                      "lang": {
+                      "language": {
                         "@xpath": "'en-us'"
                       },
-                      "value": {
+                      "text": {
                         "@xpath": "caex:Value"
                       }
                     }
@@ -1731,14 +1745,16 @@
                   }
                 },
                 "semanticId": {
-                  "value": "0173-1#02-AAQ836#005",
-                  "idType": "Irdi",
-                  "type": "SubmodelElementCollection"
+                  "keys": {
+                    "value": "0173-1#02-AAQ836#005",
+                    "idType": "Irdi",
+                    "type": "SubmodelElementCollection"
+                  }
                 },
                 "modelType": {
                   "name": "SubmodelElementCollection"
                 },
-                "submodelElements": [
+                "value": [
                   {
                     "@foreach": {
                       "@caexAttributeName": "ContactMail"
@@ -1749,9 +1765,11 @@
                       }
                     },
                     "semanticId": {
-                      "value": "0173-1#02-AAO198#002",
-                      "idType": "Irdi",
-                      "type": "PROPERTY"
+                      "keys": {
+                        "value": "0173-1#02-AAO198#002",
+                        "idType": "Irdi",
+                        "type": "Property"
+                      }
                     },
                     "modelType": {
                       "name": "Property"
@@ -1770,28 +1788,32 @@
                   }
                 },
                 "semanticId": {
-                  "value": "0173-1#02-AAQ833#005",
-                  "idType": "Irdi",
-                  "type": "SUBMODEL_ELEMENT"
+                  "keys": {
+                    "value": "0173-1#02-AAQ833#005",
+                    "idType": "Irdi",
+                    "type": "SubmodelElement"
+                  }
                 },
                 "modelType": {
                   "name": "SubmodelElementCollection"
                 },
-                "submodelElements": [
+                "value": [
                   {
                     "@foreach": {
                       "@caexAttributeName": "ContactPhone"
                     },
                     "@bind": {
-                      "@xpath": " 'TelephoneNumber' "
+                      "idShort": {
+                        "@xpath": " 'TelephoneNumber' "
+                      }
                     },
-                    "values": [
+                    "value": [
                       {
                         "@bind": {
-                          "lang": {
+                          "language": {
                             "@xpath": "'en-us'"
                           },
-                          "value": {
+                          "text": {
                             "@xpath": "caex:Value"
                           }
                         }
@@ -1802,7 +1824,7 @@
                         {
                           "value": "0173-1#02-AAO136#002",
                           "idType": "Irdi",
-                          "type": "PROPERTY"
+                          "type": "Property"
                         }
                       ]
                     },
@@ -1871,14 +1893,14 @@
                 "@xpath": " 'manufacturerId' "
               },
               "value": {
-                "@param": "manufacturerId"
+                "@var": "manufacturerId"
               }
             },
             "semanticId": {
               "keys": [
                 {
                   "value": "manufacturerId",
-                  "idType": "custom",
+                  "idType": "Custom",
                   "type": "SubmodelElement"
                 }
               ]
