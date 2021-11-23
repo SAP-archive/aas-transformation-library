@@ -32,7 +32,7 @@
         ]
       }
     },
-    "@vars": {
+    "@variables": {
       "submodel3Id": {
         "@xpath": "submodel3"
       },
@@ -83,7 +83,7 @@
             }
           ]
         },
-        "@vars": {
+        "@variables": {
           "submodel3Id": {
             "@xpath": "this is an updated Variable"
           }

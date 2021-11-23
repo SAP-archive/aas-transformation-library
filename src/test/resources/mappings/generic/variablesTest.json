@@ -6,7 +6,7 @@
 	"aasEnvironmentMapping": {
 		"submodels": [
 			{
-				"@vars": {
+				"@variables": {
 					"myvar1": "myvarforidshort",
 					"myvar2": "myvarforlateruse"
 				},
@@ -17,7 +17,7 @@
 				},
 				"submodelElements": [
 					{
-						"@vars": {
+						"@variables": {
 							"myvar1": "myoverriddenvarforidshort"
 						},
 						"@foreach": [
