@@ -27,6 +27,9 @@
         ]
       }
     },
+    "@variables": {
+      "xpathSubmodel": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
+    },
     "@namespaces": {
       "ns1": "http://ns.org/1",
       "ns2": "http://ns.org/2",
@@ -34,51 +37,49 @@
     }
   },
   "aasEnvironmentMapping": {
-    "assetAdministrationShells": [
-      {
-        "@foreach": {
-          "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
-        },
-        "identification": {
-          "@bind": {
-            "id": {
-              "@def": "mappingIdGeneration"
-            }
-          },
-          "idType": "Iri"
-        },
-        "assetInformation": {
-          "@bind": {
-            "assetKind": {
-              "@xpath": "TYPE"
-            }
-          },
-          "globalAssetId": {
-            "keys": [
-              {
-                "value": "assetInformationGlobalAssetIdReference",
-                "idType": "Custom",
-                "type": "Asset"
-              }
-            ]
-          }
-        },
+    "assetAdministrationShells": {
+      "@foreach": {
+        "@xpath": {
+          "@var": "xpathSubmodel"
+        }
+      },
+      "identification": {
         "@bind": {
-          "idShort": {
-            "@xpath": "@Name"
+          "id": {
+            "@def": "mappingIdGeneration"
           }
+        },
+        "idType": "Iri"
+      },
+      "assetInformation": {
+        "@bind": {
+          "assetKind": "Type"
+        },
+        "globalAssetId": {
+          "keys": [
+            {
+              "value": "assetInformationGlobalAssetIdReference",
+              "idType": "Custom",
+              "type": "Asset"
+            }
+          ]
+        }
+      },
+      "@bind": {
+        "idShort": {
+          "@xpath": "@Name"
         }
       }
-    ],
+    },
     "submodels": [
       {
         "@foreach": {
-          "@xpath": "."
+          "@xpath": {
+            "@var": "xpathSubmodel"
+          }
         },
         "@bind": {
-          "idShort": {
-            "@xpath": "'AIN_Document_Submodel'"
-          }
+          "idShort": "AIN_Document_Submodel"
         },
         "semanticId": {
           "keys": [
@@ -98,6 +99,11 @@
             "@foreach": {
               "@xpath": "caex:InternalElement[@Name='TestOtherFilesCollection']/caex:InternalElement[@Name]"
             },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
+            },
             "modelType": {
               "name": "SubmodelElementCollection"
             },
@@ -112,13 +118,8 @@
             },
             "value": [
               {
-                "@foreach": {
-                  "@xpath": "."
-                },
                 "@bind": {
-                  "idShort": {
-                    "@xpath": "'DocumentID'"
-                  },
+                  "idShort": "DocumentID",
                   "value": {
                     "@xpath": "@ID"
                   }
@@ -138,9 +139,6 @@
                 "valueType": "string"
               },
               {
-                "@foreach": {
-                  "@xpath": "."
-                },
                 "@bind": {
                   "mimeType": {
                     "@xpath": "caex:ExternalInterface[@Name='ExternalDataReference']/caex:Attribute[@Name='MIMEType']/caex:Value"
@@ -163,16 +161,11 @@
                 }
               },
               {
-                "@foreach": {
-                  "@xpath": "."
-                },
                 "@bind": {
                   "value": {
                     "@xpath": "@LifecyclePhase"
                   },
-                  "idShort": {
-                    "@xpath": "'LifecyclePhase'"
-                  }
+                  "idShort": "LifecyclePhase"
                 },
                 "semanticId": {
                   "keys": [
@@ -189,13 +182,8 @@
                 "valueType": "string"
               },
               {
-                "@foreach": {
-                  "@xpath": "."
-                },
                 "@bind": {
-                  "idShort": {
-                    "@xpath": "'DocumentName'"
-                  },
+                  "idShort": "DocumentName",
                   "value": {
                     "@xpath": "@Name"
                   }
@@ -215,13 +203,8 @@
                 "valueType": "string"
               },
               {
-                "@foreach": {
-                  "@xpath": "."
-                },
                 "@bind": {
-                  "idShort": {
-                    "@xpath": "'Categories'"
-                  }
+                  "idShort": "Categories"
                 },
                 "modelType": {
                   "name": "SubmodelElementCollection"
@@ -237,13 +220,8 @@
                 },
                 "value": [
                   {
-                    "@foreach": {
-                      "@xpath": "."
-                    },
                     "@bind": {
-                      "idShort": {
-                        "@xpath": "'CategoryCode'"
-                      },
+                      "idShort": "CategoryCode",
                       "value": {
                         "@xpath": "@CategoryCode"
                       }
@@ -263,13 +241,8 @@
                     "valueType": "string"
                   },
                   {
-                    "@foreach": {
-                      "@xpath": "."
-                    },
                     "@bind": {
-                      "idShort": {
-                        "@xpath": "'FileName'"
-                      },
+                      "idShort": "FileName",
                       "value": {
                         "@xpath": "@Name"
                       }
@@ -289,13 +262,8 @@
                     "valueType": "string"
                   },
                   {
-                    "@foreach": {
-                      "@xpath": "."
-                    },
                     "@bind": {
-                      "idShort": {
-                        "@xpath": "'LanguageCode'"
-                      },
+                      "idShort": "LanguageCode",
                       "value": {
                         "@xpath": "@LanguageCode"
                       }
@@ -317,13 +285,8 @@
                 ]
               },
               {
-                "@foreach": {
-                  "@xpath": "."
-                },
                 "@bind": {
-                  "idShort": {
-                    "@xpath": "'Description'"
-                  }
+                  "idShort": "Description"
                 },
                 "modelType": {
                   "name": "SubmodelElementCollection"
@@ -339,13 +302,8 @@
                 },
                 "value": [
                   {
-                    "@foreach": {
-                      "@xpath": "."
-                    },
                     "@bind": {
-                      "idShort": {
-                        "@xpath": "'ShortDescription'"
-                      },
+                      "idShort": "ShortDescription",
                       "value": {
                         "@xpath": "@ShortDescription"
                       }
@@ -365,13 +323,8 @@
                     "valueType": "string"
                   },
                   {
-                    "@foreach": {
-                      "@xpath": "."
-                    },
                     "@bind": {
-                      "idShort": {
-                        "@xpath": "'LongDescription'"
-                      },
+                      "idShort": "LongDescription",
                       "value": {
                         "@xpath": "@LongDescription"
                       }
@@ -391,13 +344,8 @@
                     "valueType": "string"
                   },
                   {
-                    "@foreach": {
-                      "@xpath": "."
-                    },
                     "@bind": {
-                      "idShort": {
-                        "@xpath": "'LanguageCode'"
-                      },
+                      "idShort": "LanguageCode",
                       "value": {
                         "@xpath": "@LanguageCode"
                       }
@@ -417,13 +365,8 @@
                     "valueType": "string"
                   },
                   {
-                    "@foreach": {
-                      "@xpath": "."
-                    },
                     "@bind": {
-                      "idShort": {
-                        "@xpath": "'DataSensitivity'"
-                      },
+                      "idShort": "DataSensitivity",
                       "value": {
                         "@xpath": "@DataSensitivity"
                       }
@@ -443,13 +386,8 @@
                     "valueType": "string"
                   },
                   {
-                    "@foreach": {
-                      "@xpath": "."
-                    },
                     "@bind": {
-                      "idShort": {
-                        "@xpath": "'Confidentiality'"
-                      },
+                      "idShort": "Confidentiality",
                       "value": {
                         "@xpath": "@Confidentiality"
                       }
