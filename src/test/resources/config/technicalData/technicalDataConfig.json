@@ -20,10 +20,10 @@
         ]
       },
       "mappingIdGeneration": {
-        "concatenate_and_hash": [
+        "@concatenate_and_hash": [
           {
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
-            "@const": "DefaultManufacturer"
+            "default": "DefaultManufacturer"
           },
           "/",
           {
@@ -49,19 +49,7 @@
           }
         },
         "assetInformation": {
-          "@bind": {
-            "assetKind": {
-              "@xpath": "TYPE"
-            }
-          },
-          "identification": {
-            "@bind": {
-              "id": {
-                "@def": "assetIdGeneration"
-              }
-            },
-            "idType": "Iri"
-          },
+          "assetKind" : "Type",
           "globalAssetId": {
             "keys": [
               {
@@ -128,7 +116,7 @@
                 }
               ]
             },
-            "submodelElements": [
+            "value": [
               {
                 "@foreach": {
                   "@caexAttributeName": "Manufacturer"
@@ -161,7 +149,7 @@
                     {
                       "value": "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerPartNumber/1/1",
                       "idType": "Iri",
-                      "type": "Submodel_ELEMENT"
+                      "type": "SubmodelElement"
                     }
                   ]
                 },
@@ -219,12 +207,12 @@
                     "@xpath": " 'ManufacturerProductDesignation' "
                   }
                 },
-                "values": {
+                "value": {
                   "@bind": {
-                    "lang": {
+                    "language": {
                       "@xpath": "'en-us'"
                     },
-                    "value": {
+                    "text": {
                       "@xpath": "caex:Value"
                     }
                   }
@@ -253,7 +241,7 @@
                 }
               ]
             },
-            "submodelElements": [
+            "value": [
               {
                 "@foreach": {
                   "@caexAttributeName": "AmbientTemperature"
@@ -272,10 +260,10 @@
                   ]
                 },
                 "@bind": {
-                  "minValue": {
+                  "min": {
                     "@xpath": "caex:Attribute[@Name='TemperatureMin']/caex:Value"
                   },
-                  "maxValue": {
+                  "max": {
                     "@xpath": "caex:Attribute[@Name='TemperatureMax']/caex:Value"
                   }
                 }
