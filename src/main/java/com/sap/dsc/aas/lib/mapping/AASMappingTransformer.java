@@ -62,12 +62,13 @@ public class AASMappingTransformer {
 	public AssetAdministrationShellEnvironment transform(MappingSpecification mappingSpec, Object initialContextItem, Map<String, String> initialVars) {
 		TransformationContext initialCtx = createInitialContext(initialContextItem, mappingSpec.getHeader(), initialVars);
 		AssetAdministrationShellEnvironment aasEnvTemplate = mappingSpec.getAasEnvironmentMapping();
-		if (mappingSpec.getAasEnvironmentMapping() instanceof Template
-				&& ((Template) mappingSpec.getAasEnvironmentMapping()).getForeachExpression() != null) {
+		List<Object> envList = asList(transformAny(aasEnvTemplate, initialCtx));
+		if (envList.size() > 1) {
 			LOGGER.warn(
-					"@forEach expression on top level AAS Environment is not applicable. Only one AAS Environments will be returned!");
+					"@forEach expression on top level AAS Environment resulted to multiple AAS transformations, but only the first AAS Environments will be returned!");
+			
 		}
-		return (AssetAdministrationShellEnvironment) asList(transformAny(aasEnvTemplate, initialCtx)).get(0);
+		return (AssetAdministrationShellEnvironment) envList.get(0);
 	}
 
 	private TransformationContext createInitialContext(Object initialContextItem, Header header, Map<String, String> initialVars) {
