@@ -74,7 +74,9 @@ public class UANodeSetTransformer extends DocumentTransformer {
 	@Override
 	protected void afterValidation(Document readXmlDocument, MappingSpecification mapping) {
         LOGGER.info("NodeSet validated.");
-	}
+        BrowsepathXPathBuilder.updateInstance(readXmlDocument);
+        LOGGER.info("BrowsepathBuilder set to validated NodeSet.");
+    }
 
 	@Override
 	public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
