@@ -48,7 +48,7 @@ public abstract class DocumentTransformer extends MappingSpecificationDocumentTr
 	 */
 	public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping)
 			throws TransformationException {
-		return transform(inStream, mapping);
+		return transform(inStream, mapping, null);
 	}
 	
 	/**
