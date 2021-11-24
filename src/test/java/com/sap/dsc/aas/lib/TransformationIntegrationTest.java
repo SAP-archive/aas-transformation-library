@@ -384,7 +384,7 @@ public class TransformationIntegrationTest {
         assertThat(submodel.getSubmodelElements()).isNotNull();
 
         return submodel.getSubmodelElements().stream()
-            .filter(submodelElement -> submodelElement.getIdShort().equals(idShort))
+            .filter(submodelElement -> idShort.equals(submodelElement.getIdShort()))
             .findFirst()
             .orElseThrow(() -> new AssertionFailedError("SubmodelElement with IdShort '" + idShort + "' not found"));
     }
@@ -393,7 +393,7 @@ public class TransformationIntegrationTest {
         assertNotNull(shellEnv.getSubmodels());
 
         return shellEnv.getSubmodels().stream()
-            .filter(submodel -> submodel.getIdShort().equals(idShort))
+            .filter(submodel -> idShort.equals(submodel.getIdShort()))
             .findFirst()
             .orElseThrow(() -> new AssertionFailedError("Submodel with IdShort '" + idShort + "' not found"));
     }

@@ -10,19 +10,19 @@ import static com.sap.dsc.aas.lib.expressions.Helpers.valueToSet;
 import static com.sap.dsc.aas.lib.expressions.Helpers.valueToStream;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Stack;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import org.dom4j.Node;
 
 import com.google.common.hash.Hashing;
 
@@ -137,6 +137,19 @@ public class Expressions {
 			String concatenated = stream.map(Object::toString).collect(Collectors.joining());
 			return Hashing.sha256().hashString(concatenated, StandardCharsets.UTF_8).toString();
 		});
+
+		// string encoding
+        functions.put("base64", args -> {
+            Stream<Object> stream = (Stream<Object>) valueToStream(args);
+            String concatenated = stream.flatMap(o -> valueToStream(o)).map(o -> {
+                if (o instanceof Node) {
+                    return ((Node) o).getStringValue();
+                } else {
+                    return String.valueOf(o);
+                }
+            }).collect(Collectors.joining());
+            return Base64.getEncoder().encodeToString(concatenated.getBytes());
+        });
     }
 
     public static Function<Object, Object> getFunctionByName(String name) {
