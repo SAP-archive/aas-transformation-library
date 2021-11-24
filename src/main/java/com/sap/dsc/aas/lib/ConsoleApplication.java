@@ -134,7 +134,7 @@ public class ConsoleApplication {
 	@SuppressWarnings("unchecked")
 	protected void readPlaceholders() {
 		if (commandLine.hasOption(OPTION_NAME_PLACEHOLDER_VALUES)) {
-			LOGGER.info("Replacing placeholders in AAS env");
+			LOGGER.info("Reading placeholder values for AAS transformation");
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				placeholderMap = mapper
@@ -267,7 +267,7 @@ public class ConsoleApplication {
 			LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
 			List<Parameter> placeholders = mapping.getHeader().getParameters();
 
-			LOGGER.info("Found {} placeholders:", placeholders.size());
+			LOGGER.info("{} placeholders are expected according to header:", placeholders.size());
 			placeholders
 					.forEach(placeholder -> LOGGER.info("{}: {}", placeholder.getName(), placeholder.getDescription()));
 		}
