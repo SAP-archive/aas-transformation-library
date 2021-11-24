@@ -33,19 +33,17 @@
       }
     },
     "@variables": {
-      "submodel3Id": {
-        "@xpath": "submodel3"
-      },
+      "submodel3Id": "submodel3",
       "submodelDocsId": "submodelDocuments"
     }
   },
   "aasEnvironmentMapping": {
+    "@foreach": {
+      "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
+    },
     "assets": [],
     "assetAdministrationShells": [
       {
-        "@foreach": {
-          "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
-        },
         "@bind": {
           "idShort": {
             "@xpath": "@Name"
@@ -88,9 +86,7 @@
           ]
         },
         "@variables": {
-          "submodel3Id": {
-            "@xpath": "this is an updated Variable"
-          }
+          "submodel3Id": "this is an updated Variable"
         },
         "identification": {
           "@bind": {
@@ -255,10 +251,10 @@
                 "value": [
                   {
                     "@bind": {
-                      "lang": {
+                      "language": {
                         "@xpath": "'en'"
                       },
-                      "value": {
+                      "text": {
                         "@xpath": "caex:Value"
                       }
                     }
@@ -325,7 +321,12 @@
       },
       {
         "@foreach": {
-          "@xpath": "caex:Attribute[@Name='GeneralTechnicalData']"
+          "@caexAttributeName": "GeneralTechnicalData"
+        },
+        "@bind": {
+          "idShort": {
+            "@xpath": "@Name"
+          }
         },
         "semanticId": {
           "keys": [
@@ -354,6 +355,11 @@
             "@foreach": {
               "@caexAttributeName": "AmbientTemperature"
             },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
+            },
             "modelType": {
               "name": "Range"
             },
@@ -378,15 +384,49 @@
             "@foreach": {
               "@caexAttributeName": "Material"
             },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
+            },
             "modelType": {
               "name": "MultiLanguageProperty"
-            }
+            },
+            "value": [
+              {
+                "@foreach": {
+                  "@caexAttributeName": "aml-lang=en-US"
+                },
+                "@bind": {
+                  "language": "en",
+                  "text": {
+                    "@xpath": "caex:Value"
+                  }
+                }
+              },
+              {
+                "@foreach": {
+                  "@caexAttributeName": "aml-lang=de-DE"
+                },
+                "@bind": {
+                  "language": "de",
+                  "text": {
+                    "@xpath": "caex:Value"
+                  }
+                }
+              }
+            ]
           }
         ]
       },
       {
         "@foreach": {
           "@caexAttributeName": "ParameterData"
+        },
+        "@bind": {
+          "idShort": {
+            "@xpath": "@Name"
+          }
         },
         "semanticId": {
           "keys": [
@@ -497,7 +537,9 @@
                 "@xpath": "'BetriebsanleitungBIN'"
               },
               "value": {
-                "@xpath": "caex:Attribute[@Name='refURI']/caex:Value"
+                "@base64": {
+                  "@xpath": "caex:Attribute[@Name='refURI']/caex:Value"
+                }
               },
               "mimeType": {
                 "@xpath": "caex:Attribute[@Name='MIMEType']/caex:Value"
