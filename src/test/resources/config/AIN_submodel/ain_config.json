@@ -46,7 +46,8 @@
           "@bind": {
             "id": {
               "@def": "mappingIdGeneration"
-            }
+            },
+           "idType" : "Custom" 
           }
         },
         "assetInformation": {
