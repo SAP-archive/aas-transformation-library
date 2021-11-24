@@ -23,7 +23,6 @@ public class UaIntegrationTest {
     public static final String UA_BIG_MACHINE = "src/test/resources/ua/big.machine.nodeset.xml";
     public static final String NAMEPLATE_CONFIG = "src/test/resources/ua/diToNameplate.json";
 
-
     private static AssetAdministrationShellEnvironment shellEnv;
 
     @BeforeEach
@@ -54,7 +53,6 @@ public class UaIntegrationTest {
         address.getValues().stream().map(Referable::getIdShort)
                 .collect(Collectors.toList()).forEach(Assertions::assertNotNull);
     }
-
 
     SubmodelElement getElement(String idShort, Submodel submodel) {
         assertThat(submodel.getSubmodelElements()).isNotNull();
