@@ -168,6 +168,16 @@ public class Expressions {
         });
     }
 
+    protected static Stream<String> nodeListsToString(Stream<?> stream) {
+        return stream.flatMap(o -> valueToStream(o)).map(o -> {
+            if (o instanceof Node) {
+                return ((Node) o).getStringValue();
+            } else {
+                return String.valueOf(o);
+            }
+        });
+    }
+
     public static Function<Object, Object> getFunctionByName(String name) {
         return functions.get(name);
     }
