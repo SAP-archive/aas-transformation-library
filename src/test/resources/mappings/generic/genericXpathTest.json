@@ -5,12 +5,9 @@
 		"@namespaces": {
 			"ns": "http://ns.org/"
 		},
-		"@parameters": [
-			{
-				"name": "genericPlaceholder",
-				"description": "A generic placeholder"
-			}
-		]
+		"@parameters": {
+				"genericPlaceholder": "A generic placeholder"
+    }
 	},
 	"aasEnvironmentMapping": {
 		"submodels": [
