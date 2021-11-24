@@ -49,7 +49,7 @@
     "submodels": [
       {
         "@foreach": {
-          "@xpath": "caex:Attribute[@Name='CommercialData']/caex:Attribute[@Name='ManufacturerDetails']"
+          "@xpath": "//caex:Attribute[@Name='CommercialData']/caex:Attribute[@Name='ManufacturerDetails']"
         },
         "@bind": {
 			"idShort": {
