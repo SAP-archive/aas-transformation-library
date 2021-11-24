@@ -110,6 +110,11 @@
             "@foreach": {
               "@caexAttributeName": "Manufacturer"
             },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
+            },
             "semanticId": {
               "keys": [
                 {
@@ -142,6 +147,9 @@
             },
             "valueType": "STRING",
             "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              },
               "value": {
                 "@xpath": "caex:Value"
               }
@@ -165,6 +173,11 @@
       {
         "@foreach": {
           "@xpath": "caex:Attribute[@Name='CommercialData']"
+        },
+        "@bind" : {
+          "idShort" : {
+            "@xpath" : "@Name"
+          }
         },
         "semanticId": {
           "keys": [
@@ -192,6 +205,11 @@
           {
             "@foreach": {
               "@caexAttributeName": "ProductPriceDetails"
+            },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
             },
             "modelType": {
               "name": "SubmodelElementCollection"
@@ -230,6 +248,11 @@
             "@foreach": {
               "@caexAttributeName": "ProductDetails"
             },
+            "@bind" : {
+              "idShort" : {
+                "@xpath" : "@Name"
+              }
+            },
             "modelType": {
               "name": "SubmodelElementCollection"
             },
@@ -244,6 +267,11 @@
               {
                 "@foreach": {
                   "@caexAttributeName": "DescriptionShort"
+                },
+                "@bind" : {
+                  "idShort" : {
+                    "@xpath" : "@Name"
+                  }
                 },
                 "modelType": {
                   "name": "MultiLanguageProperty"
@@ -267,14 +295,19 @@
             "@foreach": {
               "@caexAttributeName": "PackagingAndTransportation"
             },
+            "@bind" : {
+              "idShort" : {
+                "@xpath" : "@Name"
+              }
+            },
             "modelType": {
               "name": "Entity"
             },
             "semanticId": {
               "keys": {
                 "value": "PackAndTransport",
-                "idType": "IdShort",
-                "type": "Property"
+                "idType": "Irdi",
+                "type": "ConceptDescription"
               }
             },
             "entityType": "SelfManagedEntity",
@@ -355,11 +388,6 @@
             "@foreach": {
               "@caexAttributeName": "AmbientTemperature"
             },
-            "@bind": {
-              "idShort": {
-                "@xpath": "@Name"
-              }
-            },
             "modelType": {
               "name": "Range"
             },
@@ -370,8 +398,11 @@
                 "type": "Range"
               }
             },
-            "valueType": "Integer",
+            "valueType": "integer",
             "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              },
               "min": {
                 "@xpath": "caex:Attribute[@Name='TemperatureMin']/caex:Value"
               },
@@ -440,7 +471,7 @@
         "identification": {
           "@bind": {
             "id": {
-              "@var": "$submodel3Id"
+              "@var": "submodel3Id"
             }
           },
           "idType": "Custom"
@@ -449,6 +480,11 @@
           {
             "@foreach": {
               "@xpath": "caex:Attribute"
+            },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
             },
             "modelType": {
               "name": "Property"
@@ -610,6 +646,11 @@
             "@foreach": {
               "@caexAttributeName": "OperationA"
             },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
+            },
             "semanticId": {
               "keys": [
                 {
@@ -624,10 +665,10 @@
             },
             "inputVariable": [
               {
+                "@foreach": {
+                  "@xpath": "caex:Attribute[@Name='Inputs']/caex:Attribute"
+                },
                 "value": {
-                  "@foreach": {
-                    "@xpath": "caex:Attribute[@Name='Inputs']/caex:Attribute"
-                  },
                   "modelType": {
                     "name": "Property"
                   },
@@ -637,10 +678,10 @@
             ],
             "outputVariable": [
               {
+                "@foreach": {
+                  "@xpath": "caex:Attribute[@Name='Outputs']/caex:Attribute"
+                },
                 "value": {
-                  "@foreach": {
-                    "@xpath": "caex:Attribute[@Name='Outputs']/caex:Attribute"
-                  },
                   "modelType": {
                     "name": "Property"
                   },

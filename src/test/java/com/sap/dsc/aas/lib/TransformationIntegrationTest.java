@@ -311,7 +311,7 @@ public class TransformationIntegrationTest {
         assertThat(collection.getValues()).isNotNull();
 
         return collection.getValues().stream()
-            .filter(submodelElement -> submodelElement.getIdShort().equals(idShortElement))
+            .filter(submodelElement -> idShortElement.equals(submodelElement.getIdShort()))
             .findFirst()
             .orElseThrow(() -> new AssertionFailedError("SubmodelElement with IdShort '" + idShortElement + "' not found"));
     }
