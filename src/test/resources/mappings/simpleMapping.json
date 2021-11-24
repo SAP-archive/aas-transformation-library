@@ -389,12 +389,16 @@
           "finalizeFunction": "concatenate_and_hash",
           "idGenerationName": "assetIdGeneration"
         },
-        "globalAssetIdReference": {
-          "valueId": "assetInformationGlobalAssetIdReference",
-          "keyType": "Custom",
-          "keyElement": "Asset"
-        }
-      }
+		"globalAssetId": {
+			"keys": [
+				{
+					"type": "Asset",
+					"value": "assetInformationGlobalAssetIdReference",
+					"idType": "Custom"
+				}
+			]
+		}      
+	  }
     }
   }
 }

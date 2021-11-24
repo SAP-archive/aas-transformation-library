@@ -7,11 +7,15 @@
     "from_xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']",
     "assetAdministrationShells": {
       "assetInformation": {
-        "globalAssetIdReference": {
-          "valueId": "assetInformationGlobalAssetIdReference",
-          "keyType": "Custom",
-          "keyElement": "Asset"
-        },
+		"globalAssetId": {
+			"keys": [
+				{
+					"type": "Asset",
+					"value": "assetInformationGlobalAssetIdReference",
+					"idType": "Custom"
+				}
+			]
+		},
         "@bind": {
           "assetKind": "Type",
           "unknownProp1": 3,

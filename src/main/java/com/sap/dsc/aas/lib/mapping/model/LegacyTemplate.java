@@ -10,7 +10,6 @@ import io.adminshell.aas.v3.model.KeyType;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sap.dsc.aas.lib.config.pojo.ConfigReference;
 
 /**
  * Includes the legacy config attributes that may be replaced by a new template DSL in the future.
@@ -71,11 +70,6 @@ public interface LegacyTemplate extends Template {
 
     @JsonProperty("kindType_xpath")
     void setKindTypeXPath(String kindTypeXPath);
-
-    ConfigReference getGlobalAssetIdReference();
-
-    @JsonProperty("globalAssetIdReference")
-    void setGlobalAssetIdReference(ConfigReference globalAssetIdReference);
 
     void setValueId(String valueId);
 

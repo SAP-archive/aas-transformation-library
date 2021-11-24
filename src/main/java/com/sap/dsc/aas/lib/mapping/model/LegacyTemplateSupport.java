@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sap.dsc.aas.lib.config.pojo.ConfigReference;
 import com.sap.dsc.aas.lib.exceptions.AlreadyDefinedException;
 
 public class LegacyTemplateSupport extends TemplateSupport implements LegacyTemplate {
@@ -27,7 +26,6 @@ public class LegacyTemplateSupport extends TemplateSupport implements LegacyTemp
     private Map<String, Object> idGeneration;
     private KeyType keyType;
     private KeyElements keyElement;
-    private ConfigReference globalAssetIdReference;
     private String idShortXPath = "@Name";
     private String configElementId;
 
@@ -184,16 +182,4 @@ public class LegacyTemplateSupport extends TemplateSupport implements LegacyTemp
         this.kindTypeXPath = kindTypeXPath;
     }
 
-    @Override
-    public ConfigReference getGlobalAssetIdReference() {
-        return globalAssetIdReference;
-    }
-
-    @Override
-    public void setGlobalAssetIdReference(ConfigReference globalAssetIdReference) {
-        if (this.globalAssetIdReference != null) {
-            throw new AlreadyDefinedException("globalAssetIdReference");
-        }
-        this.globalAssetIdReference = globalAssetIdReference;
-    }
 }
