@@ -6,8 +6,8 @@
 			"ns": "http://ns.org/"
 		},
 		"@parameters": {
-				"genericPlaceholder": "A generic placeholder"
-    }
+			"genericPlaceholder": "A generic placeholder"
+		}
 	},
 	"aasEnvironmentMapping": {
 		"submodels": [
@@ -26,8 +26,10 @@
 							"@xpath": "ns:b"
 						},
 						"modelType": "Property",
-						"value": "${{genericPlaceholder}}",
 						"@bind": {
+							"value": {
+								"@var": "genericPlaceholder"
+							},
 							"idShort": {
 								"@xpath": "@name"
 							}

@@ -9,6 +9,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -43,7 +44,7 @@ public class ConsoleApplicationTest {
     private final String HELP_CONTENT = "usage: transform";
     // private final String CONFIG_FILE_PATH = "src/test/resources/config/simpleConfig.json";
     private final String CONFIG_FILE_PATH = "src/test/resources/mappings/generic/genericXpathTest.json";
-    private final String EMPTY_CONFIG_FILE_PATH = "src/test/resources/config/newschema/emptyConfig.json";
+    private final String EMPTY_CONFIG_FILE_PATH = "src/test/resources/config/emptyConfig.json";
     private final String AML_FILE_PATH = "src/test/resources/aml/full_AutomationComponent.aml";
     private final String GENERIC_FILE_PATH = "src/test/resources/mappings/generic/generic.xml";
 
@@ -145,8 +146,8 @@ public class ConsoleApplicationTest {
 
     @Test
     void getPlaceholderList() {
-        ConsoleApplication.main(new String[] {"-p", "-c", "src/test/resources/config/newschema/minimal_placeholder.json"});
-        assertThat(getPrinted()).contains("Found 2 placeholders:");
+        ConsoleApplication.main(new String[] {"-p", "-c", "src/test/resources/config/minimal_placeholder.json"});
+        assertThat(getPrinted()).contains("2 placeholders are expected");
         assertThat(getPrinted()).contains("assetName: Name of the asset");
         assertThat(getPrinted()).contains("submodelName: Name of the submodel");
     }
@@ -154,7 +155,7 @@ public class ConsoleApplicationTest {
     @Test
     void getSinglePlaceholderList() {
         ConsoleApplication.main(new String[] {"-c", CONFIG_FILE_PATH, "--print-placeholders"});
-        assertThat(getPrinted()).contains("Found 1 placeholders:");
+        assertThat(getPrinted()).contains("1 placeholders");
         assertThat(getPrinted()).contains("genericPlaceholder: A generic placeholder");
     }
 

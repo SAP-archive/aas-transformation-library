@@ -37,6 +37,7 @@ import com.sap.dsc.aas.lib.mapping.model.Parameter;
 import com.sap.dsc.aas.lib.exceptions.InvalidConfigException;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.Header;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.GenericDocumentTransformer;
 import com.sap.dsc.aas.lib.ua.transform.UANodeSetTransformer;
@@ -82,14 +83,14 @@ public class ConsoleApplication {
 	protected AssetAdministrationShellEnvironment transformAmlFile(String amlFilePath)
 			throws IOException, TransformationException {
 		try (InputStream amlStream = Files.newInputStream(Paths.get(amlFilePath))) {
-			LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
+			logHeaderInfo();
 			return new AmlTransformer().transform(amlStream, mapping, placeholderMap);
 		}
 	}
 
 	protected AssetAdministrationShellEnvironment transformAml(InputStream amlStream)
 			throws IOException, TransformationException {
-		LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
+		logHeaderInfo();
 		return new AmlTransformer().transform(amlStream, mapping, placeholderMap);
 	}
 
@@ -97,24 +98,32 @@ public class ConsoleApplication {
 			throws TransformationException, IOException {
 		AmlxPackage amlxPackage = new AmlxPackageReader().readAmlxPackage(Paths.get(amlxInputFileName).toFile());
 		try (InputStream amlInputStream = amlxPackage.getRootAmlFile().getInputStream()) {
-            LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
+            logHeaderInfo();
 			return transformAml(amlInputStream);
 		}
 	}
 
 	private AssetAdministrationShellEnvironment transformNodeSet(String nodesetInputFileName) throws IOException, TransformationException {
 		try (InputStream nodesetStream = Files.newInputStream(Paths.get(nodesetInputFileName))) {
-			LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
+			logHeaderInfo();
 			return new UANodeSetTransformer().transform(nodesetStream, mapping, placeholderMap);
 		}
 	}
 
     private AssetAdministrationShellEnvironment transformGeneric(String genericInputFileName) throws IOException, TransformationException {
         try (InputStream genericStream = Files.newInputStream(Paths.get(genericInputFileName))) {
-            LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
+            logHeaderInfo();
             return new GenericDocumentTransformer().transform(genericStream, mapping, placeholderMap);
         }
     }
+
+	private void logHeaderInfo() {
+		//fix missing header
+		if (mapping.getHeader() == null) {
+			mapping.setHeader(new Header());
+		}
+		LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
+	}
 
 	private void writeAasToFile(String aasOutputFileName, AssetAdministrationShellEnvironment aasEnv) {
 		try (OutputStream fileOutputStream = Files.newOutputStream(Paths.get(aasOutputFileName))) {
@@ -264,7 +273,7 @@ public class ConsoleApplication {
 
 	private void printPlaceholders() {
 		if (commandLine.hasOption(OPTION_NAME_PRINT_PLACEHOLDERS)) {
-			LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
+			logHeaderInfo();
 			List<Parameter> placeholders = mapping.getHeader().getParameters();
 
 			LOGGER.info("{} placeholders are expected according to header:", placeholders.size());
