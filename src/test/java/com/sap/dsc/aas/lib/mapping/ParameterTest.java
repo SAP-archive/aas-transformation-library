@@ -3,10 +3,12 @@
 
   SPDX-License-Identifier: Apache-2.0 
  */
-package com.sap.dsc.aas.lib.config.pojo;
+package com.sap.dsc.aas.lib.mapping;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.sap.dsc.aas.lib.TestUtils;
+import com.sap.dsc.aas.lib.mapping.model.Header;
 import com.sap.dsc.aas.lib.mapping.model.Parameter;
 
 public class ParameterTest {
@@ -30,13 +33,14 @@ public class ParameterTest {
 
     @Test
     void fromJsonString() throws JsonMappingException, JsonProcessingException {
-        String input = "{\"name\": \"placeholderName\", \"description\": \"ui text\"}";
+        String input = "{\"@parameters\": {\"placeholderName1\": \"ui text 1\", \"placeholderName2\": \"ui text 2\"}}";
 
-        Parameter parameter = objectMapper.readValue(input, Parameter.class);
-        assertEquals("placeholderName", parameter.getName());
-        assertEquals("ui text", parameter.getDescription());
-
-        assertThrows(MismatchedInputException.class, () -> objectMapper.readValue("{}", Parameter.class));
+        Header header = objectMapper.readValue(input, Header.class);
+        List<Parameter> parameters = header.getParameters();
+        for (int i = 0; i < parameters.size(); i++) {
+            assertEquals("placeholderName" + (i + 1), parameters.get(i).getName());
+            assertEquals("ui text " + (i + 1), parameters.get(i).getDescription());
+        }
     }
 
 }
