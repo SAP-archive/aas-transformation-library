@@ -6,8 +6,10 @@ import java.util.Map;
 import org.dom4j.Document;
 
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.mapping.model.Header;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.postprocessor.AutoWireSubmodels;
+import com.sap.dsc.aas.lib.transform.validation.PlaceholdersCheck;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
@@ -28,9 +30,10 @@ public abstract class DocumentTransformer extends MappingSpecificationDocumentTr
 	 */
 	public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping, Map<String, String> initialVars)
 			throws TransformationException {
-		if (mapping.getHeader() != null) {
-			setNamespaces(mapping.getHeader().getNamespaces());
+		if (mapping.getHeader() == null) {
+			mapping.setHeader(new Header());
 		}
+		setNamespaces(mapping.getHeader().getNamespaces());
 		Document readXmlDocument = readXmlDocument(inStream);
 		validateDocument(readXmlDocument);
 		afterValidation(readXmlDocument, mapping);

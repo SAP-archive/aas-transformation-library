@@ -34,12 +34,14 @@ import com.sap.dsc.aas.lib.aml.amlx.AmlxPackagePart;
 import com.sap.dsc.aas.lib.aml.amlx.AmlxPackageReader;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
 import com.sap.dsc.aas.lib.mapping.model.Parameter;
+import com.sap.dsc.aas.lib.placeholder.exceptions.PlaceholderValueMissingException;
 import com.sap.dsc.aas.lib.exceptions.InvalidConfigException;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.Header;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.GenericDocumentTransformer;
+import com.sap.dsc.aas.lib.transform.validation.PlaceholdersCheck;
 import com.sap.dsc.aas.lib.ua.transform.UANodeSetTransformer;
 
 import io.adminshell.aas.v3.dataformat.DeserializationException;
@@ -148,9 +150,12 @@ public class ConsoleApplication {
 			try {
 				placeholderMap = mapper
 						.readValue(commandLine.getOptionValue(OPTION_NAME_PLACEHOLDER_VALUES), Map.class);
+				new PlaceholdersCheck(mapping.getHeader().getParameters(), placeholderMap).execute();
 			} catch (JsonProcessingException e) {
 				LOGGER.error(e.getMessage(), e);
 				LOGGER.error("Failed to read placeholders, continuing with orginial AAS...");
+			} catch (PlaceholderValueMissingException e) {
+				LOGGER.error(e.getMessage(), e);
 			}
 		}
 	}

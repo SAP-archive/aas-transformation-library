@@ -178,6 +178,18 @@ public class ConsoleApplicationTest {
         assertThat(firstProperty.getValue()).isEqualTo(expectedValue);
         assertThat(outputFile.delete()).isTrue();
     }
+    
+    @Test
+    void missingPlaceholders() throws Exception {
+        File genericInputFile = new File(GENERIC_FILE_PATH);
+        String genericInputFileDir = genericInputFile.getAbsolutePath();
+        String expectedValue = "expectedValue";
+        String placeholderMap = "{\"notTheExpectedPlaceholder\":\"" + expectedValue + "\"}";
+
+        ConsoleApplication.main(new String[] {"-c", CONFIG_FILE_PATH, "-xml", genericInputFileDir, "-p", "-P", placeholderMap});
+        
+        assertThat(getPrinted()).contains("No value for placeholder");
+    }
 
     @Test
     void validConfigAndAmlx() throws Exception {
