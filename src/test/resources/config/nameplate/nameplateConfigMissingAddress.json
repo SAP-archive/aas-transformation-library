@@ -51,11 +51,7 @@
         "@foreach": {
           "@xpath": "//caex:Attribute[@Name='CommercialData']/caex:Attribute[@Name='ManufacturerDetails']"
         },
-        "@bind": {
-          "idShort": {
-            "@xpath": "@Name"
-          }
-        },
+        "idShort" : "Nameplate",
         "semanticId": {
           "keys": [
             {
