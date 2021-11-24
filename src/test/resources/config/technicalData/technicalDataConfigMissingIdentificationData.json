@@ -20,7 +20,7 @@
         ]
       },
       "mappingIdGeneration": {
-        "concatenate_and_hash": [
+        "@concatenate_and_hash": [
           {
             "@xpath": "caex:Attribute[@Name='IdentificationData']/caex:Attribute[@Name='Manufacturer']/caex:Value",
             "@const": "DefaultManufacturer"
@@ -34,11 +34,11 @@
     }
   },
   "aasEnvironmentMapping": {
-    "assetAdministrationShells": [
-      {
         "@foreach": {
           "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
         },
+    "assetAdministrationShells": [
+      {
         "identification": {
           "id": "shellId",
           "idType": "Custom"
@@ -54,18 +54,14 @@
               "@xpath": "TYPE"
             }
           },
-          "identification": {
-            "@bind": {
-              "id": {
-                "@def": "assetIdGeneration"
-              }
-            },
-            "idType": "Iri"
-          },
           "globalAssetId": {
             "keys": [
               {
-                "value": "assetInformationGlobalAssetIdReference",
+                "@bind": {
+                   "value": {
+                     "@def": "assetIdGeneration"
+                   }
+                },
                 "idType": "Custom",
                 "type": "Asset"
               }
@@ -128,7 +124,7 @@
                 }
               ]
             },
-            "submodelElements": [
+            "value": [
               {
                 "@foreach": {
                   "@caexAttributeName": "AmbientTemperature"
@@ -147,10 +143,10 @@
                   ]
                 },
                 "@bind": {
-                  "minValue": {
+                  "min": {
                     "@xpath": "caex:Attribute[@Name='TemperatureMin']/caex:Value"
                   },
-                  "maxValue": {
+                  "max": {
                     "@xpath": "caex:Attribute[@Name='TemperatureMax']/caex:Value"
                   }
                 }

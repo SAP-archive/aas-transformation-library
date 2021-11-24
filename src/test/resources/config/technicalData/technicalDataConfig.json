@@ -34,11 +34,11 @@
     }
   },
   "aasEnvironmentMapping": {
-    "assetAdministrationShells": [
-      {
         "@foreach": {
           "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
         },
+    "assetAdministrationShells": [
+      {
         "identification": {
           "id": "shellId",
           "idType": "Custom"
@@ -64,9 +64,6 @@
     ],
     "submodels": [
       {
-        "@foreach": {
-          "@xpath": "."
-        },
         "semanticId": {
           "keys": [
             {

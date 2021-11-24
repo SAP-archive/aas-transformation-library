@@ -83,7 +83,9 @@ public class TechnicalDataSubmodelTransformationTest {
         JsonNode schemaNode = mapper.readTree(Files.newInputStream(Paths.get(JSON_SCHEMA_TECHNICAL_DATA)));
         JsonSchema schema = JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaNode)).getSchema(schemaNode);
         // we need to get the submodel only for the comparison
-        JsonNode jsonNode = mapper.readTree(serializer.write(shellEnv)).get("submodels").get(0);
+        String write = serializer.write(shellEnv);
+        System.out.println(write);
+        JsonNode jsonNode = mapper.readTree(write).get("submodels").get(0);
 
         Set<ValidationMessage> errors = schema.validate(jsonNode);
         if (errors.size() != 0) {
@@ -130,7 +132,6 @@ public class TechnicalDataSubmodelTransformationTest {
      * this test should fail when the config file does not specify a ManufacturerName SubmodelElement
      * that is required by the TechnicalData Schema
      */
-
     @Test
     void failsWhenIndentificationDataSubmodelElementNotPresent() throws IOException, TransformationException, SerializationException {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
