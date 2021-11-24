@@ -5,11 +5,12 @@
  */
 package com.sap.dsc.aas.lib.mapping.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sap.dsc.aas.lib.config.pojo.ConfigPlaceholder;
 import com.sap.dsc.aas.lib.config.pojo.Precondition;
 
 public class Header extends TemplateSupport {
@@ -18,7 +19,7 @@ public class Header extends TemplateSupport {
     private String version;
     private String aasVersion;
     private List<Precondition> preconditions;
-    private List<ConfigPlaceholder> placeholders;
+    private List<Parameter> parameters = new ArrayList<>();
 
     public String getVersion() {
         return version;
@@ -58,11 +59,13 @@ public class Header extends TemplateSupport {
         this.preconditions = preconditions;
     }
 
-    public List<ConfigPlaceholder> getPlaceholders() {
-        return placeholders;
+    public List<Parameter> getParameters() {
+        return parameters;
     }
 
-    public void setPlaceholders(List<ConfigPlaceholder> placeholders) {
-        this.placeholders = placeholders;
+    @JsonProperty("@parameters")
+    void setParameters(Map<String, String> parameterMap) {
+        this.parameters.addAll(
+            parameterMap.entrySet().stream().map(e -> new Parameter(e.getKey(), e.getValue())).collect(Collectors.toList()));
     }
 }

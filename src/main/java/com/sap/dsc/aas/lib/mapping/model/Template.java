@@ -31,6 +31,6 @@ public interface Template {
 
 	Map<String, Expression> getVariables();
 
-	@JsonProperty("@vars")
+	@JsonProperty("@variables")
 	void setVariables(Map<String, Expression> variables);
 }

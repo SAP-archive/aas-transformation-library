@@ -5,11 +5,7 @@
  */
 package com.sap.dsc.aas.lib.mapping.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sap.dsc.aas.lib.config.pojo.ConfigPlaceholder;
-import com.sap.dsc.aas.lib.config.pojo.Precondition;
 
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 

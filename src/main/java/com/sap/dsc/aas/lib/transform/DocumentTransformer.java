@@ -7,11 +7,16 @@ import org.dom4j.Document;
 
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
+import com.sap.dsc.aas.lib.transform.postprocessor.AutoWireSubmodels;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public abstract class DocumentTransformer extends MappingSpecificationDocumentTransformer {
+	{
+		// ensure that references to the subModels are created within each AAS
+		addPostProcessor(new AutoWireSubmodels());
+	}
 
 	/**
 	 * Transforms an XML file to AAS. We expect the XML file to be UTF-8 encoded.

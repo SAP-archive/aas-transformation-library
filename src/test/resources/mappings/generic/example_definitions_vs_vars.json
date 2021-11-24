@@ -9,7 +9,7 @@
 				"@foreach": {
 					"@xpath": "/ns:root/ns:a"
 				},
-				"@vars": {
+				"@variables": {
 					"localnamebyvar": {
 						"@xpath": "local-name()"
 					}

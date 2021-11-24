@@ -25,6 +25,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.util.JsonParserDelegate;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -77,10 +80,32 @@ public class MappingSpecificationParser {
     }
 
     public MappingSpecification loadMappingSpecification(String filePath) throws IOException {
-        // the following may be used to apply ModelTypeProcessor before parsing the JSON document
-        // String data = Files.readString(Paths.get(filePath));
-        // return mapper.treeToValue(ModelTypeProcessor.preprocess(data), ConfigAmlToAas.class);
-        return mapper.readValue(new File(filePath), MappingSpecification.class);
+        JsonParser parser = mapper.getFactory().createParser(new File(filePath));
+        JsonParserDelegate wrapper = new JsonParserDelegate(parser) {
+            boolean skipObject = false;
+
+            @Override
+            public JsonToken nextToken() throws IOException {
+                if (skipObject) {
+                    skipObject = false;
+                    // skip the current object in case of { "modelType: { "name" : "TheType" } }
+                    while (super.nextToken() != JsonToken.END_OBJECT) {
+                        super.nextToken();
+                    }
+                }
+                // handle case { "modelType: { "name" : "TheType" } }
+                if (super.currentToken() == JsonToken.FIELD_NAME && "modelType".equals(getText())) {
+                    JsonToken modelTypeValue = super.nextToken();
+                    if (modelTypeValue == JsonToken.START_OBJECT) {
+                        modelTypeValue = super.nextValue();
+                        skipObject = true;
+                    }
+                    return modelTypeValue;
+                }
+                return super.nextToken();
+            }
+        };
+        return mapper.readValue(wrapper, MappingSpecification.class);
     }
 
     protected void buildMapper() {
@@ -223,15 +248,6 @@ public class MappingSpecificationParser {
             }
         });
         module.setDeserializerModifier(new BeanDeserializerModifier() {
-            @Override
-            public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config, BeanDescription beanDescription,
-                JsonDeserializer<?> deserializer) {
-                // if (Submodel.class.isAssignableFrom(beanDescription.getBeanClass())) {
-                //    return new SubmodelDeserializer(deserializer);
-                //}
-                return deserializer;
-            }
-
             @Override
             public List<BeanPropertyDefinition> updateProperties(DeserializationConfig config, BeanDescription beanDesc,
                 List<BeanPropertyDefinition> propDefs) {
