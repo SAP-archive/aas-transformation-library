@@ -8,6 +8,7 @@ package com.sap.dsc.aas.lib.aml.transform;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
+import java.util.Map;
 
 import javax.xml.XMLConstants;
 
@@ -88,10 +89,10 @@ public class AmlTransformer extends DocumentTransformer {
 
 	@Override
 	public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
-			MappingSpecification mapping) throws TransformationException {
+			MappingSpecification mapping, Map<String, String> initialVars) throws TransformationException {
 		setNamespaces(mapping.getHeader().getNamespaces());
         preconditionValidator.setPreconditions(mapping.getHeader().getPreconditions());
         // idGenerator.prepareGraph(validXmlDocument, mapping.getConfigMappings());
-        return super.createShellEnv(validXmlDocument, mapping);
+        return super.createShellEnv(validXmlDocument, mapping, initialVars);
 	}
 }

@@ -59,8 +59,8 @@ public class AASMappingTransformer {
 	 * @return AssetAdministrationShellEnvironment which is the transformation
 	 *         result of the Template based attributes
 	 */
-	public AssetAdministrationShellEnvironment transform(MappingSpecification mappingSpec, Object initialContextItem) {
-		TransformationContext initialCtx = createInitialContext(initialContextItem, mappingSpec.getHeader());
+	public AssetAdministrationShellEnvironment transform(MappingSpecification mappingSpec, Object initialContextItem, Map<String, String> initialVars) {
+		TransformationContext initialCtx = createInitialContext(initialContextItem, mappingSpec.getHeader(), initialVars);
 		AssetAdministrationShellEnvironment aasEnvTemplate = mappingSpec.getAasEnvironmentMapping();
 		if (mappingSpec.getAasEnvironmentMapping() instanceof Template
 				&& ((Template) mappingSpec.getAasEnvironmentMapping()).getForeachExpression() != null) {
@@ -70,8 +70,8 @@ public class AASMappingTransformer {
 		return (AssetAdministrationShellEnvironment) asList(transformAny(aasEnvTemplate, initialCtx)).get(0);
 	}
 
-	private TransformationContext createInitialContext(Object initialContextItem, Header header) {
-		return TransformationContext.buildContext(null, initialContextItem, header);
+	private TransformationContext createInitialContext(Object initialContextItem, Header header, Map<String, String> initialVars) {
+		return TransformationContext.buildContext(null, initialContextItem, header, initialVars);
 	}
 
 	private List<? extends Object> inflateTemplate(Template template, TransformationContext parentCtx) {

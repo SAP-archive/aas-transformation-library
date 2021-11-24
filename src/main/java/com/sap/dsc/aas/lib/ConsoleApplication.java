@@ -38,7 +38,6 @@ import com.sap.dsc.aas.lib.exceptions.InvalidConfigException;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
-import com.sap.dsc.aas.lib.placeholder.PlaceholderHandling;
 import com.sap.dsc.aas.lib.transform.GenericDocumentTransformer;
 import com.sap.dsc.aas.lib.ua.transform.UANodeSetTransformer;
 
@@ -65,6 +64,7 @@ public class ConsoleApplication {
 
 	protected CommandLine commandLine;
 	protected MappingSpecification mapping;
+	private Map<String, String> placeholderMap;
 
 	public ConsoleApplication(CommandLine commandLine) {
 		this.commandLine = commandLine;
@@ -83,14 +83,14 @@ public class ConsoleApplication {
 			throws IOException, TransformationException {
 		try (InputStream amlStream = Files.newInputStream(Paths.get(amlFilePath))) {
 			LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
-			return new AmlTransformer().transform(amlStream, mapping);
+			return new AmlTransformer().transform(amlStream, mapping, placeholderMap);
 		}
 	}
 
 	protected AssetAdministrationShellEnvironment transformAml(InputStream amlStream)
 			throws IOException, TransformationException {
 		LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
-		return new AmlTransformer().transform(amlStream, mapping);
+		return new AmlTransformer().transform(amlStream, mapping, placeholderMap);
 	}
 
 	private AssetAdministrationShellEnvironment transformAmlx(String amlxInputFileName)
@@ -105,14 +105,14 @@ public class ConsoleApplication {
 	private AssetAdministrationShellEnvironment transformNodeSet(String nodesetInputFileName) throws IOException, TransformationException {
 		try (InputStream nodesetStream = Files.newInputStream(Paths.get(nodesetInputFileName))) {
 			LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
-			return new UANodeSetTransformer().transform(nodesetStream, mapping);
+			return new UANodeSetTransformer().transform(nodesetStream, mapping, placeholderMap);
 		}
 	}
 
     private AssetAdministrationShellEnvironment transformGeneric(String genericInputFileName) throws IOException, TransformationException {
         try (InputStream genericStream = Files.newInputStream(Paths.get(genericInputFileName))) {
             LOGGER.info("Loaded config version {}, aas version {}", mapping.getHeader().getVersion(), mapping.getHeader().getAasVersion());
-            return new GenericDocumentTransformer().transform(genericStream, mapping);
+            return new GenericDocumentTransformer().transform(genericStream, mapping, placeholderMap);
         }
     }
 
@@ -132,20 +132,18 @@ public class ConsoleApplication {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected AssetAdministrationShellEnvironment replacePlaceholders(AssetAdministrationShellEnvironment aasEnv) {
+	protected void readPlaceholders() {
 		if (commandLine.hasOption(OPTION_NAME_PLACEHOLDER_VALUES)) {
 			LOGGER.info("Replacing placeholders in AAS env");
 			ObjectMapper mapper = new ObjectMapper();
 			try {
-				Map<String, String> placeholderMap = mapper
+				placeholderMap = mapper
 						.readValue(commandLine.getOptionValue(OPTION_NAME_PLACEHOLDER_VALUES), Map.class);
-				return new PlaceholderHandling().replaceAllPlaceholders(aasEnv, placeholderMap);
-			} catch (SerializationException | DeserializationException | JsonProcessingException e) {
+			} catch (JsonProcessingException e) {
 				LOGGER.error(e.getMessage(), e);
-				LOGGER.error("Failed to replace all placeholders, continuing with orginial AAS...");
+				LOGGER.error("Failed to read placeholders, continuing with orginial AAS...");
 			}
 		}
-		return aasEnv;
 	}
 
 	public static void main(String[] args) {
@@ -193,9 +191,10 @@ public class ConsoleApplication {
 		}
 		
 		application.printPlaceholders();
+		application.readPlaceholders();
+		
 		AssetAdministrationShellEnvironment intermediateAAS = application.transform();
-		AssetAdministrationShellEnvironment finalAAS = application.replacePlaceholders(intermediateAAS);
-		application.writeAasToFile(finalAAS);
+		application.writeAasToFile(intermediateAAS);
 
 	}
 

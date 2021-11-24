@@ -67,7 +67,7 @@ public class BrowsepathXPathBuilderTest {
         BrowsepathXPathBuilder.updateInstance(xmlDoc);
         MappingSpecification spec = parser
                 .loadMappingSpecification(browsePathConfigTest);
-        AssetAdministrationShellEnvironment aas = transformer.createShellEnv(xmlDoc, spec);
+        AssetAdministrationShellEnvironment aas = transformer.createShellEnv(xmlDoc, spec, null);
         assertNotNull(aas);
         assertEquals(1, aas.getSubmodels().size());
         assertEquals(aas.getSubmodels().get(0).getIdShort(), "ns=1;i=1010");
@@ -78,7 +78,7 @@ public class BrowsepathXPathBuilderTest {
         BrowsepathXPathBuilder.updateInstance(xmlDoc);
         MappingSpecification spec = parser
                 .loadMappingSpecification(invalidBrowsePathConfigTest);
-        RuntimeException e = assertThrows( RuntimeException.class, () -> transformer.createShellEnv(xmlDoc, spec));
+        RuntimeException e = assertThrows( RuntimeException.class, () -> transformer.createShellEnv(xmlDoc, spec, null));
         Throwable cause = e.getCause();
         assertThat(cause instanceof IllegalArgumentException);
     }
@@ -97,7 +97,7 @@ public class BrowsepathXPathBuilderTest {
             BrowsepathXPathBuilder pathBuilder = BrowsepathXPathBuilder.getInstance();
             MappingSpecification spec = new MappingSpecificationParser()
                     .loadMappingSpecification(browsePathChildrenConfigTest);
-            AssetAdministrationShellEnvironment aas = new MappingSpecificationDocumentTransformer().createShellEnv(uaDoc, spec);
+            AssetAdministrationShellEnvironment aas = new MappingSpecificationDocumentTransformer().createShellEnv(uaDoc, spec, null);
             assertNotNull(aas);
             assertEquals(aas.getSubmodels().size(), 11);
             String[] browsePath = {"3:Machines","4:KR16-2-MotionSystem", "2:Controllers", "2:0", "2:CurrentUser", "2:Level"};

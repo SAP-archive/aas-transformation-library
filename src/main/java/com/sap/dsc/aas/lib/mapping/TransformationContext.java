@@ -64,6 +64,29 @@ public class TransformationContext {
 		}
 		return build;
 	}
+	
+	/**
+	 * creates a new TransformationContext, inherits from an already existing
+	 * parentCtx and add Template specific definitions
+	 * 
+	 * @param parentCtx       TransformationContext to inherit Variables and
+	 *                        Definitions from, might be null if nothing is to
+	 *                        inherit from
+	 * @param ctxItem         usually the current scope (e.g. result of @foreach) in
+	 *                        which Expressions will be executed
+	 * @param template        Template which might contain new Variables and
+	 *                        Definitions, might be null
+	 * @param placeholderVars additional or initial vars
+	 * @return the newly created TransformationContext
+	 */
+	public static TransformationContext buildContext(TransformationContext parentCtx, Object ctxItem, Template template,
+			Map<String, String> placeholderVars) {
+		TransformationContext buildContext = buildContext(parentCtx, ctxItem, template);
+		if (placeholderVars != null) {
+			buildContext.variables.putAll(placeholderVars);
+		}
+		return buildContext;
+	}
 
 	/**
 	 * @return usually the current scope (e.g. result of @foreach) in which Expressions will be executed

@@ -50,7 +50,7 @@ class MappingSpecificationDocumentTransformerTest {
 		XPathHelper.getInstance().setNamespaceBinding("ua", "http://opcfoundation.org/UA/2011/03/UANodeSet.xsd");
 		XPathHelper.getInstance().setNamespaceBinding("uax", "http://opcfoundation.org/UA/2008/02/Types.xsd");
 
-		AssetAdministrationShellEnvironment createShellEnv = transformer.createShellEnv(testDoc, mapSpec);
+		AssetAdministrationShellEnvironment createShellEnv = transformer.createShellEnv(testDoc, mapSpec, null);
 	}
 
 }

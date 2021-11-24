@@ -26,7 +26,7 @@ public abstract class DocumentTransformer extends MappingSpecificationDocumentTr
 	 * @return
 	 * @throws TransformationException
 	 */
-	public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping)
+	public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping, Map<String, String> initialVars)
 			throws TransformationException {
 		if (mapping.getHeader() != null) {
 			setNamespaces(mapping.getHeader().getNamespaces());
@@ -34,9 +34,23 @@ public abstract class DocumentTransformer extends MappingSpecificationDocumentTr
 		Document readXmlDocument = readXmlDocument(inStream);
 		validateDocument(readXmlDocument);
 		afterValidation(readXmlDocument, mapping);
-		return createShellEnv(readXmlDocument, mapping);
+		return createShellEnv(readXmlDocument, mapping, initialVars);
 	}
 
+
+	/**
+	 * Transforms an XML file to AAS. We expect the XML file to be UTF-8 encoded.
+	 *
+	 * @param inStream
+	 * @param mapping
+	 * @return
+	 * @throws TransformationException
+	 */
+	public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping)
+			throws TransformationException {
+		return transform(inStream, mapping);
+	}
+	
 	/**
 	 * Function called after document is validated and before shell environment gets created.
 	 * 

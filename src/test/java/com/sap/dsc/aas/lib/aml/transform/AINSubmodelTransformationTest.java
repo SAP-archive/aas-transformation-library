@@ -31,8 +31,6 @@ import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
-import com.sap.dsc.aas.lib.placeholder.PlaceholderHandling;
-import com.sap.dsc.aas.lib.placeholder.exceptions.PlaceholderValueMissingException;
 
 public class AINSubmodelTransformationTest {
 
@@ -45,7 +43,6 @@ public class AINSubmodelTransformationTest {
     private AmlTransformer amlTransformer;
     private MappingSpecificationParser mappingParser;
     private InputStream amlInputStream;
-    private PlaceholderHandling placeholderHandling;
     private String SAMPLE_MANUFACTURER_ID = "sampleReplacedManufacturerId";
 
     @BeforeEach
@@ -57,7 +54,6 @@ public class AINSubmodelTransformationTest {
         mappingParser = new MappingSpecificationParser();
         validator = new JsonSchemaValidator();
         serializer = new JsonSerializer();
-        placeholderHandling = new PlaceholderHandling();
     }
 
     @Test
@@ -66,21 +62,19 @@ public class AINSubmodelTransformationTest {
         throws IOException, TransformationException, SerializationException, DeserializationException {
 
         MappingSpecification mapping = mappingParser.loadMappingSpecification(AIN_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
         // replace the placeholder assigning a sample value
         Map<String, String> placeholderValues = new HashMap<>();
         placeholderValues.put("manufacturerId", SAMPLE_MANUFACTURER_ID);
 
-        AssetAdministrationShellEnvironment aasEnvReplacedPlaceholders =
-            placeholderHandling.replaceAllPlaceholders(shellEnv, placeholderValues);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping, placeholderValues);
 
-        String serializedShellEnv = serializer.write(aasEnvReplacedPlaceholders);
+        String serializedShellEnv = serializer.write(shellEnv);
 
         Set<String> errors = validator.validateSchema(serializedShellEnv);
         errors.stream().forEach(System.out::print);
         assertThat(errors.size()).isEqualTo(0);
 
-        Property submodelElement = (Property) aasEnvReplacedPlaceholders.getSubmodels().stream()
+        Property submodelElement = (Property) shellEnv.getSubmodels().stream()
             .filter(submodel -> submodel.getIdShort().equals("AIN_MEI_Tranformation_Submodel")).findFirst().get().getSubmodelElements()
             .get(0);
 
@@ -89,18 +83,5 @@ public class AINSubmodelTransformationTest {
 
     }
 
-    @Test
-    @DisplayName("Missing ManufacturerId placeholder when transforming Custom AIN Submodel")
-    void missingManufacturerIdPlaceholder() throws IOException, TransformationException {
-
-        MappingSpecification mapping = mappingParser.loadMappingSpecification(AIN_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
-        // replace the placeholder assigning a sample value
-        Map<String, String> placeholderValues = new HashMap<>();
-        placeholderValues.put("nan", SAMPLE_MANUFACTURER_ID);
-
-        assertThrows(PlaceholderValueMissingException.class, () -> placeholderHandling.replaceAllPlaceholders(shellEnv, placeholderValues));
-
-    }
 
 }

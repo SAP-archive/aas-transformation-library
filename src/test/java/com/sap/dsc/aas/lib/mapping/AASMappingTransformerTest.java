@@ -44,7 +44,7 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/foreachTest.json");
 
 		// ACT
-		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null, null);
 
 		// ASSERT
 		List<Submodel> transformedSubmodels = transform.getSubmodels();
@@ -70,7 +70,7 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/foreachTest2.json");
 
 		// ACT
-		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null, null);
 
 		// ASSERT
 		Submodel submodel = transform.getSubmodels().get(0);
@@ -85,7 +85,7 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/bindingsTest.json");
 
 		// ACT
-		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null, null);
 
 		// ASSERT
 		Submodel submodel = transform.getSubmodels().get(0);
@@ -107,7 +107,7 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/bindingsTest_w_errors.json");
 
 		// ACT
-		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null, null);
 
 		// ASSERT
 		Submodel submodel = transform.getSubmodels().get(0);
@@ -142,7 +142,7 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/variablesTest.json");
 
 		// ACT
-		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null, null);
 
 		// ASSERT
 		Submodel submodel = transform.getSubmodels().get(0);
@@ -179,7 +179,7 @@ public class AASMappingTransformerTest {
 
 		XPathHelper.getInstance().setNamespaceBinding("ns", "http://ns.org/");
 		// ACT
-		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, testDoc);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, testDoc, null);
 
 		// ASSERT
 		Submodel submodel = transform.getSubmodels().get(0);
@@ -203,7 +203,7 @@ public class AASMappingTransformerTest {
 				.loadMappingSpecification("src/test/resources/mappings/generic/bindingsTest_nonStrings.json");
 
 		// ACT
-		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null);
+		AssetAdministrationShellEnvironment transform = aasMappingTransformer.transform(mapSpec, null, null);
 
 		// ASSERT
 		Submodel submodel = transform.getSubmodels().get(0);

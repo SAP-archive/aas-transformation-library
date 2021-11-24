@@ -8,6 +8,7 @@ package com.sap.dsc.aas.lib.ua.transform;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
+import java.util.Map;
 
 import javax.xml.XMLConstants;
 
@@ -77,9 +78,9 @@ public class UANodeSetTransformer extends DocumentTransformer {
 
 	@Override
 	public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
-        MappingSpecification mapping) throws TransformationException {
+        MappingSpecification mapping, Map<String, String> initialVars) throws TransformationException {
 		setNamespaces(mapping.getHeader().getNamespaces());
         preconditionValidator.setPreconditions(mapping.getHeader().getPreconditions());
-		return super.createShellEnv(validXmlDocument, mapping);
+		return super.createShellEnv(validXmlDocument, mapping, initialVars);
 	}
 }
