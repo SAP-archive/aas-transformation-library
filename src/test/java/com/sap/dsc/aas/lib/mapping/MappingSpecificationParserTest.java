@@ -96,6 +96,13 @@ public class MappingSpecificationParserTest {
         MappingSpecification result = parser
             .loadMappingSpecification("src/test/resources/mappings/simpleMapping_w_expressions.json");
 
+		AssetAdministrationShellEnvironment mapping = result.getAasEnvironmentMapping();
+
+        SubmodelElement submodelElement = mapping.getSubmodels().get(0).getSubmodelElements().get(0);
+        Template temp = (Template) submodelElement;
+        assertThat(temp.getBindSpecification().getBindings().keySet()).containsAtLeastElementsIn(new String[] {"idShort", "value", "mimeType"});
+    }
+
 	@Test
 	void defaultExpressions() throws IOException {
 		MappingSpecification result = parser
