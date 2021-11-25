@@ -2,8 +2,7 @@
   "@header": {
     "aasVersion": "3.0RC01",
     "@namespaces": {
-      "ua": "http://opcfoundation.org/UA/2011/03/UANodeSet.xsd",
-      "di": "http://opcfoundation.org/UA/DI"
+      "ua": "http://opcfoundation.org/UA/2011/03/UANodeSet.xsd"
     },
     "@definitions": {},
     "@variables": {}
@@ -56,7 +55,7 @@
                 },
                 "/",
                 {
-                  "@xpath": "@ua:NodeId[text()]"
+                  "@xpath": "@NodeId"
                 }
               ]
             }
