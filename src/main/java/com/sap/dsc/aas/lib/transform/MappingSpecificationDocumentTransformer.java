@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
-import com.sap.dsc.aas.lib.mapping.AASMappingTransformer;
+import com.sap.dsc.aas.lib.mapping.TemplateTransformer;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 public class MappingSpecificationDocumentTransformer {
@@ -43,7 +43,7 @@ public class MappingSpecificationDocumentTransformer {
 
 			LOGGER.info("Transforming AAS Environment...");
 
-			AssetAdministrationShellEnvironment transformedEnvironment = new AASMappingTransformer().transform(mappings,
+			AssetAdministrationShellEnvironment transformedEnvironment = new TemplateTransformer().transform(mappings,
 					document, initialVars);
 			executePostProcessors(transformedEnvironment);
 

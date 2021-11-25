@@ -13,6 +13,9 @@ import org.dom4j.io.SAXReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.impl.SimpleLogger;
+import org.slf4j.impl.SimpleLoggerConfiguration;
+
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.GenericDocumentTransformer;
 import com.sap.dsc.aas.lib.transform.XPathHelper;
@@ -26,15 +29,19 @@ import io.adminshell.aas.v3.model.Submodel;
 import io.adminshell.aas.v3.model.SubmodelElement;
 import io.adminshell.aas.v3.model.SubmodelElementCollection;
 
-public class AASMappingTransformerTest {
+public class TemplateTransformerTest {
 
 	private MappingSpecificationParser parser;
-	private AASMappingTransformer aasMappingTransformer;
+	private TemplateTransformer aasMappingTransformer;
+
+//	static {
+//		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
+//	}
 
 	@BeforeEach
 	void setup() {
 		parser = new MappingSpecificationParser();
-		aasMappingTransformer = new AASMappingTransformer();
+		aasMappingTransformer = new TemplateTransformer();
 	}
 
 	@Test
@@ -127,11 +134,11 @@ public class AASMappingTransformerTest {
 				.newInputStream(Paths.get("src/test/resources/mappings/generic/generic.xml"))) {
 
 			// ACT
-			AssetAdministrationShellEnvironment transform = new GenericDocumentTransformer().transform(testResource, mapSpec);
+			AssetAdministrationShellEnvironment transform = new GenericDocumentTransformer().transform(testResource,
+					mapSpec);
 			// ASSERT
 			Assertions.assertEquals(2, transform.getSubmodels().size());
 		}
-		
 
 	}
 

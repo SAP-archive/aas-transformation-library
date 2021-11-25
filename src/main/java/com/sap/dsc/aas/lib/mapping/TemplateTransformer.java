@@ -36,7 +36,7 @@ import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import io.adminshell.aas.v3.model.LangString;
 
-public class AASMappingTransformer {
+public class TemplateTransformer {
 
 	private static class InstanceByBindings {
 		Object instance;
@@ -44,6 +44,7 @@ public class AASMappingTransformer {
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	private JsonMapper jsonMapper;
 
 	/**
 	 * Transforms a Template based AssetAdministrationShellEnvironment to a pure
@@ -59,19 +60,36 @@ public class AASMappingTransformer {
 	 * @return AssetAdministrationShellEnvironment which is the transformation
 	 *         result of the Template based attributes
 	 */
-	public AssetAdministrationShellEnvironment transform(MappingSpecification mappingSpec, Object initialContextItem, Map<String, String> initialVars) {
-		TransformationContext initialCtx = createInitialContext(initialContextItem, mappingSpec.getHeader(), initialVars);
+	public AssetAdministrationShellEnvironment transform(MappingSpecification mappingSpec, Object initialContextItem,
+			Map<String, String> initialVars) {
+		loadJSONMapper();
+		TransformationContext initialCtx = createInitialContext(initialContextItem, mappingSpec.getHeader(),
+				initialVars);
 		AssetAdministrationShellEnvironment aasEnvTemplate = mappingSpec.getAasEnvironmentMapping();
 		List<Object> envList = asList(transformAny(aasEnvTemplate, initialCtx));
 		if (envList.size() > 1) {
 			LOGGER.warn(
 					"@forEach expression on top level AAS Environment resulted to multiple AAS transformations, but only the first AAS Environments will be returned!");
-			
+
 		}
 		return (AssetAdministrationShellEnvironment) envList.get(0);
 	}
 
-	private TransformationContext createInitialContext(Object initialContextItem, Header header, Map<String, String> initialVars) {
+	private void loadJSONMapper() {
+		JsonDeserializer jsonDeserializer = new JsonDeserializer();
+		Field mapperField;
+		try {
+			mapperField = JsonDeserializer.class.getDeclaredField("mapper");
+			mapperField.setAccessible(true);
+			jsonMapper = (JsonMapper) mapperField.get(jsonDeserializer);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException("Unable to load JSON Mapper. Transformation can not be executed.", e);
+		}
+
+	}
+
+	private TransformationContext createInitialContext(Object initialContextItem, Header header,
+			Map<String, String> initialVars) {
 		return TransformationContext.buildContext(null, initialContextItem, header, initialVars);
 	}
 
@@ -81,7 +99,14 @@ public class AASMappingTransformer {
 		if (foreachExpression != null) {
 			Object evaluate = template.getForeachExpression().evaluate(parentCtx);
 			List<Object> forItems = asList(evaluate);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Foreach Expression {} returned {} new context items.", foreachExpression,
+						forItems.size());
+			}
 			for (Object forItem : forItems) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Transform with {} context items.", forItem);
+				}
 				TransformationContext childCtx = TransformationContext.buildContext(parentCtx, forItem, template);
 				inflated.add(transformWithBindings(template, childCtx));
 			}
@@ -120,19 +145,16 @@ public class AASMappingTransformer {
 			String evaluate = binding.getValue().evaluateAsString(ctx);
 			evaluatedBindings.put(binding.getKey(), evaluate);
 		}
-		JsonDeserializer jsonDeserializer = new JsonDeserializer();
-		Field mapperField;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Bindings for {} executed as {}.", aasInterface.getName(), evaluatedBindings);
+		}
 		try {
-			// to discuss: get the mapper as property
-			mapperField = JsonDeserializer.class.getDeclaredField("mapper");
-			mapperField.setAccessible(true);
-			JsonMapper jsonMapper = (JsonMapper) mapperField.get(jsonDeserializer);
 			transformedEntity = jsonMapper.convertValue(evaluatedBindings, aasInterface);
 			InstanceByBindings instanceByBindings = new InstanceByBindings();
 			instanceByBindings.instance = transformedEntity;
 			setPropertiesByBindings(aasInterface, instanceByBindings, evaluatedBindings, jsonMapper);
 			return instanceByBindings;
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+		} catch (SecurityException | IllegalArgumentException e) {
 			LOGGER.error("Failed to read binding specification, evaluated as '{}' for model '{}'. Error: '{}'",
 					evaluatedBindings, aasInterface.getName(), e.getMessage());
 			InstanceByBindings instanceByBindings = new InstanceByBindings();
