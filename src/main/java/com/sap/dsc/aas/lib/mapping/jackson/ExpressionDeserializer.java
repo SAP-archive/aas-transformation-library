@@ -41,8 +41,18 @@ public class ExpressionDeserializer extends JsonDeserializer<Expression> {
 
                 // move to the corresponding value
                 jp.nextToken();
+                
+                if (property.equals("default")) {
+                	if (result == null) {
+						throw new InvalidFormatException(jp, "Default is used for no Expression",
+								jp.getValueAsString(), Expression.class);
+                	}
+                	Expression toWrap = result;
+                    Expression defaultExpr = jp.getCodec().readValue(jp, Expression.class);
+                    result = new ExpressionWithDefault(toWrap, defaultExpr);
+                }
 
-                if (property.startsWith("@")) {
+                else if (property.startsWith("@")) {
                     String symbol = property.substring(1);
 
                     // deserialize value as expression
