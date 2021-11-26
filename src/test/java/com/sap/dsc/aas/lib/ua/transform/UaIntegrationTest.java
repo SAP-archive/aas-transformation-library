@@ -49,10 +49,13 @@ public class UaIntegrationTest {
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(NAMEPLATE_CONFIG);
         shellEnv = uaTransformer.transform(uaInputStream, mapping);
         Submodel np = getSubmodel("Nameplate");
-        assertEquals(5,np.getSubmodelElements().size());
-        SubmodelElementCollection address = (SubmodelElementCollection) getElement("Address",np);
+        assertEquals(5, np.getSubmodelElements().size());
+        SubmodelElementCollection address = (SubmodelElementCollection) getElement("Address", np);
         address.getValues().stream().map(Referable::getIdShort)
                 .collect(Collectors.toList()).forEach(Assertions::assertNotNull);
+        assertTrue(shellEnv.getAssetAdministrationShells().size() > 0);
+        shellEnv.getAssetAdministrationShells().get(0).getSubmodels().forEach(sm ->
+                assertTrue(sm.getKeys().size() > 0));
     }
 
 
