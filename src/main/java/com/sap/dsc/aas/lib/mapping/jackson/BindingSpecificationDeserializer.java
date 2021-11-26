@@ -1,3 +1,8 @@
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
+
+  SPDX-License-Identifier: Apache-2.0 
+ */
 package com.sap.dsc.aas.lib.mapping.jackson;
 
 import java.io.IOException;
@@ -12,8 +17,7 @@ import com.sap.dsc.aas.lib.mapping.model.BindSpecification;
 
 public class BindingSpecificationDeserializer extends JsonDeserializer<BindSpecification> {
 
-    public BindingSpecificationDeserializer() {
-    }
+    public BindingSpecificationDeserializer() {}
 
     @Override
     public BindSpecification deserialize(JsonParser jp, DeserializationContext dc)

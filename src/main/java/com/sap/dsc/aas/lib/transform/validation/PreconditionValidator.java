@@ -13,19 +13,19 @@ import java.util.stream.Collectors;
 
 import org.dom4j.Node;
 
-import com.sap.dsc.aas.lib.mapping.model.Template;
-import com.sap.dsc.aas.lib.transform.XPathHelper;
 import com.sap.dsc.aas.lib.config.pojo.Precondition;
 import com.sap.dsc.aas.lib.config.pojo.preconditions.AbstractPreconditionTypeForEach;
 import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeMatch;
 import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeRange;
 import com.sap.dsc.aas.lib.exceptions.PreconditionValidationException;
+import com.sap.dsc.aas.lib.mapping.model.Template;
+import com.sap.dsc.aas.lib.transform.XPathHelper;
 
 public class PreconditionValidator {
 
     public static final String BUT_WAS = " but was ";
     private List<Precondition> preconditions;
-    
+
     private XPathHelper xPathHelper = XPathHelper.getInstance();
 
     public List<Precondition> getPreconditions() {
@@ -44,7 +44,7 @@ public class PreconditionValidator {
      * @throws PreconditionValidationException If something goes wrong
      */
     public void validate(Template template, List<Node> matchingNodes) throws PreconditionValidationException {
-        List<Precondition> matchingPreconditions = this.getPreconditions(/*template.getConfigElementId()*/null);
+        List<Precondition> matchingPreconditions = this.getPreconditions(/* template.getConfigElementId() */null);
         for (Precondition precondition : matchingPreconditions) {
             this.validatePrecondition(precondition, matchingNodes);
         }

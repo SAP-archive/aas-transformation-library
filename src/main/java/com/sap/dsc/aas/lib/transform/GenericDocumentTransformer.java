@@ -21,52 +21,52 @@ import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 
 /**
- * Can transform any XML Document. Does not contain any validation despite
- * parsing the generic XML structure into a Document Object.
+ * Can transform any XML Document. Does not contain any validation despite parsing the generic XML
+ * structure into a Document Object.
  *
  */
 public class GenericDocumentTransformer extends DocumentTransformer {
 
-	private PreconditionValidator preconditionValidator;
+    private PreconditionValidator preconditionValidator;
 
-	public GenericDocumentTransformer() {
-		this(new PreconditionValidator());
-	}
+    public GenericDocumentTransformer() {
+        this(new PreconditionValidator());
+    }
 
-	public GenericDocumentTransformer(PreconditionValidator validator) { // tests
-		this.preconditionValidator = validator;
-	}
+    public GenericDocumentTransformer(PreconditionValidator validator) { // tests
+        this.preconditionValidator = validator;
+    }
 
-	@Override
-	public void validateDocument(Document document) throws TransformationException {
-		return;
-	}
+    @Override
+    public void validateDocument(Document document) throws TransformationException {
+        return;
+    }
 
-	@Override
-	public Document readXmlDocument(InputStream inStream) throws TransformationException {
-		try {
-			SAXReader reader = new SAXReader();
-			reader.setEncoding("UTF-8");
-			reader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-			reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-			return reader.read(inStream);
-		} catch (DocumentException | SAXException e) {
-			throw new UnableToReadXmlException("Unable to Document.", e);
-		}
-	}
+    @Override
+    public Document readXmlDocument(InputStream inStream) throws TransformationException {
+        try {
+            SAXReader reader = new SAXReader();
+            reader.setEncoding("UTF-8");
+            reader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            return reader.read(inStream);
+        } catch (DocumentException | SAXException e) {
+            throw new UnableToReadXmlException("Unable to Document.", e);
+        }
+    }
 
-	@Override
-	public SchemaValidator getSchemaValidator() {
-		return new SchemaValidator(null) {
-			@Override
-			public void validate(Document document) throws TransformationException {
-				return;
-			}
-		};
-	}
+    @Override
+    public SchemaValidator getSchemaValidator() {
+        return new SchemaValidator(null) {
+            @Override
+            public void validate(Document document) throws TransformationException {
+                return;
+            }
+        };
+    }
 
-	@Override
-	protected void afterValidation(Document readXmlDocument, MappingSpecification mapping) {
-		return;
-	}
+    @Override
+    protected void afterValidation(Document readXmlDocument, MappingSpecification mapping) {
+        return;
+    }
 }

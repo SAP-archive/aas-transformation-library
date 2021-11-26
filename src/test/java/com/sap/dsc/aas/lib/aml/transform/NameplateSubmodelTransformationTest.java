@@ -8,11 +8,6 @@ package com.sap.dsc.aas.lib.aml.transform;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import io.adminshell.aas.v3.dataformat.SerializationException;
-import io.adminshell.aas.v3.dataformat.Serializer;
-import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -34,6 +29,12 @@ import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
+
+import io.adminshell.aas.v3.dataformat.SerializationException;
+import io.adminshell.aas.v3.dataformat.Serializer;
+import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
+import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public class NameplateSubmodelTransformationTest {
 
@@ -57,7 +58,7 @@ public class NameplateSubmodelTransformationTest {
 
     @BeforeEach
     protected void setUp() throws Exception {
-    	TestUtils.resetBindings();
+        TestUtils.resetBindings();
         amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
         mapper = new ObjectMapper();
 

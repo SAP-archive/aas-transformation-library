@@ -37,7 +37,7 @@ class AmlxValidatorTest {
 
     @BeforeEach
     void setup() throws Exception {
-    	TestUtils.resetBindings();
+        TestUtils.resetBindings();
         this.classUnderTest = new AmlxValidator();
     }
 

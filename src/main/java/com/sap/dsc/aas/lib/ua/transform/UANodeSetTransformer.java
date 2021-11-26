@@ -5,7 +5,6 @@
  */
 package com.sap.dsc.aas.lib.ua.transform;
 
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.Map;
@@ -23,37 +22,37 @@ import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.DocumentTransformer;
-import com.sap.dsc.aas.lib.transform.XPathHelper;
 import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 import com.sap.dsc.aas.lib.ua.transform.validation.UANodeSetSchemaValidator;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
-//TODO write tests
+// TODO write tests
 public class UANodeSetTransformer extends DocumentTransformer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    
+
     private SchemaValidator nodesetValidator;
-    
-	private PreconditionValidator preconditionValidator;
+
+    private PreconditionValidator preconditionValidator;
 
     public UANodeSetTransformer() {
-    	this(new PreconditionValidator());
-    	//FIXME check for needed namespace bindings
-    	//XPathHelper.getInstance().setNamespaceBinding(null, null);
+        this(new PreconditionValidator());
+        // FIXME check for needed namespace bindings
+        // XPathHelper.getInstance().setNamespaceBinding(null, null);
     }
 
-    public UANodeSetTransformer(PreconditionValidator validator) {//FIXME only used by tests
-    	this.preconditionValidator = validator;
+    public UANodeSetTransformer(PreconditionValidator validator) {// FIXME only used by tests
+        this.preconditionValidator = validator;
         this.nodesetValidator = new UANodeSetSchemaValidator();
     }
 
-	@Override
+    @Override
     public void validateDocument(Document document) throws TransformationException {
         this.nodesetValidator.validate(document);
     }
 
-	@Override
+    @Override
     public Document readXmlDocument(InputStream amlStream) throws TransformationException {
         try {
             SAXReader reader = new SAXReader();
@@ -66,23 +65,23 @@ public class UANodeSetTransformer extends DocumentTransformer {
         }
     }
 
-	@Override
-	public SchemaValidator getSchemaValidator() {
-		return this.nodesetValidator;
-	}
+    @Override
+    public SchemaValidator getSchemaValidator() {
+        return this.nodesetValidator;
+    }
 
-	@Override
-	protected void afterValidation(Document readXmlDocument, MappingSpecification mapping) {
+    @Override
+    protected void afterValidation(Document readXmlDocument, MappingSpecification mapping) {
         LOGGER.info("NodeSet validated.");
         BrowsepathXPathBuilder.updateInstance(readXmlDocument);
         LOGGER.info("BrowsepathBuilder set to validated NodeSet.");
     }
 
-	@Override
-	public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
+    @Override
+    public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
         MappingSpecification mapping, Map<String, String> initialVars) throws TransformationException {
-		setNamespaces(mapping.getHeader().getNamespaces());
+        setNamespaces(mapping.getHeader().getNamespaces());
         preconditionValidator.setPreconditions(mapping.getHeader().getPreconditions());
-		return super.createShellEnv(validXmlDocument, mapping, initialVars);
-	}
+        return super.createShellEnv(validXmlDocument, mapping, initialVars);
+    }
 }

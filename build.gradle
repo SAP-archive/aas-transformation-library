@@ -254,7 +254,7 @@ publishing {
     }
     publications {
         gpr(MavenPublication) {
-			artifact jar
+            artifact jar
         }
     }
 }

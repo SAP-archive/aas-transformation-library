@@ -9,7 +9,6 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -27,8 +26,6 @@ import org.mockito.Mockito;
 
 import com.sap.dsc.aas.lib.aml.helper.AmlxPackageCreator;
 
-import io.adminshell.aas.v3.dataformat.DeserializationException;
-import io.adminshell.aas.v3.dataformat.Deserializer;
 import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import io.adminshell.aas.v3.model.Property;
@@ -53,11 +50,12 @@ public class ConsoleApplicationTest {
     /**
      * Capture system.out in a stream
      * https://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
-     * @throws Exception 
+     *
+     * @throws Exception
      */
     @BeforeEach
     public void setUpStreams() throws Exception {
-    	TestUtils.resetBindings();
+        TestUtils.resetBindings();
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
 
@@ -178,7 +176,7 @@ public class ConsoleApplicationTest {
         assertThat(firstProperty.getValue()).isEqualTo(expectedValue);
         assertThat(outputFile.delete()).isTrue();
     }
-    
+
     @Test
     void missingPlaceholders() throws Exception {
         File genericInputFile = new File(GENERIC_FILE_PATH);
@@ -187,7 +185,7 @@ public class ConsoleApplicationTest {
         String placeholderMap = "{\"notTheExpectedPlaceholder\":\"" + expectedValue + "\"}";
 
         ConsoleApplication.main(new String[] {"-c", CONFIG_FILE_PATH, "-xml", genericInputFileDir, "-p", "-P", placeholderMap});
-        
+
         assertThat(getPrinted()).contains("No value for placeholder");
     }
 
@@ -228,7 +226,6 @@ public class ConsoleApplicationTest {
 
         assertThat(getPrinted()).contains("Loaded config version");
         assertThat(getPrinted()).contains("Wrote AAS file");
-        assertTrue(outputFile.delete());
-        ;
+        assertTrue(outputFile.delete());;
     }
 }

@@ -6,15 +6,7 @@
 package com.sap.dsc.aas.lib.aml.transform;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import io.adminshell.aas.v3.dataformat.DeserializationException;
-import io.adminshell.aas.v3.dataformat.SerializationException;
-import io.adminshell.aas.v3.dataformat.Serializer;
-import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
-import io.adminshell.aas.v3.model.Property;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -32,6 +24,14 @@ import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
+import io.adminshell.aas.v3.dataformat.DeserializationException;
+import io.adminshell.aas.v3.dataformat.SerializationException;
+import io.adminshell.aas.v3.dataformat.Serializer;
+import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
+import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+import io.adminshell.aas.v3.model.Property;
+
 public class AINSubmodelTransformationTest {
 
     public static final String AIN_SUBMODEL_CONFIG_JSON = "src/test/resources/config/AIN_submodel/ain_config.json";
@@ -47,7 +47,7 @@ public class AINSubmodelTransformationTest {
 
     @BeforeEach
     protected void setUp() throws Exception {
-    	TestUtils.resetBindings();
+        TestUtils.resetBindings();
         amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         amlTransformer = new AmlTransformer();
@@ -82,6 +82,5 @@ public class AINSubmodelTransformationTest {
         assertThat(submodelElement.getValue()).isEqualTo(SAMPLE_MANUFACTURER_ID);
 
     }
-
 
 }

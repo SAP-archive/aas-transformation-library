@@ -131,7 +131,7 @@ public class AmlxValidator {
     private void validateRootAmlFile(String rootDocumentTarget, PackagePart rootDocumentPart) throws TransformationException, IOException {
         try (InputStream rootDocument = rootDocumentPart.getInputStream()) {
             Document readXmlDocument = amlTransformer.readXmlDocument(rootDocument);
-        	amlTransformer.validateDocument(readXmlDocument);
+            amlTransformer.validateDocument(readXmlDocument);
         } catch (TransformationException exception) {
             throw new AmlxInvalidRootAmlDocumentException(rootDocumentTarget, exception);
         }

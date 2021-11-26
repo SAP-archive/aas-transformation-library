@@ -43,7 +43,7 @@ public class AmlxPackageTest {
 
     @BeforeEach
     void setup() throws Exception {
-    	TestUtils.resetBindings();
+        TestUtils.resetBindings();
         amlxPackage = getAmlxPackage(AmlxPackageCreator.PATH_TO_MINIMAL_AMLX_DIR);
     }
 

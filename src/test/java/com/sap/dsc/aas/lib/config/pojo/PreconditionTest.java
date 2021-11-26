@@ -24,7 +24,7 @@ public class PreconditionTest {
 
     @BeforeEach
     void setup() throws Exception {
-		TestUtils.resetBindings();
+        TestUtils.resetBindings();
         this.objectMapper = new ObjectMapper();
     }
 

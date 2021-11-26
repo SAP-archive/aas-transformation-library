@@ -1,4 +1,15 @@
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
+
+  SPDX-License-Identifier: Apache-2.0 
+ */
 package com.sap.dsc.aas.lib.transform.postprocessor;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import io.adminshell.aas.v3.model.AssetAdministrationShell;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
@@ -9,15 +20,10 @@ import io.adminshell.aas.v3.model.Reference;
 import io.adminshell.aas.v3.model.Submodel;
 import io.adminshell.aas.v3.model.impl.DefaultKey;
 import io.adminshell.aas.v3.model.impl.DefaultReference;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
- * PostProcessor which adds each {@link Submodel} as a {@link Reference} to each {@link AssetAdministrationShell} of the same {@link
- * AssetAdministrationShellEnvironment}
+ * PostProcessor which adds each {@link Submodel} as a {@link Reference} to each
+ * {@link AssetAdministrationShell} of the same {@link AssetAdministrationShellEnvironment}
  *
  * @author br-iosb
  */
@@ -26,8 +32,8 @@ public class AutoWireSubmodels implements Consumer<AssetAdministrationShellEnvir
     @Override
     public void accept(AssetAdministrationShellEnvironment t) {
         ArrayList<Reference> smRefs = t.getSubmodels().stream()
-            .flatMap(submodel -> submodel.getIdentification() == null ? Stream.empty() :
-                Stream.of(createReference(submodel.getIdentification().getIdentifier(), KeyElements.SUBMODEL, KeyType.CUSTOM)))
+            .flatMap(submodel -> submodel.getIdentification() == null ? Stream.empty()
+                : Stream.of(createReference(submodel.getIdentification().getIdentifier(), KeyElements.SUBMODEL, KeyType.CUSTOM)))
             .collect(Collectors.toCollection(ArrayList::new));
         t.getAssetAdministrationShells().forEach(aas -> aas.getSubmodels().addAll(smRefs));
     }

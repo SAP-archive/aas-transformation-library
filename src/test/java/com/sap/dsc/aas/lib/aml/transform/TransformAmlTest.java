@@ -11,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import io.adminshell.aas.v3.model.AssetAdministrationShell;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -39,6 +37,9 @@ import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.AbstractTransformerTest;
 import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
+
+import io.adminshell.aas.v3.model.AssetAdministrationShell;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 class TransformAmlTest extends AbstractTransformerTest {
 
@@ -103,13 +104,14 @@ class TransformAmlTest extends AbstractTransformerTest {
         assertThrows(UnableToReadXmlException.class, () -> classUnderTest.transform(inputStream, new MappingSpecification()));
     }
 
-//    @Test
-//    @DisplayName("Create identifier")
-//    void createIdentifier() throws TransformationException {
-//        Identifier result = ((AbstractTransformer) classUnderTest).createIdentifier(unitClass, createSimpleIdGeneration(ID_VALUE));
-//        assertThat(result).isNotNull();
-//        assertThat(result.getIdentifier()).isEqualTo(ID_VALUE);
-//    }
+    // @Test
+    // @DisplayName("Create identifier")
+    // void createIdentifier() throws TransformationException {
+    // Identifier result = ((AbstractTransformer) classUnderTest).createIdentifier(unitClass,
+    // createSimpleIdGeneration(ID_VALUE));
+    // assertThat(result).isNotNull();
+    // assertThat(result.getIdentifier()).isEqualTo(ID_VALUE);
+    // }
 
     @Test
     @DisplayName("Test a precondition check which succeeds")

@@ -6,7 +6,6 @@
 package com.sap.dsc.aas.lib.mapping;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.mapping.model.Header;
 import com.sap.dsc.aas.lib.mapping.model.Parameter;
@@ -27,7 +25,7 @@ public class ParameterTest {
 
     @BeforeEach
     void setup() throws Exception {
-		TestUtils.resetBindings();
+        TestUtils.resetBindings();
         this.objectMapper = new ObjectMapper();
     }
 

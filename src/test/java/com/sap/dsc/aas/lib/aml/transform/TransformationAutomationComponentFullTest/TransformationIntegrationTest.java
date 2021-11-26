@@ -7,10 +7,6 @@ package com.sap.dsc.aas.lib.aml.transform.TransformationAutomationComponentFullT
 
 import static com.google.common.truth.Truth.assertThat;
 
-import io.adminshell.aas.v3.dataformat.SerializationException;
-import io.adminshell.aas.v3.dataformat.Serializer;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -32,6 +28,11 @@ import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
+import io.adminshell.aas.v3.dataformat.SerializationException;
+import io.adminshell.aas.v3.dataformat.Serializer;
+import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+
 public class TransformationIntegrationTest {
 
     public static final String AUTOMATION_COMPONENT_CONFIG_JSON = "src/test/resources/config/AutomationComponentConfig.json";
@@ -41,11 +42,11 @@ public class TransformationIntegrationTest {
     public static final String AAS_v3_JSON = "src/test/resources/aas/AASEnv_Test_JSON_v3.json";
     private static AssetAdministrationShellEnvironment shellEnv;
 
-	@BeforeEach
-	protected void setUp() throws Exception {
-		TestUtils.resetBindings();
-	}
-        
+    @BeforeEach
+    protected void setUp() throws Exception {
+        TestUtils.resetBindings();
+    }
+
     @Test
     void validateTransformedAutomationConfigFullAgainstAASJSONSchema() throws IOException, SerializationException, TransformationException {
 

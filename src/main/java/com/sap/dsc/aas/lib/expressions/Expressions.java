@@ -1,3 +1,8 @@
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
+
+  SPDX-License-Identifier: Apache-2.0 
+ */
 package com.sap.dsc.aas.lib.expressions;
 
 import static com.sap.dsc.aas.lib.expressions.Helpers.binaryDouble;
@@ -129,16 +134,17 @@ public class Expressions {
 
         // special functions for ID generation
         functions.put("concatenate", args -> {
-            Stream<String> strStream = nodeListsToString ( valueToStream(args));
+            Stream<String> strStream = nodeListsToString(valueToStream(args));
             return strStream.collect(Collectors.joining());
         });
-		functions.put("concatenate_and_hash", args -> {
-			Stream<String> strStream = nodeListsToString ( valueToStream(args));
-			String concatenated = strStream.collect(Collectors.joining());
-			return Hashing.sha256().hashString(concatenated, StandardCharsets.UTF_8).toString();
-		});
 
-		// string encoding
+        functions.put("concatenate_and_hash", args -> {
+            Stream<String> strStream = nodeListsToString(valueToStream(args));
+            String concatenated = strStream.collect(Collectors.joining());
+            return Hashing.sha256().hashString(concatenated, StandardCharsets.UTF_8).toString();
+        });
+
+        // string encoding
         functions.put("base64", args -> {
             Stream<Object> stream = (Stream<Object>) valueToStream(args);
             String concatenated = stream.flatMap(o -> valueToStream(o)).map(o -> {
@@ -149,6 +155,16 @@ public class Expressions {
                 }
             }).collect(Collectors.joining());
             return Base64.getEncoder().encodeToString(concatenated.getBytes());
+        });
+    }
+
+    protected static Stream<String> nodeListsToString(Stream<?> stream) {
+        return stream.flatMap(o -> valueToStream(o)).map(o -> {
+            if (o instanceof Node) {
+                return ((Node) o).getStringValue();
+            } else {
+                return String.valueOf(o);
+            }
         });
     }
 

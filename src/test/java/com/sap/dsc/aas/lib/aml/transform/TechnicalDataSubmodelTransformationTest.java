@@ -10,11 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import io.adminshell.aas.v3.dataformat.SerializationException;
-import io.adminshell.aas.v3.dataformat.Serializer;
-import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -37,6 +32,12 @@ import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
+import io.adminshell.aas.v3.dataformat.SerializationException;
+import io.adminshell.aas.v3.dataformat.Serializer;
+import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
+import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+
 public class TechnicalDataSubmodelTransformationTest {
 
     public static final String TECHNICAL_DATA_CONFIG_JSON = "src/test/resources/config/technicalData/technicalDataConfig.json";
@@ -51,10 +52,9 @@ public class TechnicalDataSubmodelTransformationTest {
     private static Serializer serializer;
     private static JsonSchemaValidator validator;
 
-
     @BeforeEach
     protected void setUp() throws Exception {
-    	TestUtils.resetBindings();
+        TestUtils.resetBindings();
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
@@ -105,7 +105,8 @@ public class TechnicalDataSubmodelTransformationTest {
 
         AmlTransformer amlTransformer = new AmlTransformer();
 
-        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_MISSING_MANUFACTURER_NAME);
+        MappingSpecification mapping =
+            new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_MISSING_MANUFACTURER_NAME);
         shellEnv = amlTransformer.transform(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -128,6 +129,7 @@ public class TechnicalDataSubmodelTransformationTest {
             assertTrue(e.getMessage().contains("https://admin-shell.io/ZVEI/TechnicalData/ManufacturerName/1/1"));
         }
     }
+
     /*
      * this test should fail when the config file does not specify a ManufacturerName SubmodelElement
      * that is required by the TechnicalData Schema
@@ -138,7 +140,8 @@ public class TechnicalDataSubmodelTransformationTest {
 
         AmlTransformer amlTransformer = new AmlTransformer();
 
-        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_MISSING_IDENTIFICATION_DATA);
+        MappingSpecification mapping =
+            new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_MISSING_IDENTIFICATION_DATA);
         shellEnv = amlTransformer.transform(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
