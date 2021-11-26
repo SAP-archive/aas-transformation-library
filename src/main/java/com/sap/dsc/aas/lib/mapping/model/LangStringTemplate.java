@@ -1,9 +1,14 @@
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
+
+  SPDX-License-Identifier: Apache-2.0 
+ */
 package com.sap.dsc.aas.lib.mapping.model;
 
-import io.adminshell.aas.v3.model.LangString;
 import java.util.Map;
 
 import com.sap.dsc.aas.lib.expressions.Expression;
+import io.adminshell.aas.v3.model.LangString;
 
 /**
  * Extension of class {@link LangString} with support for the {@link Template} interface.

@@ -18,8 +18,7 @@ public class TemplateSupport implements Template {
     private Map<String, Expression> definitions;
     private Map<String, Expression> variables;
 
-    public TemplateSupport() {
-    }
+    public TemplateSupport() {}
 
     public TemplateSupport(Object target) {
         this.target = target;

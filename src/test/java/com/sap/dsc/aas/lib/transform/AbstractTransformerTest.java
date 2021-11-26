@@ -7,19 +7,6 @@ package com.sap.dsc.aas.lib.transform;
 
 import static org.mockito.Mockito.mock;
 
-import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
-import io.adminshell.aas.v3.model.AssetAdministrationShell;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
-import io.adminshell.aas.v3.model.AssetInformation;
-import io.adminshell.aas.v3.model.Key;
-import io.adminshell.aas.v3.model.KeyElements;
-import io.adminshell.aas.v3.model.KeyType;
-import io.adminshell.aas.v3.model.Property;
-import io.adminshell.aas.v3.model.Reference;
-import io.adminshell.aas.v3.model.Submodel;
-import io.adminshell.aas.v3.model.SubmodelElementCollection;
-import io.adminshell.aas.v3.model.impl.DefaultKey;
-import io.adminshell.aas.v3.model.impl.DefaultReference;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +28,20 @@ import com.sap.dsc.aas.lib.mapping.model.LegacyTemplateSupport;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
 import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
+
+import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
+import io.adminshell.aas.v3.model.AssetAdministrationShell;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+import io.adminshell.aas.v3.model.AssetInformation;
+import io.adminshell.aas.v3.model.Key;
+import io.adminshell.aas.v3.model.KeyElements;
+import io.adminshell.aas.v3.model.KeyType;
+import io.adminshell.aas.v3.model.Property;
+import io.adminshell.aas.v3.model.Reference;
+import io.adminshell.aas.v3.model.Submodel;
+import io.adminshell.aas.v3.model.SubmodelElementCollection;
+import io.adminshell.aas.v3.model.impl.DefaultKey;
+import io.adminshell.aas.v3.model.impl.DefaultReference;
 
 public abstract class AbstractTransformerTest {
 
@@ -145,7 +146,8 @@ public abstract class AbstractTransformerTest {
         // subModel.setIdGeneration(createSimpleIdGeneration(ID_VALUE + "_submodel"));
 
         Property submodelElementProperty = createTemplate(Property.class);
-        ((Template) subModel).setForeachExpression(new XPathExpr(Arrays.asList(new ConstantExpr("caex:Attribute[@Name='MySubAttribute']"))));
+        ((Template) subModel)
+            .setForeachExpression(new XPathExpr(Arrays.asList(new ConstantExpr("caex:Attribute[@Name='MySubAttribute']"))));
         submodelElementProperty.setValueType("String");
 
         subModel.setSubmodelElements(Arrays.asList(submodelElementProperty));
@@ -160,7 +162,8 @@ public abstract class AbstractTransformerTest {
         submodelMultipleAttrs.setSubmodelElements(Arrays.asList(submodelElementMultiple));
 
         SubmodelElementCollection submodelElementCollection = createTemplate(SubmodelElementCollection.class);
-        // ((Template) submodelElementCollection).setForeachExpression(new XPathExpr(Arrays.asList(new ConstantExpr(""));
+        // ((Template) submodelElementCollection).setForeachExpression(new XPathExpr(Arrays.asList(new
+        // ConstantExpr(""));
         submodelElementCollection.setValues(Arrays.asList(submodelElementProperty, submodelElementMultiple));
 
         aasEnv.setSubmodels(Arrays.asList(subModel, submodelMultipleAttrs));

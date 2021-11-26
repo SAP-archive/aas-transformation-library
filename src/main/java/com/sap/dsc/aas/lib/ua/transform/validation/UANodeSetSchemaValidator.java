@@ -6,6 +6,7 @@
 package com.sap.dsc.aas.lib.ua.transform.validation;
 
 import java.lang.invoke.MethodHandles;
+
 import javax.xml.XMLConstants;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -19,16 +20,15 @@ import org.slf4j.LoggerFactory;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 
-//TODO add xsd to resources, check validate method, write test classes
+// TODO add xsd to resources, check validate method, write test classes
 public class UANodeSetSchemaValidator extends SchemaValidator {
-	
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     public static final String PATH_NDOESET_XSD = "ua/UANodeSet.xsd";
 
     public UANodeSetSchemaValidator() {
-    	super(Thread.currentThread().getContextClassLoader().getResource(PATH_NDOESET_XSD));
+        super(Thread.currentThread().getContextClassLoader().getResource(PATH_NDOESET_XSD));
     }
 
     @Override

@@ -1,15 +1,16 @@
-/*
-  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved.
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
 
-  SPDX-License-Identifier: Apache-2.0
+  SPDX-License-Identifier: Apache-2.0 
  */
 package com.sap.dsc.aas.lib.mapping.model;
 
-import io.adminshell.aas.v3.model.KeyElements;
-import io.adminshell.aas.v3.model.KeyType;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.adminshell.aas.v3.model.KeyElements;
+import io.adminshell.aas.v3.model.KeyType;
 
 /**
  * Includes the legacy config attributes that may be replaced by a new template DSL in the future.

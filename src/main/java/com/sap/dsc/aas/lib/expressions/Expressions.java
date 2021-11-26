@@ -1,3 +1,8 @@
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
+
+  SPDX-License-Identifier: Apache-2.0 
+ */
 package com.sap.dsc.aas.lib.expressions;
 
 import static com.sap.dsc.aas.lib.expressions.Helpers.binaryDouble;
@@ -132,13 +137,13 @@ public class Expressions {
             Stream<Object> stream = (Stream<Object>) valueToStream(args);
             return stream.map(Object::toString).collect(Collectors.joining());
         });
-		functions.put("concatenate_and_hash", args -> {
-			Stream<Object> stream = (Stream<Object>) valueToStream(args);
-			String concatenated = stream.map(Object::toString).collect(Collectors.joining());
-			return Hashing.sha256().hashString(concatenated, StandardCharsets.UTF_8).toString();
-		});
+        functions.put("concatenate_and_hash", args -> {
+            Stream<Object> stream = (Stream<Object>) valueToStream(args);
+            String concatenated = stream.map(Object::toString).collect(Collectors.joining());
+            return Hashing.sha256().hashString(concatenated, StandardCharsets.UTF_8).toString();
+        });
 
-		// string encoding
+        // string encoding
         functions.put("base64", args -> {
             Stream<Object> stream = (Stream<Object>) valueToStream(args);
             String concatenated = stream.flatMap(o -> valueToStream(o)).map(o -> {

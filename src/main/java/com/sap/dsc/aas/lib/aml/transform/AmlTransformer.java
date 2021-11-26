@@ -5,7 +5,6 @@
  */
 package com.sap.dsc.aas.lib.aml.transform;
 
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.Map;
@@ -27,31 +26,32 @@ import com.sap.dsc.aas.lib.transform.DocumentTransformer;
 import com.sap.dsc.aas.lib.transform.XPathHelper;
 import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public class AmlTransformer extends DocumentTransformer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    
+
     private SchemaValidator amlValidator;
-    
-	private PreconditionValidator preconditionValidator;
+
+    private PreconditionValidator preconditionValidator;
 
     public AmlTransformer() {
-    	this(new PreconditionValidator());
-    	XPathHelper.getInstance().setNamespaceBinding("caex", "http://www.dke.de/CAEX");
+        this(new PreconditionValidator());
+        XPathHelper.getInstance().setNamespaceBinding("caex", "http://www.dke.de/CAEX");
     }
 
-    public AmlTransformer(PreconditionValidator validator) {//FIXME only used by tests
-    	this.preconditionValidator = validator;
+    public AmlTransformer(PreconditionValidator validator) {// FIXME only used by tests
+        this.preconditionValidator = validator;
         this.amlValidator = new AmlSchemaValidator();
     }
 
-	@Override
+    @Override
     public void validateDocument(Document document) throws TransformationException {
         this.amlValidator.validate(document);
     }
 
-	@Override
+    @Override
     public Document readXmlDocument(InputStream amlStream) throws TransformationException {
         try {
             SAXReader reader = new SAXReader();
@@ -64,18 +64,17 @@ public class AmlTransformer extends DocumentTransformer {
         }
     }
 
-	@Override
-	public SchemaValidator getSchemaValidator() {
-		return this.amlValidator;
-	}
+    @Override
+    public SchemaValidator getSchemaValidator() {
+        return this.amlValidator;
+    }
 
-	@Override
-	protected void afterValidation(Document readXmlDocument, MappingSpecification mapping) {
+    @Override
+    protected void afterValidation(Document readXmlDocument, MappingSpecification mapping) {
         LOGGER.info("Loaded config version {}, AAS version {}",
-                getValidatedVersionString(mapping.getHeader().getVersion()),
-                getValidatedVersionString(mapping.getHeader().getAasVersion()));
-	}
-	
+            getValidatedVersionString(mapping.getHeader().getVersion()),
+            getValidatedVersionString(mapping.getHeader().getAasVersion()));
+    }
 
     protected String getValidatedVersionString(String version) {
         if (version == null) {
@@ -87,12 +86,12 @@ public class AmlTransformer extends DocumentTransformer {
         return "[Invalid version string provided]";
     }
 
-	@Override
-	public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
-			MappingSpecification mapping, Map<String, String> initialVars) throws TransformationException {
-		setNamespaces(mapping.getHeader().getNamespaces());
+    @Override
+    public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
+        MappingSpecification mapping, Map<String, String> initialVars) throws TransformationException {
+        setNamespaces(mapping.getHeader().getNamespaces());
         preconditionValidator.setPreconditions(mapping.getHeader().getPreconditions());
         // idGenerator.prepareGraph(validXmlDocument, mapping.getConfigMappings());
         return super.createShellEnv(validXmlDocument, mapping, initialVars);
-	}
+    }
 }

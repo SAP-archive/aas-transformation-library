@@ -5,6 +5,13 @@
  */
 package com.sap.dsc.aas.lib.mapping.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sap.dsc.aas.lib.exceptions.AlreadyDefinedException;
+
 import io.adminshell.aas.v3.model.HasSemantics;
 import io.adminshell.aas.v3.model.Key;
 import io.adminshell.aas.v3.model.KeyElements;
@@ -12,12 +19,6 @@ import io.adminshell.aas.v3.model.KeyType;
 import io.adminshell.aas.v3.model.Reference;
 import io.adminshell.aas.v3.model.impl.DefaultKey;
 import io.adminshell.aas.v3.model.impl.DefaultReference;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sap.dsc.aas.lib.exceptions.AlreadyDefinedException;
 
 public class LegacyTemplateSupport extends TemplateSupport implements LegacyTemplate {
 

@@ -1,16 +1,10 @@
-/*
-  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved.
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
 
-  SPDX-License-Identifier: Apache-2.0
+  SPDX-License-Identifier: Apache-2.0 
  */
 package com.sap.dsc.aas.lib.mapping;
 
-import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
-import io.adminshell.aas.v3.dataformat.core.deserialization.EmbeddedDataSpecificationDeserializer;
-import io.adminshell.aas.v3.dataformat.core.deserialization.EnumDeserializer;
-import io.adminshell.aas.v3.dataformat.json.ReflectionAnnotationIntrospector;
-import io.adminshell.aas.v3.model.EmbeddedDataSpecification;
-import io.adminshell.aas.v3.model.LangString;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -33,7 +27,6 @@ import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.deser.ValueInstantiator;
@@ -54,6 +47,13 @@ import com.sap.dsc.aas.lib.mapping.model.LegacyTemplate;
 import com.sap.dsc.aas.lib.mapping.model.LegacyTemplateSupport;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
+
+import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
+import io.adminshell.aas.v3.dataformat.core.deserialization.EmbeddedDataSpecificationDeserializer;
+import io.adminshell.aas.v3.dataformat.core.deserialization.EnumDeserializer;
+import io.adminshell.aas.v3.dataformat.json.ReflectionAnnotationIntrospector;
+import io.adminshell.aas.v3.model.EmbeddedDataSpecification;
+import io.adminshell.aas.v3.model.LangString;
 
 /**
  * Class for parsing mapping specifications containing AAS JSON templates.
@@ -112,7 +112,7 @@ public class MappingSpecificationParser {
         mapper = JsonMapper.builder()
             .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
             // fail on unknown properties for now
-            //.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            // .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .annotationIntrospector(new ReflectionAnnotationIntrospector() {
                 public TypeResolverBuilder<?> findTypeResolver(MapperConfig<?> config, AnnotatedClass ac, JavaType baseType) {
                     if (ReflectionHelper.SUBTYPES.containsKey(ac.getRawType())) {

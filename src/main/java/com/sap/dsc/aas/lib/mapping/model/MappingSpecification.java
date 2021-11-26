@@ -6,7 +6,6 @@
 package com.sap.dsc.aas.lib.mapping.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public class MappingSpecification {
