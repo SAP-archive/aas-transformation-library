@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UANodeSet LastModified="2021-02-18T14:13:26.803Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://opcfoundation.org/UA/Machinery/Types.xsd" xmlns:s2="http://opcfoundation.org/UA/DI/Types.xsd" xmlns:ua="http://unifiedautomation.com/Configuration/NodeSet.xsd">
+<UANodeSet LastModified="2021-02-18T14:13:26.803Z" xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd"
+           xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd"
+           xmlns:si="http://www.siemens.com/OPCUA/2017/SimaticNodeSetExtensions"
+>
     <NamespaceUris>
         <Uri>http://opcfoundation.org/UA/DI/</Uri>
         <Uri>http://opcfoundation.org/UA/Robotics/</Uri>
@@ -11147,6 +11150,11 @@
             <Reference ReferenceType="HasProperty" IsForward="false">ns=4;i=1267</Reference>
             <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
         </References>
+        <Value>
+            <uax:LocalizedText xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd">
+                <uax:Text>23409812AB</uax:Text>
+            </uax:LocalizedText>
+        </Value>
     </UAVariable>
     <UAObject NodeId="ns=4;i=1271" BrowseName="1:ParameterSet" ParentNodeId="ns=4;i=1267">
         <DisplayName>ParameterSet</DisplayName>

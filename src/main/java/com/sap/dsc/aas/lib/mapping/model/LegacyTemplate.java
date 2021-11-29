@@ -1,16 +1,16 @@
-/*
-  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved.
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
 
-  SPDX-License-Identifier: Apache-2.0
+  SPDX-License-Identifier: Apache-2.0 
  */
 package com.sap.dsc.aas.lib.mapping.model;
 
-import io.adminshell.aas.v3.model.KeyElements;
-import io.adminshell.aas.v3.model.KeyType;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sap.dsc.aas.lib.config.pojo.ConfigIdGeneration;
-import com.sap.dsc.aas.lib.config.pojo.ConfigReference;
+
+import io.adminshell.aas.v3.model.KeyElements;
+import io.adminshell.aas.v3.model.KeyType;
 
 /**
  * Includes the legacy config attributes that may be replaced by a new template DSL in the future.
@@ -55,9 +55,9 @@ public interface LegacyTemplate extends Template {
 
     void setMimeTypeXPath(String mimeTypeXPath);
 
-    ConfigIdGeneration getIdGeneration();
+    Map<String, Object> getIdGeneration();
 
-    void setIdGeneration(ConfigIdGeneration idGeneration);
+    void setIdGeneration(Map<String, Object> idGeneration);
 
     KeyType getKeyType();
 
@@ -71,11 +71,6 @@ public interface LegacyTemplate extends Template {
 
     @JsonProperty("kindType_xpath")
     void setKindTypeXPath(String kindTypeXPath);
-
-    ConfigReference getGlobalAssetIdReference();
-
-    @JsonProperty("globalAssetIdReference")
-    void setGlobalAssetIdReference(ConfigReference globalAssetIdReference);
 
     void setValueId(String valueId);
 

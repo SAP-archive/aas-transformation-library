@@ -1,3 +1,8 @@
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
+
+  SPDX-License-Identifier: Apache-2.0 
+ */
 package com.sap.dsc.aas.lib.expressions;
 
 import static com.sap.dsc.aas.lib.expressions.Helpers.binaryDouble;
@@ -10,19 +15,19 @@ import static com.sap.dsc.aas.lib.expressions.Helpers.valueToSet;
 import static com.sap.dsc.aas.lib.expressions.Helpers.valueToStream;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Stack;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import org.dom4j.Node;
 
 import com.google.common.hash.Hashing;
 
@@ -128,11 +133,39 @@ public class Expressions {
         });
 
         // special functions for ID generation
-		functions.put("concatenate_and_hash", args -> {
-			Stream<Object> stream = (Stream<Object>) valueToStream(args);
-			String concatenated = stream.map(Object::toString).collect(Collectors.joining());
-			return Hashing.sha256().hashString(concatenated, StandardCharsets.UTF_8).toString();
-		});
+        functions.put("concatenate", args -> {
+            Stream<String> strStream = nodeListsToString(valueToStream(args));
+            return strStream.collect(Collectors.joining());
+        });
+
+        functions.put("concatenate_and_hash", args -> {
+            Stream<String> strStream = nodeListsToString(valueToStream(args));
+            String concatenated = strStream.collect(Collectors.joining());
+            return Hashing.sha256().hashString(concatenated, StandardCharsets.UTF_8).toString();
+        });
+
+        // string encoding
+        functions.put("base64", args -> {
+            Stream<Object> stream = (Stream<Object>) valueToStream(args);
+            String concatenated = stream.flatMap(o -> valueToStream(o)).map(o -> {
+                if (o instanceof Node) {
+                    return ((Node) o).getStringValue();
+                } else {
+                    return String.valueOf(o);
+                }
+            }).collect(Collectors.joining());
+            return Base64.getEncoder().encodeToString(concatenated.getBytes());
+        });
+    }
+
+    protected static Stream<String> nodeListsToString(Stream<?> stream) {
+        return stream.flatMap(o -> valueToStream(o)).map(o -> {
+            if (o instanceof Node) {
+                return ((Node) o).getStringValue();
+            } else {
+                return String.valueOf(o);
+            }
+        });
     }
 
     public static Function<Object, Object> getFunctionByName(String name) {

@@ -22,12 +22,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.sap.dsc.aas.lib.transform.AbstractTransformerTest;
 import com.sap.dsc.aas.lib.config.pojo.Precondition;
 import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeForAll;
 import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeMatch;
 import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeRange;
 import com.sap.dsc.aas.lib.exceptions.PreconditionValidationException;
+import com.sap.dsc.aas.lib.transform.AbstractTransformerTest;
 
 public class PreconditionValidatorTest extends AbstractTransformerTest {
 

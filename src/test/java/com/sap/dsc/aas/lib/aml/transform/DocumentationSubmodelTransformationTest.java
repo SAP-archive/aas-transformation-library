@@ -18,9 +18,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.sap.dsc.aas.lib.TestUtils;
-import com.sap.dsc.aas.lib.config.ConfigLoader;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 import io.adminshell.aas.v3.dataformat.DeserializationException;
 import io.adminshell.aas.v3.dataformat.SerializationException;
@@ -41,15 +41,15 @@ public class DocumentationSubmodelTransformationTest {
     private static JsonSchemaValidator validator;
     private static Serializer serializer;
     private AmlTransformer amlTransformer;
-    private ConfigLoader configLoader;
+    private MappingSpecificationParser mappingParser;
     private InputStream amlInputStream;
 
     @BeforeEach
     protected void setUp() throws Exception {
-    	TestUtils.resetBindings();
+        TestUtils.resetBindings();
         amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
         amlTransformer = new AmlTransformer();
-        configLoader = new ConfigLoader();
+        mappingParser = new MappingSpecificationParser();
         validator = new JsonSchemaValidator();
         serializer = new JsonSerializer();
     }
@@ -59,8 +59,8 @@ public class DocumentationSubmodelTransformationTest {
     void validateTransformedAINSubmodelAgainstAASJSONSchema()
         throws IOException, TransformationException, SerializationException, DeserializationException {
 
-        ConfigTransformToAas config = configLoader.loadConfig(DOCU_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(DOCU_SUBMODEL_CONFIG_JSON);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
         String serializedShellEnv = serializer.write(shellEnv);
         Set<String> errors = validator.validateSchema(serializedShellEnv);
         errors.stream().forEach(System.out::print);
@@ -73,8 +73,8 @@ public class DocumentationSubmodelTransformationTest {
     void validateReferencedSubmodel()
         throws IOException, TransformationException {
 
-        ConfigTransformToAas config = configLoader.loadConfig(DOCU_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(DOCU_SUBMODEL_CONFIG_JSON);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
         String reference = shellEnv.getAssetAdministrationShells().get(0).getSubmodels().get(0).getKeys().get(0).getValue();
         assertThat(shellEnv.getSubmodels().get(0).getIdentification().getIdentifier()).isEqualTo(reference);
     }
@@ -84,8 +84,8 @@ public class DocumentationSubmodelTransformationTest {
     void validateTransformedAINSubmodelContainedElements()
         throws IOException, TransformationException {
 
-        ConfigTransformToAas config = configLoader.loadConfig(DOCU_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(DOCU_SUBMODEL_CONFIG_JSON);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
 
         // test that the submodel with the semanticId for documentation is there
         Submodel documentationSubmodel = shellEnv.getSubmodels().stream()

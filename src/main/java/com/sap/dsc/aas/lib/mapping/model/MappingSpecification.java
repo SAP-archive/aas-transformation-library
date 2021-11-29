@@ -5,56 +5,28 @@
  */
 package com.sap.dsc.aas.lib.mapping.model;
 
-import java.util.List;
-
-import com.sap.dsc.aas.lib.config.pojo.ConfigPlaceholder;
-import com.sap.dsc.aas.lib.config.pojo.Precondition;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public class MappingSpecification {
 
-    private String version;
-    private String aasVersion;
-    private List<Mapping> mappings;
-    private List<Precondition> preconditions;
-    private List<ConfigPlaceholder> placeholders;
+    private AssetAdministrationShellEnvironment aasEnvironmentMapping;
+    private Header header;
 
-    public String getVersion() {
-        return version;
+    public AssetAdministrationShellEnvironment getAasEnvironmentMapping() {
+        return aasEnvironmentMapping;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public void setAasEnvironmentMapping(AssetAdministrationShellEnvironment mapping) {
+        this.aasEnvironmentMapping = mapping;
     }
 
-    public String getAasVersion() {
-        return aasVersion;
+    public Header getHeader() {
+        return header;
     }
 
-    public void setAasVersion(String aasVersion) {
-        this.aasVersion = aasVersion;
-    }
-
-    public List<Mapping> getMappings() {
-        return mappings;
-    }
-
-    public void setMappings(List<Mapping> mappings) {
-        this.mappings = mappings;
-    }
-
-    public List<Precondition> getPreconditions() {
-        return preconditions;
-    }
-
-    public void setPreconditions(List<Precondition> preconditions) {
-        this.preconditions = preconditions;
-    }
-
-    public List<ConfigPlaceholder> getPlaceholders() {
-        return placeholders;
-    }
-
-    public void setPlaceholders(List<ConfigPlaceholder> placeholders) {
-        this.placeholders = placeholders;
+    @JsonProperty("@header")
+    public void setHeader(Header header) {
+        this.header = header;
     }
 }

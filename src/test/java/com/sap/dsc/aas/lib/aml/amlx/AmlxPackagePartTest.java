@@ -37,7 +37,7 @@ public class AmlxPackagePartTest {
 
     @BeforeEach
     void setup() throws Exception {
-    	TestUtils.resetBindings();
+        TestUtils.resetBindings();
         opcPackage = getOpcPackage(PATH_TO_MINIMAL_AMLX_DIR);
     }
 

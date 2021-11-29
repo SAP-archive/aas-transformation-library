@@ -1,28 +1,28 @@
 {
-	"version": "1.0.0",
-	"aasVersion": "3.0RC01",
-	"mappings": [
-		{
-			"submodels": [
-				{
+	"@header": {
+		"version": "1.0.0",
+		"aasVersion": "3.0RC01"
+	},
+	"aasEnvironmentMapping": {
+		"submodels": [
+			{
+				"@foreach": {
+					"@list": [
+						"sm_a"
+					]
+				},
+				"identification": {
 					"@foreach": {
 						"@list": [
-							"sm_a"
+							"a",
+							"b",
+							"c"
 						]
 					},
-					"identification": {
-						"@foreach": {
-							"@list": [
-								"a",
-								"b",
-								"c"
-							]
-						},
-						"id": "https://test.org/transform_for_first_in_list",
-						"idType": "Iri"
-					}
+					"id": "https://test.org/transform_for_first_in_list",
+					"idType": "Iri"
 				}
-			]
-		}
-	]
+			}
+		]
+	}
 }
