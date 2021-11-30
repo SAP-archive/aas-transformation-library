@@ -19,7 +19,7 @@ format and leverage special features for OPC UA and AutomationML.
     - [Expressions](#expressions)
     - [Looping](#looping-with-foreach)
     - [Dynamic Evaluation](#dynamic-evaluation-with-bind)
-    - [Defining Functions](#compound-expressions-with-definitions)
+    - [Defining Functions](#pre-defined-expressions-with-definitions)
   - [Structure](#config-json-structure)
     - [Asset Administration Shell Environment](#asset-administration-shell-environment)
     - [Asset Administration Shells](#assetadministrationshells)
@@ -152,9 +152,18 @@ Asset Administration Shells are instantiated using the basic structure determine
 However, there are a variety of tools that ease the writing process
 
 ### Expressions
-Expressions are denoted by a `@` at the beginning of the json-key and signify a side-effect during runtime. While those
+Expressions are bottom-level-objects denoted by a `@` at the beginning of the json-key and signify a side-effect during runtime. While those
 configurations with no expression in their context are just parsed as AAS-JSON, expressions are evaluated with their result
-determining the structure of the resulting AAS objects.
+determining the structure of the resulting AAS objects. Examples include:
+- `@xpath` for evaluation of xPath-Queries
+- `@caexAttributeName` to fetch the attribute name of an element in a AutomationML file. Takes a string.
+- `@uaBrowsePath` gets a Node's NodeId by its BrowsePath from a OPC UA nodeset file. Takes a list of BrowseNames connected
+by hierarchical ReferenceTypes.
+- `@uaChildren` takes a BrowsePath (see above) and returns all Nodes that are connected to this node via a hierarchical
+ReferenceType.
+- Several basic programmatic operations such as `@plus`,`@times`,`@max`,`@negate` or `@and`.
+
+Please note that Expressions can only be called from within a `@bind`- or `@foreach`-context.
 
 ### Looping with `@foreach`
 On every level (except for the `aasEnvironmentMapping`) objects can be dynamically generated using this feature.
@@ -171,8 +180,8 @@ The syntax is as follows:
 ```
 ### Dynamic evaluation with `@bind`
 Looping around the results of an expression would be obsolete if all resulting objects would hold the same values.
-That's why the @bind Context allows to fill AAS-attributes with the result of an expression. It may only return a single
-value that will be used. If I wanted to configure changing idShorts based on the iterator, it could look like this:
+That's why the `@bind` context allows to populate AAS-attributes with the result of an expression. It may only return a single
+value that will be used. If one wanted to configure changing idShorts based on the iterator, it could look like this:
 
 ```json
 {
@@ -181,15 +190,47 @@ value that will be used. If I wanted to configure changing idShorts based on the
   },
   "@bind": {
     "idShort": {
-      "@xpath": "somePotentiallyRelativeXpathQuery"
+      "@xpath": "someContextRelativeXPathQuery"
     }
   }
 }
 ```
-###Compound Expressions with `@definitions`
+### Pre-defined expressions with `@definitions`
 Usually in the `@header` (but everywhere else is fine as well) the config can define more complex functions that will
-then be called using the `@def`-key in the `@bind`-context
+then be called using the `@def`-key in the `@bind`-context. In the example below, the `exampleFunction` is called to 
+assign an id to an AAS.
 
+```json
+{
+  "@headers": {
+    "@definitions": {
+      "exampleFunction": {
+        "@concatenate": [
+          {
+            "@xpath": "someXpath"
+          },
+          "/",
+          {
+            "@xpath": "someOtherXpath"
+          }
+        ]
+      }
+    }
+  },
+  "aasEnvironmentMapping": {
+    ...,
+    "assetAdministrationShells": {
+      "identification": {
+        "@bind": {
+          "id": {
+            "@def": "exampleFunction"
+          }
+        }
+      }
+    }
+  }
+}
+```
 
 ## config-JSON structure
 

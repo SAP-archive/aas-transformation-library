@@ -1,8 +1,13 @@
 package com.sap.dsc.aas.lib.ua.transform;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.networknt.schema.*;
 import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
+import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
+import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
 import io.adminshell.aas.v3.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,8 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -22,13 +29,15 @@ public class UaIntegrationTest {
     public static final String INTEGRATION_CONFIG = "src/test/resources/ua/uaIntegrationTest.json";
     public static final String UA_BIG_MACHINE = "src/test/resources/ua/big.machine.nodeset.xml";
     public static final String NAMEPLATE_CONFIG = "src/test/resources/ua/diToNameplate.json";
+    public static final String JSON_SCHEMA_NAMEPLATE = "src/test/resources/schema/schema_nameplate.json";
 
-
+    private ObjectMapper mapper;
     private static AssetAdministrationShellEnvironment shellEnv;
 
     @BeforeEach
     protected void setUp() throws Exception {
         TestUtils.resetBindings();
+        mapper = new ObjectMapper();
     }
 
     @Test
@@ -44,6 +53,7 @@ public class UaIntegrationTest {
 
     @Test
     void testUaNameplate() throws Exception {
+        InputStream schemaInputStream = Files.newInputStream(Paths.get(JSON_SCHEMA_NAMEPLATE));
         InputStream uaInputStream = Files.newInputStream(Paths.get(UA_BIG_MACHINE));
         UANodeSetTransformer uaTransformer = new UANodeSetTransformer();
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(NAMEPLATE_CONFIG);
@@ -56,6 +66,22 @@ public class UaIntegrationTest {
         assertTrue(shellEnv.getAssetAdministrationShells().size() > 0);
         shellEnv.getAssetAdministrationShells().get(0).getSubmodels().forEach(sm ->
                 assertTrue(sm.getKeys().size() > 0));
+        JsonSerializer jsonSerializer = new JsonSerializer();
+        SchemaValidatorsConfig schemaValidatorsConfig = new SchemaValidatorsConfig();
+        schemaValidatorsConfig.setFailFast(true);
+        JsonNode schemaNode = mapper.readTree(Files.newInputStream(Paths.get(JSON_SCHEMA_NAMEPLATE)));
+        JsonSchema schema =
+                JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaNode)).getSchema(schemaNode, schemaValidatorsConfig);
+        JsonNode jsonNode = mapper.readTree(jsonSerializer.write(shellEnv)).get("submodels").get(0);
+
+        try {
+            schema.validate(jsonNode);
+            fail("JsonSchemaException must be thrown");
+        } catch (JsonSchemaException e) {
+            final Set<ValidationMessage> messages = e.getValidationMessages();
+            messages.stream().forEach(message -> System.out.println(message.getMessage()));
+            assertThat(messages.size()).isEqualTo(0);
+        }
     }
 
 

@@ -174,9 +174,9 @@
         "@foreach": {
           "@xpath": "caex:Attribute[@Name='CommercialData']"
         },
-        "@bind" : {
-          "idShort" : {
-            "@xpath" : "@Name"
+        "@bind": {
+          "idShort": {
+            "@xpath": "@Name"
           }
         },
         "semanticId": {
@@ -248,9 +248,9 @@
             "@foreach": {
               "@caexAttributeName": "ProductDetails"
             },
-            "@bind" : {
-              "idShort" : {
-                "@xpath" : "@Name"
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
               }
             },
             "modelType": {
@@ -268,9 +268,9 @@
                 "@foreach": {
                   "@caexAttributeName": "DescriptionShort"
                 },
-                "@bind" : {
-                  "idShort" : {
-                    "@xpath" : "@Name"
+                "@bind": {
+                  "idShort": {
+                    "@xpath": "@Name"
                   }
                 },
                 "modelType": {
@@ -295,9 +295,9 @@
             "@foreach": {
               "@caexAttributeName": "PackagingAndTransportation"
             },
-            "@bind" : {
-              "idShort" : {
-                "@xpath" : "@Name"
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
               }
             },
             "modelType": {
@@ -404,10 +404,20 @@
                 "@xpath": "@Name"
               },
               "min": {
-                "@xpath": "caex:Attribute[@Name='TemperatureMin']/caex:Value"
+                "@negate": {
+                  "@plus": [
+                    {
+                      "@max": [240,4.2]
+                    },
+                    33
+                  ]
+                }
               },
               "max": {
-                "@xpath": "caex:Attribute[@Name='TemperatureMax']/caex:Value"
+                "@times": [
+                  5,
+                  20
+                ]
               }
             }
           },
