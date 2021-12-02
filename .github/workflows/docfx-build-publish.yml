@@ -6,7 +6,7 @@ name: Documentation Publish
 on:
   push:
     branches: 
-      - main
+      - development
 
 jobs:
   build_docs:
