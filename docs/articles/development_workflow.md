@@ -2,9 +2,11 @@
 
 We develop with Github using pull requests (see this [Github guide](https://guides.github.com/introduction/flow/) for a short introduction).
 
-**Development branch.** The development branch is always `master`. Expect changes on this branch from time to time.
+**Development branch.** The development branch is always `development`. Expect changes on this branch from time to time.
+On push to the development branch, a snapshot release will be triggered. Please ensure the correct naming in the build.gradle file.
 
-**Releases.** The releases mark the development milestones on the `master` branch with a certain feature completeness.
+**Releases.** The releases mark the development milestones on the `main` branch with a certain feature completeness.
+Every push/accepted merge request to the `main` branch will trigger a release.
 
 ## Pull Requests
 
@@ -12,11 +14,14 @@ We develop with Github using pull requests (see this [Github guide](https://guid
 
 If you are a member of the development team, create a feature branch directly within the repository.
 
-Otherwise, if you are a non-member contributor, fork the repository and create the feature branch in your forked repository. See this Github tuturial for more guidance.
+Otherwise, if you are a non-member contributor, fork the repository and create the feature branch in your forked repository.
+Developers can open pull requests that will be reviewed and merged to the development branch.
 
-**Branch Prefix.** Each PullRequest must contained a list of the changed topics, for instance as a list of bulletpoints. Simply refering to the commit messages is not sufficient.
+**Branch Prefix.** Each PullRequest must contained a list of the changed topics, for instance as a list of bulletpoints. 
+Simply refering to the commit messages is not sufficient.
 
-**Reviews.** Each PullRequest is reviewed by the Maintainers of the project. In order to simplify the workflow, please assign the PullRequest directly to the Maintainer you think is most knowledgable about your changes.
+**Reviews.** Each PullRequest is reviewed by the Maintainers of the project. 
+In order to simplify the workflow, please assign the PullRequest directly to the Maintainer you think is most knowledgable about your changes.
 
 ## Commit Messages
 
