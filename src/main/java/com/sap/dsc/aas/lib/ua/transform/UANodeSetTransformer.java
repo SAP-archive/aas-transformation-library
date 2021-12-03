@@ -7,8 +7,6 @@ package com.sap.dsc.aas.lib.ua.transform;
 
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
-import java.util.Map;
-
 import javax.xml.XMLConstants;
 
 import org.dom4j.Document;
@@ -22,10 +20,8 @@ import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.DocumentTransformer;
-import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 import com.sap.dsc.aas.lib.ua.transform.validation.UANodeSetSchemaValidator;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public class UANodeSetTransformer extends DocumentTransformer {
 
@@ -33,14 +29,7 @@ public class UANodeSetTransformer extends DocumentTransformer {
 
     private SchemaValidator nodesetValidator;
 
-    private PreconditionValidator preconditionValidator;
-
     public UANodeSetTransformer() {
-        this(new PreconditionValidator());
-    }
-
-    public UANodeSetTransformer(PreconditionValidator validator) {
-        this.preconditionValidator = validator;
         this.nodesetValidator = new UANodeSetSchemaValidator();
     }
 

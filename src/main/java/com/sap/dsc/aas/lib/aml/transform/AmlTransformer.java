@@ -24,7 +24,6 @@ import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.DocumentTransformer;
 import com.sap.dsc.aas.lib.transform.XPathHelper;
-import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
@@ -34,15 +33,8 @@ public class AmlTransformer extends DocumentTransformer {
 
     private SchemaValidator amlValidator;
 
-    private PreconditionValidator preconditionValidator;
-
     public AmlTransformer() {
-        this(new PreconditionValidator());
         XPathHelper.getInstance().setNamespaceBinding("caex", "http://www.dke.de/CAEX");
-    }
-
-    public AmlTransformer(PreconditionValidator validator) {
-        this.preconditionValidator = validator;
         this.amlValidator = new AmlSchemaValidator();
     }
 

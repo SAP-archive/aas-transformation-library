@@ -17,7 +17,6 @@ import org.xml.sax.SAXException;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
-import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 
 /**
@@ -26,16 +25,6 @@ import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
  *
  */
 public class GenericDocumentTransformer extends DocumentTransformer {
-
-    private PreconditionValidator preconditionValidator;
-
-    public GenericDocumentTransformer() {
-        this(new PreconditionValidator());
-    }
-
-    public GenericDocumentTransformer(PreconditionValidator validator) { // tests
-        this.preconditionValidator = validator;
-    }
 
     @Override
     public void validateDocument(Document document) throws TransformationException {

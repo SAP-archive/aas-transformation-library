@@ -27,7 +27,6 @@ import com.sap.dsc.aas.lib.mapping.model.LegacyTemplate;
 import com.sap.dsc.aas.lib.mapping.model.LegacyTemplateSupport;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
-import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 
 import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
 import io.adminshell.aas.v3.model.AssetAdministrationShell;
@@ -57,7 +56,6 @@ public abstract class AbstractTransformerTest {
 
     protected MappingSpecification mapping;
 
-    protected PreconditionValidator mockPreconditionValidator;
 
     protected void setUp() throws Exception {
         TestUtils.resetBindings();
@@ -65,7 +63,6 @@ public abstract class AbstractTransformerTest {
         this.document = createDocument();
         // sample mapping specification
         this.mapping = createMappingSpecification();
-        this.mockPreconditionValidator = mock(PreconditionValidator.class);
     }
 
     protected <T> T createTemplate(Class<T> modelClass) {

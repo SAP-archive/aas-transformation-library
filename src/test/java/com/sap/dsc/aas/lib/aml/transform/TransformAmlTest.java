@@ -36,7 +36,6 @@ import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.AbstractTransformerTest;
-import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 
 import io.adminshell.aas.v3.model.AssetAdministrationShell;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
@@ -67,7 +66,7 @@ class TransformAmlTest extends AbstractTransformerTest {
         super.setUp();
         TestUtils.setAMLBindings();
 
-        this.classUnderTest = new AmlTransformer(this.mockPreconditionValidator);
+        this.classUnderTest = new AmlTransformer();
         this.amlInputStream = Files.newInputStream(Paths.get("src/test/resources/aml/full_AutomationComponent.aml"));
     }
 
@@ -116,7 +115,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     @Test
     @DisplayName("Test a precondition check which succeeds")
     void preconditionCheckSucceeds() throws TransformationException {
-        this.classUnderTest = new AmlTransformer(new PreconditionValidator());
+        this.classUnderTest = new AmlTransformer();
 
         Precondition precondition = new Precondition();
         precondition.setConfigElementId(DEFAULT_CONFIG_ELEMENT_ID);
@@ -141,7 +140,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     @Disabled("Disabled until preconditions are supported")
     @DisplayName("Test a precondition check with forAll which fails")
     void preconditionCheckFailsForAll() throws TransformationException {
-        this.classUnderTest = new AmlTransformer(new PreconditionValidator());
+        this.classUnderTest = new AmlTransformer();
 
         Precondition precondition = new Precondition();
         precondition.setConfigElementId(DEFAULT_CONFIG_ELEMENT_ID);
@@ -160,7 +159,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     @Disabled("Disabled until preconditions are supported")
     @DisplayName("Test a precondition check with forEach which fails")
     void preconditionCheckFailsForEachAll() throws TransformationException {
-        this.classUnderTest = new AmlTransformer(new PreconditionValidator());
+        this.classUnderTest = new AmlTransformer();
 
         Precondition precondition = new Precondition();
         precondition.setConfigElementId(DEFAULT_CONFIG_ELEMENT_ID);
