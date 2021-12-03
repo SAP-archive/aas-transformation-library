@@ -28,10 +28,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.sap.dsc.aas.lib.TestUtils;
-import com.sap.dsc.aas.lib.config.pojo.Precondition;
-import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeForAll;
-import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeRange;
-import com.sap.dsc.aas.lib.exceptions.PreconditionValidationException;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
@@ -101,78 +97,6 @@ class TransformAmlTest extends AbstractTransformerTest {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><CustomXmlElement>Text</CustomXmlElement>";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
         assertThrows(UnableToReadXmlException.class, () -> classUnderTest.execute(inputStream, new MappingSpecification()));
-    }
-
-    // @Test
-    // @DisplayName("Create identifier")
-    // void createIdentifier() throws TransformationException {
-    // Identifier result = ((AbstractTransformer) classUnderTest).createIdentifier(unitClass,
-    // createSimpleIdGeneration(ID_VALUE));
-    // assertThat(result).isNotNull();
-    // assertThat(result.getIdentifier()).isEqualTo(ID_VALUE);
-    // }
-
-    @Test
-    @DisplayName("Test a precondition check which succeeds")
-    void preconditionCheckSucceeds() throws TransformationException {
-        this.classUnderTest = new AmlTransformer();
-
-        Precondition precondition = new Precondition();
-        precondition.setConfigElementId(DEFAULT_CONFIG_ELEMENT_ID);
-
-        PreconditionTypeForAll forAll = new PreconditionTypeForAll();
-        forAll.setMinimumNumber(1);
-        forAll.setMaximumNumber(2);
-        precondition.setForAll(forAll);
-
-        PreconditionTypeRange range = new PreconditionTypeRange();
-        range.setFromXPath("//caex:Attribute");
-        range.setMinimumNumber(1);
-        range.setMaximumNumber(0);
-        precondition.setForEach(Arrays.asList(range));
-
-        mapping.getHeader().setPreconditions(Arrays.asList(precondition));
-
-        assertDoesNotThrow(() -> classUnderTest.execute(amlInputStream, mapping));
-    }
-
-    @Test
-    @Disabled("Disabled until preconditions are supported")
-    @DisplayName("Test a precondition check with forAll which fails")
-    void preconditionCheckFailsForAll() throws TransformationException {
-        this.classUnderTest = new AmlTransformer();
-
-        Precondition precondition = new Precondition();
-        precondition.setConfigElementId(DEFAULT_CONFIG_ELEMENT_ID);
-
-        PreconditionTypeForAll forAll = new PreconditionTypeForAll();
-        forAll.setMinimumNumber(4);
-        forAll.setMaximumNumber(4);
-        precondition.setForAll(forAll);
-
-        mapping.getHeader().setPreconditions(Arrays.asList(precondition));
-
-        assertThrows(PreconditionValidationException.class, () -> classUnderTest.execute(amlInputStream, mapping));
-    }
-
-    @Test
-    @Disabled("Disabled until preconditions are supported")
-    @DisplayName("Test a precondition check with forEach which fails")
-    void preconditionCheckFailsForEachAll() throws TransformationException {
-        this.classUnderTest = new AmlTransformer();
-
-        Precondition precondition = new Precondition();
-        precondition.setConfigElementId(DEFAULT_CONFIG_ELEMENT_ID);
-
-        PreconditionTypeRange range = new PreconditionTypeRange();
-        range.setFromXPath("//caex:Attribute");
-        range.setMinimumNumber(1);
-        range.setMaximumNumber(1);
-        precondition.setForEach(Arrays.asList(range));
-
-        mapping.getHeader().setPreconditions(Arrays.asList(precondition));
-
-        assertThrows(PreconditionValidationException.class, () -> classUnderTest.execute(amlInputStream, mapping));
     }
 
     @ParameterizedTest(name = "Given version ''{0}'' expected result ''{1}''")
