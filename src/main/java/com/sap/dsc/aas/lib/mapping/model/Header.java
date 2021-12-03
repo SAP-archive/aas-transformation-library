@@ -11,14 +11,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sap.dsc.aas.lib.config.pojo.Precondition;
 
 public class Header extends TemplateSupport {
 
-    protected Map<String, String> namespaces;
+	private Map<String, String> namespaces;
     private String version;
     private String aasVersion;
-    private List<Precondition> preconditions;
     private List<Parameter> parameters = new ArrayList<>();
 
     public String getVersion() {
@@ -51,20 +49,12 @@ public class Header extends TemplateSupport {
         throw new UnsupportedOperationException("@bind ist not allowed in header");
     }
 
-    public List<Precondition> getPreconditions() {
-        return preconditions;
-    }
-
-    public void setPreconditions(List<Precondition> preconditions) {
-        this.preconditions = preconditions;
-    }
-
     public List<Parameter> getParameters() {
         return parameters;
     }
 
     @JsonProperty("@parameters")
-    void setParameters(Map<String, String> parameterMap) {
+    public void setParameters(Map<String, String> parameterMap) {
         this.parameters.addAll(
             parameterMap.entrySet().stream().map(e -> new Parameter(e.getKey(), e.getValue())).collect(Collectors.toList()));
     }

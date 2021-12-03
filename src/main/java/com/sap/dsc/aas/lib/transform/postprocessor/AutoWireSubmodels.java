@@ -38,7 +38,7 @@ public class AutoWireSubmodels implements Consumer<AssetAdministrationShellEnvir
         t.getAssetAdministrationShells().forEach(aas -> aas.getSubmodels().addAll(smRefs));
     }
 
-    protected Reference createReference(String value, KeyElements keyElement, KeyType keyType) {
+    private Reference createReference(String value, KeyElements keyElement, KeyType keyType) {
         Key key = new DefaultKey.Builder().idType(keyType).type(keyElement).value(value).build();
 
         return new DefaultReference.Builder().keys(Arrays.asList(key)).build();

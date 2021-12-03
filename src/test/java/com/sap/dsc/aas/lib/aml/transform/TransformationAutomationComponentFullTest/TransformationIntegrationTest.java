@@ -55,7 +55,7 @@ public class TransformationIntegrationTest {
         AmlTransformer amlTransformer = new AmlTransformer();
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(AUTOMATION_COMPONENT_CONFIG_JSON);
 
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
         Serializer serializer = new JsonSerializer();

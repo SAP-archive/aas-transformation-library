@@ -13,7 +13,7 @@ import com.sap.dsc.aas.lib.ua.transform.BrowsepathXPathBuilder;
 
 public class BrowsePathExpr implements Expression {
 
-    protected final List<Expression> args;
+    private final List<Expression> args;
 
     public BrowsePathExpr(List<Expression> args) {
         this.args = args;

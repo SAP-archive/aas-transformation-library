@@ -36,7 +36,7 @@ public class MappingSpecificationDocumentTransformer {
      * @return Flat AAS env
      * @throws TransformationException If something goes wrong during transformation
      */
-    public AssetAdministrationShellEnvironment createShellEnv(Document document, MappingSpecification mappings,
+    protected AssetAdministrationShellEnvironment createShellEnv(Document document, MappingSpecification mappings,
         Map<String, String> initialVars)
         throws TransformationException {
         if (mappings.getAasEnvironmentMapping() != null) {

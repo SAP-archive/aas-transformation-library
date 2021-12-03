@@ -17,12 +17,12 @@ public class BuiltinCallExpr implements Expression {
     /**
      * The function that is used to compute a value.
      */
-    protected final Function<Object, Object> f;
+    private final Function<Object, Object> f;
     /**
      * Expressions for the function's arguments that are evaluated to compute the actual arguments of
      * the function.
      */
-    protected final Expression[] args;
+    private final Expression[] args;
 
     public BuiltinCallExpr(Function<Object, Object> f, List<Expression> args) {
         this(f, args.toArray(new Expression[args.size()]));

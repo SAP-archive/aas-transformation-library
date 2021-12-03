@@ -16,7 +16,7 @@ import com.sap.dsc.aas.lib.ua.transform.BrowsepathXPathBuilder;
 
 public class UaChildrenExpr implements Expression {
 
-    protected final List<Expression> args;
+	private final List<Expression> args;
 
     public UaChildrenExpr(List<Expression> args) {
         this.args = args;

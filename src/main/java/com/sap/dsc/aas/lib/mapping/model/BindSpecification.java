@@ -12,7 +12,7 @@ import com.sap.dsc.aas.lib.expressions.Expression;
 
 public class BindSpecification {
 
-    protected Map<String, Expression> bindings = new HashMap<>();
+	private Map<String, Expression> bindings = new HashMap<>();
 
     public Map<String, Expression> getBindings() {
         return bindings;

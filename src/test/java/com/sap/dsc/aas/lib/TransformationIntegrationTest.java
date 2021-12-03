@@ -78,7 +78,7 @@ public class TransformationIntegrationTest {
 
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(CONFIG_JSON);
 
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class TransformationIntegrationTest {
 
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(AUTOMATION_COMPONENT_CONFIG_JSON);
 
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         System.out.println(new JsonSerializer().write(shellEnv));
     }
