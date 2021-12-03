@@ -86,12 +86,5 @@ public class AmlTransformer extends DocumentTransformer {
         return "[Invalid version string provided]";
     }
 
-    @Override
-    public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
-        MappingSpecification mapping, Map<String, String> initialVars) throws TransformationException {
-        setNamespaces(mapping.getHeader().getNamespaces());
-        preconditionValidator.setPreconditions(mapping.getHeader().getPreconditions());
-        // idGenerator.prepareGraph(validXmlDocument, mapping.getConfigMappings());
-        return super.createShellEnv(validXmlDocument, mapping, initialVars);
-    }
+
 }

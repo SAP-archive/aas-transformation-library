@@ -52,7 +52,7 @@ public abstract class DocumentTransformer extends MappingSpecificationDocumentTr
      * @return
      * @throws TransformationException
      */
-    public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping)
+    public AssetAdministrationShellEnvironment execute(InputStream inStream, MappingSpecification mapping)
         throws TransformationException {
         return execute(inStream, mapping, null);
     }

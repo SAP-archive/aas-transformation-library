@@ -137,7 +137,7 @@ public class TemplateTransformerTest {
             .newInputStream(Paths.get("src/test/resources/mappings/generic/generic.xml"))) {
 
             // ACT
-            AssetAdministrationShellEnvironment transform = new GenericDocumentTransformer().transform(testResource,
+            AssetAdministrationShellEnvironment transform = new GenericDocumentTransformer().execute(testResource,
                 mapSpec);
             // ASSERT
             Assertions.assertEquals(2, transform.getSubmodels().size());

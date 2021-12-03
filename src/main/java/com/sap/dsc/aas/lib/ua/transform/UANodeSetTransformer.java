@@ -77,11 +77,5 @@ public class UANodeSetTransformer extends DocumentTransformer {
         LOGGER.info("BrowsepathBuilder set to validated NodeSet.");
     }
 
-    @Override
-    public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
-        MappingSpecification mapping, Map<String, String> initialVars) throws TransformationException {
-        setNamespaces(mapping.getHeader().getNamespaces());
-        preconditionValidator.setPreconditions(mapping.getHeader().getPreconditions());
-        return super.createShellEnv(validXmlDocument, mapping, initialVars);
-    }
+
 }

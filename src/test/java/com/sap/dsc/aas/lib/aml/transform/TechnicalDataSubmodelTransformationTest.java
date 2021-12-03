@@ -60,7 +60,7 @@ public class TechnicalDataSubmodelTransformationTest {
         AmlTransformer amlTransformer = new AmlTransformer();
 
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
         validator = new JsonSchemaValidator();
         serializer = new JsonSerializer();
 
@@ -107,7 +107,7 @@ public class TechnicalDataSubmodelTransformationTest {
 
         MappingSpecification mapping =
             new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_MISSING_MANUFACTURER_NAME);
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -142,7 +142,7 @@ public class TechnicalDataSubmodelTransformationTest {
 
         MappingSpecification mapping =
             new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_MISSING_IDENTIFICATION_DATA);
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
 

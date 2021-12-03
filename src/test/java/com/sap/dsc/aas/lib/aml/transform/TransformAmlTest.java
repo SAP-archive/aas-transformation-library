@@ -74,7 +74,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     @Test
     @DisplayName("Straight transform an AML document into AAS format")
     void transformAmlTest() throws TransformationException {
-        AssetAdministrationShellEnvironment result = classUnderTest.transform(amlInputStream, mapping);
+        AssetAdministrationShellEnvironment result = classUnderTest.execute(amlInputStream, mapping);
         assertNotNull(result);
 
         List<AssetAdministrationShell> shells = result.getAssetAdministrationShells();
@@ -85,7 +85,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     @Test
     @DisplayName("Test failure case, that the AML document can't read")
     void transformAmlWithEmptyAmlStream() {
-        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.transform(null, new MappingSpecification()));
+        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.execute(null, new MappingSpecification()));
     }
 
     @Test
@@ -93,7 +93,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     void readInvalidXml() {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><UnclosedOpenTag>Text";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
-        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.transform(inputStream, new MappingSpecification()));
+        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.execute(inputStream, new MappingSpecification()));
     }
 
     @Test
@@ -101,7 +101,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     void readInvalidAml() {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><CustomXmlElement>Text</CustomXmlElement>";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
-        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.transform(inputStream, new MappingSpecification()));
+        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.execute(inputStream, new MappingSpecification()));
     }
 
     // @Test
@@ -134,7 +134,7 @@ class TransformAmlTest extends AbstractTransformerTest {
 
         mapping.getHeader().setPreconditions(Arrays.asList(precondition));
 
-        assertDoesNotThrow(() -> classUnderTest.transform(amlInputStream, mapping));
+        assertDoesNotThrow(() -> classUnderTest.execute(amlInputStream, mapping));
     }
 
     @Test
@@ -153,7 +153,7 @@ class TransformAmlTest extends AbstractTransformerTest {
 
         mapping.getHeader().setPreconditions(Arrays.asList(precondition));
 
-        assertThrows(PreconditionValidationException.class, () -> classUnderTest.transform(amlInputStream, mapping));
+        assertThrows(PreconditionValidationException.class, () -> classUnderTest.execute(amlInputStream, mapping));
     }
 
     @Test
@@ -173,7 +173,7 @@ class TransformAmlTest extends AbstractTransformerTest {
 
         mapping.getHeader().setPreconditions(Arrays.asList(precondition));
 
-        assertThrows(PreconditionValidationException.class, () -> classUnderTest.transform(amlInputStream, mapping));
+        assertThrows(PreconditionValidationException.class, () -> classUnderTest.execute(amlInputStream, mapping));
     }
 
     @ParameterizedTest(name = "Given version ''{0}'' expected result ''{1}''")

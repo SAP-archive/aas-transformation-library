@@ -45,7 +45,7 @@ public class UaIntegrationTest {
         InputStream uaInputStream = Files.newInputStream(Paths.get(UA_BIG_MACHINE));
         UANodeSetTransformer uaTransformer = new UANodeSetTransformer();
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(INTEGRATION_CONFIG);
-        shellEnv = uaTransformer.transform(uaInputStream, mapping);
+        shellEnv = uaTransformer.execute(uaInputStream, mapping);
         boolean idInEnv = shellEnv.getSubmodels().stream().map(s -> s.getIdentification().getIdentifier())
                 .collect(Collectors.toList()).contains("http://exp.organization.com/UA/BigMachine/ns=4;i=1281");
         assertTrue(idInEnv);
@@ -57,7 +57,7 @@ public class UaIntegrationTest {
         InputStream uaInputStream = Files.newInputStream(Paths.get(UA_BIG_MACHINE));
         UANodeSetTransformer uaTransformer = new UANodeSetTransformer();
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(NAMEPLATE_CONFIG);
-        shellEnv = uaTransformer.transform(uaInputStream, mapping);
+        shellEnv = uaTransformer.execute(uaInputStream, mapping);
         Submodel np = getSubmodel("Nameplate");
         assertEquals(5, np.getSubmodelElements().size());
         SubmodelElementCollection address = (SubmodelElementCollection) getElement("Address", np);
