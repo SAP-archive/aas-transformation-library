@@ -1,43 +1,39 @@
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
+
+  SPDX-License-Identifier: Apache-2.0 
+ */
 package com.sap.dsc.aas.lib.ua.transform;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.*;
-import com.sap.dsc.aas.lib.TestUtils;
-import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
-import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
-import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
-import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.*;
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import com.sap.dsc.aas.lib.TestUtils;
+import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
+import io.adminshell.aas.v3.model.*;
 
 public class UaIntegrationTest {
 
     public static final String INTEGRATION_CONFIG = "src/test/resources/ua/uaIntegrationTest.json";
     public static final String UA_BIG_MACHINE = "src/test/resources/ua/big.machine.nodeset.xml";
     public static final String NAMEPLATE_CONFIG = "src/test/resources/ua/diToNameplate.json";
-    public static final String JSON_SCHEMA_NAMEPLATE = "src/test/resources/schema/schema_nameplate.json";
 
-    private ObjectMapper mapper;
     private static AssetAdministrationShellEnvironment shellEnv;
 
     @BeforeEach
     protected void setUp() throws Exception {
         TestUtils.resetBindings();
-        mapper = new ObjectMapper();
     }
 
     @Test
@@ -47,13 +43,12 @@ public class UaIntegrationTest {
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(INTEGRATION_CONFIG);
         shellEnv = uaTransformer.transform(uaInputStream, mapping);
         boolean idInEnv = shellEnv.getSubmodels().stream().map(s -> s.getIdentification().getIdentifier())
-                .collect(Collectors.toList()).contains("http://exp.organization.com/UA/BigMachine/ns=4;i=1281");
+            .collect(Collectors.toList()).contains("http://exp.organization.com/UA/BigMachine/ns=4;i=1281");
         assertTrue(idInEnv);
     }
 
     @Test
     void testUaNameplate() throws Exception {
-        InputStream schemaInputStream = Files.newInputStream(Paths.get(JSON_SCHEMA_NAMEPLATE));
         InputStream uaInputStream = Files.newInputStream(Paths.get(UA_BIG_MACHINE));
         UANodeSetTransformer uaTransformer = new UANodeSetTransformer();
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(NAMEPLATE_CONFIG);
@@ -62,44 +57,26 @@ public class UaIntegrationTest {
         assertEquals(5, np.getSubmodelElements().size());
         SubmodelElementCollection address = (SubmodelElementCollection) getElement("Address", np);
         address.getValues().stream().map(Referable::getIdShort)
-                .collect(Collectors.toList()).forEach(Assertions::assertNotNull);
+            .collect(Collectors.toList()).forEach(Assertions::assertNotNull);
         assertTrue(shellEnv.getAssetAdministrationShells().size() > 0);
-        shellEnv.getAssetAdministrationShells().get(0).getSubmodels().forEach(sm ->
-                assertTrue(sm.getKeys().size() > 0));
-        JsonSerializer jsonSerializer = new JsonSerializer();
-        SchemaValidatorsConfig schemaValidatorsConfig = new SchemaValidatorsConfig();
-        schemaValidatorsConfig.setFailFast(true);
-        JsonNode schemaNode = mapper.readTree(Files.newInputStream(Paths.get(JSON_SCHEMA_NAMEPLATE)));
-        JsonSchema schema =
-                JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaNode)).getSchema(schemaNode, schemaValidatorsConfig);
-        JsonNode jsonNode = mapper.readTree(jsonSerializer.write(shellEnv)).get("submodels").get(0);
-
-        try {
-            schema.validate(jsonNode);
-            fail("JsonSchemaException must be thrown");
-        } catch (JsonSchemaException e) {
-            final Set<ValidationMessage> messages = e.getValidationMessages();
-            messages.stream().forEach(message -> System.out.println(message.getMessage()));
-            assertThat(messages.size()).isEqualTo(0);
-        }
+        shellEnv.getAssetAdministrationShells().get(0).getSubmodels().forEach(sm -> assertTrue(sm.getKeys().size() > 0));
     }
-
 
     SubmodelElement getElement(String idShort, Submodel submodel) {
         assertThat(submodel.getSubmodelElements()).isNotNull();
 
         return submodel.getSubmodelElements().stream()
-                .filter(submodelElement -> submodelElement.getIdShort().equals(idShort))
-                .findFirst()
-                .orElseThrow(() -> new AssertionFailedError("SubmodelElement with IdShort '" + idShort + "' not found"));
+            .filter(submodelElement -> submodelElement.getIdShort().equals(idShort))
+            .findFirst()
+            .orElseThrow(() -> new AssertionFailedError("SubmodelElement with IdShort '" + idShort + "' not found"));
     }
 
     Submodel getSubmodel(String idShort) {
         assertNotNull(shellEnv.getSubmodels());
 
         return shellEnv.getSubmodels().stream()
-                .filter(submodel -> submodel.getIdShort().equals(idShort))
-                .findFirst()
-                .orElseThrow(() -> new AssertionFailedError("Submodel with IdShort '" + idShort + "' not found"));
+            .filter(submodel -> submodel.getIdShort().equals(idShort))
+            .findFirst()
+            .orElseThrow(() -> new AssertionFailedError("Submodel with IdShort '" + idShort + "' not found"));
     }
 }
