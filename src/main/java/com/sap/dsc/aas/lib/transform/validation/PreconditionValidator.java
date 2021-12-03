@@ -13,19 +13,19 @@ import java.util.stream.Collectors;
 
 import org.dom4j.Node;
 
-import com.sap.dsc.aas.lib.transform.XPathHelper;
-import com.sap.dsc.aas.lib.config.pojo.AbstractConfig;
 import com.sap.dsc.aas.lib.config.pojo.Precondition;
 import com.sap.dsc.aas.lib.config.pojo.preconditions.AbstractPreconditionTypeForEach;
 import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeMatch;
 import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeRange;
 import com.sap.dsc.aas.lib.exceptions.PreconditionValidationException;
+import com.sap.dsc.aas.lib.mapping.model.Template;
+import com.sap.dsc.aas.lib.transform.XPathHelper;
 
 public class PreconditionValidator {
 
     public static final String BUT_WAS = " but was ";
     private List<Precondition> preconditions;
-    
+
     private XPathHelper xPathHelper = XPathHelper.getInstance();
 
     public List<Precondition> getPreconditions() {
@@ -38,13 +38,13 @@ public class PreconditionValidator {
 
     /**
      *
-     * @param configElement A configMapping, configSubmodel or other AbstractConfigs
+     * @param template A template to validate
      * @param matchingNodes Nodes matching this config element. For example, a configMapping matches a
      *        list of node in its from_xpath
      * @throws PreconditionValidationException If something goes wrong
      */
-    public void validate(AbstractConfig configElement, List<Node> matchingNodes) throws PreconditionValidationException {
-        List<Precondition> matchingPreconditions = this.getPreconditions(configElement.getConfigElementId());
+    public void validate(Template template, List<Node> matchingNodes) throws PreconditionValidationException {
+        List<Precondition> matchingPreconditions = this.getPreconditions(/* template.getConfigElementId() */null);
         for (Precondition precondition : matchingPreconditions) {
             this.validatePrecondition(precondition, matchingNodes);
         }

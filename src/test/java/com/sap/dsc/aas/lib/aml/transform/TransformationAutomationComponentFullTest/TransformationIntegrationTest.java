@@ -24,9 +24,9 @@ import com.networknt.schema.SpecVersionDetector;
 import com.networknt.schema.ValidationMessage;
 import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
-import com.sap.dsc.aas.lib.config.ConfigLoader;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 import io.adminshell.aas.v3.dataformat.SerializationException;
 import io.adminshell.aas.v3.dataformat.Serializer;
@@ -42,22 +42,20 @@ public class TransformationIntegrationTest {
     public static final String AAS_v3_JSON = "src/test/resources/aas/AASEnv_Test_JSON_v3.json";
     private static AssetAdministrationShellEnvironment shellEnv;
 
-	@BeforeEach
-	protected void setUp() throws Exception {
-		TestUtils.resetBindings();
-	}
-        
+    @BeforeEach
+    protected void setUp() throws Exception {
+        TestUtils.resetBindings();
+    }
+
     @Test
     void validateTransformedAutomationConfigFullAgainstAASJSONSchema() throws IOException, SerializationException, TransformationException {
 
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(AUTOMATION_COMPONENT_CONFIG_JSON);
 
-        ConfigTransformToAas config = configLoader.loadConfig(AUTOMATION_COMPONENT_CONFIG_JSON);
-
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        shellEnv = amlTransformer.transform(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
         Serializer serializer = new JsonSerializer();

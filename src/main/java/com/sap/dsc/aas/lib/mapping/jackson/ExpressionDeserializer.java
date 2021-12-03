@@ -1,3 +1,8 @@
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
+
+  SPDX-License-Identifier: Apache-2.0 
+ */
 package com.sap.dsc.aas.lib.mapping.jackson;
 
 import java.io.IOException;
@@ -13,7 +18,9 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.sap.dsc.aas.lib.expressions.*;
 import com.sap.dsc.aas.lib.expressions.BuiltinCallExpr;
+import com.sap.dsc.aas.lib.expressions.CaexAttributeNameExpr;
 import com.sap.dsc.aas.lib.expressions.ConstantExpr;
 import com.sap.dsc.aas.lib.expressions.DefExpr;
 import com.sap.dsc.aas.lib.expressions.Expression;
@@ -24,8 +31,7 @@ import com.sap.dsc.aas.lib.expressions.XPathExpr;
 
 public class ExpressionDeserializer extends JsonDeserializer<Expression> {
 
-    public ExpressionDeserializer() {
-    }
+    public ExpressionDeserializer() {}
 
     @Override
     public Expression deserialize(JsonParser jp, DeserializationContext dc)
@@ -40,7 +46,17 @@ public class ExpressionDeserializer extends JsonDeserializer<Expression> {
                 // move to the corresponding value
                 jp.nextToken();
 
-                if (property.startsWith("@")) {
+                if (property.equals("default")) {
+                    if (result == null) {
+                        throw new InvalidFormatException(jp, "Default is used for no Expression",
+                            jp.getValueAsString(), Expression.class);
+                    }
+                    Expression toWrap = result;
+                    Expression defaultExpr = jp.getCodec().readValue(jp, Expression.class);
+                    result = new ExpressionWithDefault(toWrap, defaultExpr);
+                }
+
+                else if (property.startsWith("@")) {
                     String symbol = property.substring(1);
 
                     // deserialize value as expression
@@ -73,6 +89,23 @@ public class ExpressionDeserializer extends JsonDeserializer<Expression> {
                             case "xpath":
                                 result = new XPathExpr(argsList);
                                 break;
+                            case "caexAttributeName":
+                                if (argsList.size() == 1 && argsList.get(0) instanceof ConstantExpr
+                                    && ((ConstantExpr) argsList.get(0)).getValue() instanceof String) {
+                                    String attributeName = (String) ((ConstantExpr) argsList.get(0)).getValue();
+                                    result = new CaexAttributeNameExpr(attributeName);
+                                } else {
+                                    throw new InvalidFormatException(jp,
+                                        "Only string constants are supported as variable names",
+                                        jp.getValueAsString(), Expression.class);
+                                }
+                                break;
+                            case "uaBrowsePath":
+                                result = new BrowsePathExpr(argsList);
+                                break;
+                            case "uaChildren":
+                                result = new UaChildrenExpr(argsList);
+                                break;
                             case "var":
                                 if (argsList.size() == 1 &&
                                     argsList.get(0) instanceof ConstantExpr &&
@@ -83,17 +116,17 @@ public class ExpressionDeserializer extends JsonDeserializer<Expression> {
                                         jp.getValueAsString(), Expression.class);
                                 }
                                 break;
-							case "def":
-								if (argsList.size() == 1 && argsList.get(0) instanceof ConstantExpr
-										&& ((ConstantExpr) argsList.get(0)).getValue() instanceof String) {
-									result = new DefExpr((String) ((ConstantExpr) argsList.get(0)).getValue());
-								} else {
-									throw new InvalidFormatException(jp,
-											"Only string constants are supported as definition names",
-											jp.getValueAsString(), Expression.class);
-								}
-								break;
-							}
+                            case "def":
+                                if (argsList.size() == 1 && argsList.get(0) instanceof ConstantExpr
+                                    && ((ConstantExpr) argsList.get(0)).getValue() instanceof String) {
+                                    result = new DefExpr((String) ((ConstantExpr) argsList.get(0)).getValue());
+                                } else {
+                                    throw new InvalidFormatException(jp,
+                                        "Only string constants are supported as definition names",
+                                        jp.getValueAsString(), Expression.class);
+                                }
+                                break;
+                        }
                     }
 
                     if (result == null) {

@@ -32,7 +32,7 @@ public class AmlxPackageReaderTest {
 
     @BeforeEach
     void setup() throws Exception {
-    	TestUtils.resetBindings();
+        TestUtils.resetBindings();
         this.amlxFile = AmlxPackageCreator.compressFolder(AmlxPackageCreator.PATH_TO_MINIMAL_AMLX_DIR);
     }
 

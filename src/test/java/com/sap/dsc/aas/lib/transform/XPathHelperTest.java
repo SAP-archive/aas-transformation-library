@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.junit.After;
 import org.junit.jupiter.api.Assertions;
@@ -40,7 +39,7 @@ import com.sap.dsc.aas.lib.exceptions.TransformationException;
 public class XPathHelperTest extends AbstractTransformerTest {
 
     private XPathHelper classUnderTest;
-    
+
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
@@ -61,7 +60,7 @@ public class XPathHelperTest extends AbstractTransformerTest {
     @Override
     @BeforeEach
     protected void setUp() throws Exception {
-    	super.setUp();
+        super.setUp();
         this.classUnderTest = XPathHelper.getInstance();
         classUnderTest.setNamespaceBinding("caex", "http://www.dke.de/CAEX");
         System.setOut(new PrintStream(outContent));
@@ -88,53 +87,52 @@ public class XPathHelperTest extends AbstractTransformerTest {
     void getStringValues(String xPath, List<String> expectedValues) {
         assertThat(classUnderTest.getStringValues(unitClass, xPath)).containsExactlyElementsIn(expectedValues);
     }
-    
+
     @Test
-    void doubleNamespaceBinding(){
+    void doubleNamespaceBinding() {
         classUnderTest.setNamespaceBinding("caex", "http://www.dke.de/CAEX");
         assertThat(outContent.toString().contains("already set"));
         assertThat(!outContent.toString().contains("will be overriden"));
     }
-    
+
     @Test
-    void overrideNamespaceBinding(){
+    void overrideNamespaceBinding() {
         classUnderTest.setNamespaceBinding("caex", "http://overrideURI");
         assertThat(outContent.toString().contains("already set"));
         assertThat(outContent.toString().contains("will be overriden"));
     }
-    
+
     @Test
-    void illegalNamespaceBinding(){
-    	Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("", "http://www.dke.de/CAEX"));
-    	Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("myprefix", null));
-    	Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("myprefix", null));
+    void illegalNamespaceBinding() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("", "http://www.dke.de/CAEX"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("myprefix", null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> classUnderTest.setNamespaceBinding("myprefix", null));
     }
-    
+
     @Test
-    void testAddNamespaceBindings(){
-    	Map<String,String> bindings = new HashMap<>();
-    	bindings.put("a", "http://a.org/ns");
-    	bindings.put("b", "http://b.org/ns");
+    void testAddNamespaceBindings() {
+        Map<String, String> bindings = new HashMap<>();
+        bindings.put("a", "http://a.org/ns");
+        bindings.put("b", "http://b.org/ns");
         classUnderTest.addNamespaceBindings(bindings);
         Map<String, String> namespaceBindings = classUnderTest.getNamespaceBindings();
         assertThat(namespaceBindings).containsAtLeastEntriesIn(bindings);
     }
-    
-	@Test
-	void testXPathWithNamespaceBindings() throws Exception {
-		InputStream testInput = Files.newInputStream(Paths.get("src/test/resources/ua/aasfull.xml"));
-		Document testDoc = new SAXReader().read(testInput);
 
-		XPathHelper.getInstance().setNamespaceBinding("opc", "http://opcfoundation.org/UA/2011/03/UANodeSet.xsd");
-		XPathHelper.getInstance().setNamespaceBinding("uax", "http://opcfoundation.org/UA/2008/02/Types.xsd");
-		XPathHelper.getInstance().setNamespaceBinding("bla", "http://opcfoundation.org/UA/I4AAS/V3/Types.xsd");
-		
-		Object evaluate = XPathHelper.getInstance().createXPath(testDoc, "string(/opc:UANodeSet/opc:UAVariable/opc:Value/uax:ListOfExtensionObject/uax:ExtensionObject/uax:Body/bla:AASKeyDataType/bla:Type)")
-				.evaluate(testDoc);
-		assertNotNull(evaluate);
-		
-	}
+    @Test
+    void testXPathWithNamespaceBindings() throws Exception {
+        InputStream testInput = Files.newInputStream(Paths.get("src/test/resources/ua/aasfull.xml"));
+        Document testDoc = new SAXReader().read(testInput);
 
-    
+        XPathHelper.getInstance().setNamespaceBinding("opc", "http://opcfoundation.org/UA/2011/03/UANodeSet.xsd");
+        XPathHelper.getInstance().setNamespaceBinding("uax", "http://opcfoundation.org/UA/2008/02/Types.xsd");
+        XPathHelper.getInstance().setNamespaceBinding("bla", "http://opcfoundation.org/UA/I4AAS/V3/Types.xsd");
+
+        Object evaluate = XPathHelper.getInstance().createXPath(testDoc,
+            "string(/opc:UANodeSet/opc:UAVariable/opc:Value/uax:ListOfExtensionObject/uax:ExtensionObject/uax:Body/bla:AASKeyDataType/bla:Type)")
+            .evaluate(testDoc);
+        assertNotNull(evaluate);
+
+    }
 
 }

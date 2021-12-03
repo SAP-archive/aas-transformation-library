@@ -8,60 +8,65 @@ package com.sap.dsc.aas.lib.transform;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import org.dom4j.Document;
-import org.dom4j.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.dsc.aas.lib.mapping.AASMappingTransformer;
-import com.sap.dsc.aas.lib.mapping.model.Mapping;
-import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
-import com.sap.dsc.aas.lib.expressions.Expression;
-import com.sap.dsc.aas.lib.transform.idgeneration.IdGenerator;
-import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
-
-import io.adminshell.aas.v3.model.*;
-import io.adminshell.aas.v3.model.impl.DefaultAssetAdministrationShell;
-import io.adminshell.aas.v3.model.impl.DefaultAssetAdministrationShellEnvironment;
+import com.sap.dsc.aas.lib.mapping.TemplateTransformer;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public class MappingSpecificationDocumentTransformer {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	public MappingSpecificationDocumentTransformer() {
-	}
+    private List<Consumer<AssetAdministrationShellEnvironment>> postProcessors = new ArrayList<>();
 
-	/**
-	 * Map document based on the mapping configuration into one flat AAS env.
-	 *
-	 * @param document       The XML document
-	 * @param configMappings The mapping configuration
-	 * @return Flat AAS env
-	 * @throws TransformationException If something goes wrong during transformation
-	 */
-	public AssetAdministrationShellEnvironment createShellEnv(Document document, MappingSpecification mappings)
-			throws TransformationException {
-		AssetAdministrationShellEnvironment shellEnv = new DefaultAssetAdministrationShellEnvironment();
+    public MappingSpecificationDocumentTransformer() {}
 
-		if (mappings == null) {
-			return shellEnv;
-		}
+    /**
+     * Map document based on the mapping configuration into one flat AAS env.
+     *
+     * @param document The XML document
+     * @param mappings The mapping configuration
+     * @return Flat AAS env
+     * @throws TransformationException If something goes wrong during transformation
+     */
+    public AssetAdministrationShellEnvironment createShellEnv(Document document, MappingSpecification mappings,
+        Map<String, String> initialVars)
+        throws TransformationException {
+        if (mappings.getAasEnvironmentMapping() != null) {
 
-		LOGGER.info("Transforming {} configMappings...", mappings.getMappings().size());
+            LOGGER.info("Transforming AAS Environment...");
 
-		List<AssetAdministrationShellEnvironment> transformedEnvs = new AASMappingTransformer().transform(mappings, document);
-		for (AssetAdministrationShellEnvironment envForFlattening : transformedEnvs) {
-			shellEnv.getAssetAdministrationShells()
-					.addAll(envForFlattening.getAssetAdministrationShells());
-			shellEnv.getAssets().addAll(envForFlattening.getAssets());
-			shellEnv.getSubmodels().addAll(envForFlattening.getSubmodels());
-			shellEnv.getConceptDescriptions().addAll(envForFlattening.getConceptDescriptions());
-		}
+            AssetAdministrationShellEnvironment transformedEnvironment = new TemplateTransformer().transform(mappings,
+                document, initialVars);
+            executePostProcessors(transformedEnvironment);
 
-		return shellEnv;
-	}
+            return transformedEnvironment;
+        } else {
+            throw new IllegalArgumentException("No AAS Environment specified!");
+        }
+    }
+
+    private void executePostProcessors(AssetAdministrationShellEnvironment transformedEnvironment) {
+        postProcessors.stream().forEach(c -> c.accept(transformedEnvironment));
+    }
+
+    /**
+     * adds a function which gets called with the AssetAdministrationShellEnvironment result after the
+     * transformation process
+     */
+    public void addPostProcessor(Consumer<AssetAdministrationShellEnvironment> postProcessor) {
+        postProcessors.add(postProcessor);
+    }
+
+    public void setNamespaces(Map<String, String> namespaces) {
+        XPathHelper.getInstance().addNamespaceBindings(namespaces);
+    }
 
 }
