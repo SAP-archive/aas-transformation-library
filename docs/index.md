@@ -30,6 +30,6 @@ engine, how to conduct the mapping. When called from the commandline, the result
 When used as a dependency in another java-project, it will return an AssetAdministrationShellEnvironment object from the
 abovementioned java-model library. The user must decide what transformer to use depending on the format of the source file.
 
-![aas-transformation-library schema](../images/aastransform.png "High level Workflow for the AAS Transformation Library")
+![aas-transformation-library schema](images/aastransform.png "High level Workflow for the AAS Transformation Library")
 
 The project was kicked-off by SAP for AutomationML-transformations and extended its scope from there.
