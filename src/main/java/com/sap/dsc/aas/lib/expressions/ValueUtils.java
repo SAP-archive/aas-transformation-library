@@ -361,10 +361,6 @@ public class ValueUtils {
         return new BigInteger(stringValue(value, true));
     }
 
-    /*
-     * FIXME: check for String-conversion! old - String set: true, String empty: false new - String set
-     * and "true" (case insensitive): true, else: false
-     */
     public Boolean booleanValue(Object value) {
         if (value == null)
             return Boolean.FALSE;
