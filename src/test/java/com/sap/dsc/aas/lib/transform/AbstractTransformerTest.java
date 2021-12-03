@@ -23,10 +23,9 @@ import com.sap.dsc.aas.lib.expressions.ConstantExpr;
 import com.sap.dsc.aas.lib.expressions.XPathExpr;
 import com.sap.dsc.aas.lib.mapping.model.BindSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Header;
-import com.sap.dsc.aas.lib.mapping.model.LegacyTemplate;
-import com.sap.dsc.aas.lib.mapping.model.LegacyTemplateSupport;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
+import com.sap.dsc.aas.lib.mapping.model.TemplateSupport;
 
 import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
 import io.adminshell.aas.v3.model.AssetAdministrationShell;
@@ -76,8 +75,8 @@ public abstract class AbstractTransformerTest {
         // create a proxy instance that implements the bean interface and the config interface
         List<Class<?>> interfaces = new ArrayList<>();
         interfaces.addAll(Arrays.asList(target.getClass().getInterfaces()));
-        interfaces.add(LegacyTemplate.class);
-        LegacyTemplate config = new LegacyTemplateSupport(target);
+        interfaces.add(Template.class);
+        Template config = new TemplateSupport(target);
         return (T) Proxy.newProxyInstance(getClass().getClassLoader(),
             interfaces.toArray(new Class<?>[interfaces.size()]),
             (o, method, args) -> {

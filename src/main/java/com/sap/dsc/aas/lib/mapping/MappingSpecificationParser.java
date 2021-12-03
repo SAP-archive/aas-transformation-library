@@ -43,10 +43,9 @@ import com.sap.dsc.aas.lib.mapping.jackson.BindingSpecificationDeserializer;
 import com.sap.dsc.aas.lib.mapping.jackson.ExpressionDeserializer;
 import com.sap.dsc.aas.lib.mapping.model.BindSpecification;
 import com.sap.dsc.aas.lib.mapping.model.LangStringTemplate;
-import com.sap.dsc.aas.lib.mapping.model.LegacyTemplate;
-import com.sap.dsc.aas.lib.mapping.model.LegacyTemplateSupport;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
+import com.sap.dsc.aas.lib.mapping.model.TemplateSupport;
 
 import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
 import io.adminshell.aas.v3.dataformat.core.deserialization.EmbeddedDataSpecificationDeserializer;
@@ -208,8 +207,8 @@ public class MappingSpecificationParser {
                                 // create a proxy instance that implements the bean interface and the config interface
                                 List<Class<?>> interfaces = new ArrayList<>();
                                 interfaces.addAll(Arrays.asList(target.getClass().getInterfaces()));
-                                interfaces.add(LegacyTemplate.class);
-                                LegacyTemplate config = new LegacyTemplateSupport(target);
+                                interfaces.add(Template.class);
+                                Template config = new TemplateSupport(target);
                                 return Proxy.newProxyInstance(getClass().getClassLoader(),
                                     interfaces.toArray(new Class<?>[interfaces.size()]),
                                     (o, method, args) -> {
@@ -249,13 +248,13 @@ public class MappingSpecificationParser {
             public List<BeanPropertyDefinition> updateProperties(DeserializationConfig config, BeanDescription beanDesc,
                 List<BeanPropertyDefinition> propDefs) {
                 // include all config properties
-                if (!LegacyTemplate.class.isAssignableFrom(beanDesc.getBeanClass()) &&
+                if (!Template.class.isAssignableFrom(beanDesc.getBeanClass()) &&
                     (ReflectionHelper.isModelInterfaceOrDefaultImplementation(beanDesc.getBeanClass()) ||
                         LangString.class.isAssignableFrom(beanDesc.getBeanClass()))) {
                     Set<String> existingProps = propDefs.stream().map(propDef -> propDef.getName()).collect(Collectors.toSet());
                     List<BeanPropertyDefinition> compoundDefs = new ArrayList<>(propDefs);
                     compoundDefs.addAll(
-                        config.introspect(config.getTypeFactory().constructSimpleType(LegacyTemplate.class, null))
+                        config.introspect(config.getTypeFactory().constructSimpleType(Template.class, null))
                             .findProperties().stream()
                             // filter properties that are already contained in base bean interface
                             .filter(propDef -> !existingProps.contains(propDef.getName())).collect(Collectors.toList()));
