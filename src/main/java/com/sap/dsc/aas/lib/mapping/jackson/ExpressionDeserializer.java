@@ -19,15 +19,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.sap.dsc.aas.lib.expressions.*;
-import com.sap.dsc.aas.lib.expressions.BuiltinCallExpr;
-import com.sap.dsc.aas.lib.expressions.CaexAttributeNameExpr;
-import com.sap.dsc.aas.lib.expressions.ConstantExpr;
-import com.sap.dsc.aas.lib.expressions.DefExpr;
-import com.sap.dsc.aas.lib.expressions.Expression;
-import com.sap.dsc.aas.lib.expressions.Expressions;
-import com.sap.dsc.aas.lib.expressions.ListExpr;
-import com.sap.dsc.aas.lib.expressions.VarExpr;
-import com.sap.dsc.aas.lib.expressions.XPathExpr;
 
 public class ExpressionDeserializer extends JsonDeserializer<Expression> {
 

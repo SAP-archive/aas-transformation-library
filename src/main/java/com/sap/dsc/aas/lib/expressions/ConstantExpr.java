@@ -14,7 +14,7 @@ public class ConstantExpr implements Expression {
     /**
      * The constant value.
      */
-    protected final Object value;
+    private final Object value;
 
     public ConstantExpr(Object value) {
         this.value = value;

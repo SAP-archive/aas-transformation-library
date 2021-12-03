@@ -7,8 +7,6 @@ package com.sap.dsc.aas.lib.ua.transform;
 
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
-import java.util.Map;
-
 import javax.xml.XMLConstants;
 
 import org.dom4j.Document;
@@ -22,28 +20,16 @@ import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.DocumentTransformer;
-import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 import com.sap.dsc.aas.lib.ua.transform.validation.UANodeSetSchemaValidator;
-import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
-// TODO write tests
 public class UANodeSetTransformer extends DocumentTransformer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private SchemaValidator nodesetValidator;
 
-    private PreconditionValidator preconditionValidator;
-
     public UANodeSetTransformer() {
-        this(new PreconditionValidator());
-        // FIXME check for needed namespace bindings
-        // XPathHelper.getInstance().setNamespaceBinding(null, null);
-    }
-
-    public UANodeSetTransformer(PreconditionValidator validator) {// FIXME only used by tests
-        this.preconditionValidator = validator;
         this.nodesetValidator = new UANodeSetSchemaValidator();
     }
 
@@ -77,11 +63,5 @@ public class UANodeSetTransformer extends DocumentTransformer {
         LOGGER.info("BrowsepathBuilder set to validated NodeSet.");
     }
 
-    @Override
-    public AssetAdministrationShellEnvironment createShellEnv(Document validXmlDocument,
-        MappingSpecification mapping, Map<String, String> initialVars) throws TransformationException {
-        setNamespaces(mapping.getHeader().getNamespaces());
-        preconditionValidator.setPreconditions(mapping.getHeader().getPreconditions());
-        return super.createShellEnv(validXmlDocument, mapping, initialVars);
-    }
+
 }

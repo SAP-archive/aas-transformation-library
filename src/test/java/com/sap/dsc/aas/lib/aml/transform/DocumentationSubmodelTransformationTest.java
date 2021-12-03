@@ -60,7 +60,7 @@ public class DocumentationSubmodelTransformationTest {
         throws IOException, TransformationException, SerializationException, DeserializationException {
 
         MappingSpecification mapping = mappingParser.loadMappingSpecification(DOCU_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
         String serializedShellEnv = serializer.write(shellEnv);
         Set<String> errors = validator.validateSchema(serializedShellEnv);
         errors.stream().forEach(System.out::print);
@@ -74,7 +74,7 @@ public class DocumentationSubmodelTransformationTest {
         throws IOException, TransformationException {
 
         MappingSpecification mapping = mappingParser.loadMappingSpecification(DOCU_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
         String reference = shellEnv.getAssetAdministrationShells().get(0).getSubmodels().get(0).getKeys().get(0).getValue();
         assertThat(shellEnv.getSubmodels().get(0).getIdentification().getIdentifier()).isEqualTo(reference);
     }
@@ -85,7 +85,7 @@ public class DocumentationSubmodelTransformationTest {
         throws IOException, TransformationException {
 
         MappingSpecification mapping = mappingParser.loadMappingSpecification(DOCU_SUBMODEL_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, mapping);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         // test that the submodel with the semanticId for documentation is there
         Submodel documentationSubmodel = shellEnv.getSubmodels().stream()

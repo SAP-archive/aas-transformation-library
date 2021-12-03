@@ -66,7 +66,7 @@ public class AINSubmodelTransformationTest {
         Map<String, String> placeholderValues = new HashMap<>();
         placeholderValues.put("manufacturerId", SAMPLE_MANUFACTURER_ID);
 
-        shellEnv = amlTransformer.transform(amlInputStream, mapping, placeholderValues);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping, placeholderValues);
 
         String serializedShellEnv = serializer.write(shellEnv);
 

@@ -51,7 +51,7 @@ class GenericDocumentTransformerTest {
 
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(JSON_CONFIG);
 
-        AssetAdministrationShellEnvironment transform = transformer.transform(testInputStream, mapping);
+        AssetAdministrationShellEnvironment transform = transformer.execute(testInputStream, mapping);
         Assert.assertNotNull(transform);
         Assert.assertEquals(71, transform.getSubmodels().size());
     }

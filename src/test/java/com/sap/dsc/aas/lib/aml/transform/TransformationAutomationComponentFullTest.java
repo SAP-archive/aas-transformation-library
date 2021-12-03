@@ -3,7 +3,7 @@
 
   SPDX-License-Identifier: Apache-2.0 
  */
-package com.sap.dsc.aas.lib.aml.transform;
+package com.sap.dsc.aas.lib.aml.transform.TransformationAutomationComponentFullTest;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -23,6 +23,7 @@ import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersionDetector;
 import com.networknt.schema.ValidationMessage;
 import com.sap.dsc.aas.lib.TestUtils;
+import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
@@ -32,11 +33,14 @@ import io.adminshell.aas.v3.dataformat.Serializer;
 import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
-public class TransformationAutomationComponentFullTest {
+public class TransformationIntegrationTest {
 
     public static final String AUTOMATION_COMPONENT_CONFIG_JSON = "src/test/resources/config/AutomationComponentConfig.json";
     public static final String AML_INPUT = "src/test/resources/aml/full_AutomationComponent.aml";
     public static final String JSON_SCHEMA_AAS = "src/test/resources/schema/schema_v3.0_RC01.json";
+    public static final String JSON_SCHEMA_PLAIN = "src/test/resources/schema/schema_2019-09.json";
+    public static final String AAS_v3_JSON = "src/test/resources/aas/AASEnv_Test_JSON_v3.json";
+    private static AssetAdministrationShellEnvironment shellEnv;
 
     @BeforeEach
     protected void setUp() throws Exception {
@@ -45,12 +49,13 @@ public class TransformationAutomationComponentFullTest {
 
     @Test
     void validateTransformedAutomationConfigFullAgainstAASJSONSchema() throws IOException, SerializationException, TransformationException {
+
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(AUTOMATION_COMPONENT_CONFIG_JSON);
 
-        AssetAdministrationShellEnvironment shellEnv = amlTransformer.transform(amlInputStream, mapping);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
         Serializer serializer = new JsonSerializer();

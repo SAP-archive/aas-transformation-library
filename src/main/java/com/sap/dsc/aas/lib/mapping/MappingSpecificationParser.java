@@ -43,10 +43,9 @@ import com.sap.dsc.aas.lib.mapping.jackson.BindingSpecificationDeserializer;
 import com.sap.dsc.aas.lib.mapping.jackson.ExpressionDeserializer;
 import com.sap.dsc.aas.lib.mapping.model.BindSpecification;
 import com.sap.dsc.aas.lib.mapping.model.LangStringTemplate;
-import com.sap.dsc.aas.lib.mapping.model.LegacyTemplate;
-import com.sap.dsc.aas.lib.mapping.model.LegacyTemplateSupport;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
+import com.sap.dsc.aas.lib.mapping.model.TemplateSupport;
 
 import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
 import io.adminshell.aas.v3.dataformat.core.deserialization.EmbeddedDataSpecificationDeserializer;
@@ -60,13 +59,13 @@ import io.adminshell.aas.v3.model.LangString;
  */
 public class MappingSpecificationParser {
 
-    protected static Map<Class<?>, com.fasterxml.jackson.databind.JsonDeserializer> customDeserializers = Map.of(
+	private static Map<Class<?>, com.fasterxml.jackson.databind.JsonDeserializer> customDeserializers = Map.of(
         EmbeddedDataSpecification.class, new EmbeddedDataSpecificationDeserializer(),
         BindSpecification.class, new BindingSpecificationDeserializer(),
         Expression.class, new ExpressionDeserializer());
 
-    protected JsonMapper mapper;
-    protected SimpleAbstractTypeResolver typeResolver;
+	private JsonMapper mapper;
+	private SimpleAbstractTypeResolver typeResolver;
 
     public MappingSpecificationParser() {
         initTypeResolver();
@@ -108,7 +107,7 @@ public class MappingSpecificationParser {
         return mapper.readValue(wrapper, MappingSpecification.class);
     }
 
-    protected void buildMapper() {
+    private void buildMapper() {
         mapper = JsonMapper.builder()
             .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
             // fail on unknown properties for now
@@ -137,7 +136,7 @@ public class MappingSpecificationParser {
         });
     }
 
-    protected SimpleModule buildCustomDeserializerModule() {
+    private SimpleModule buildCustomDeserializerModule() {
         SimpleModule module = new SimpleModule();
         customDeserializers.forEach(module::addDeserializer);
         return module;
@@ -150,13 +149,13 @@ public class MappingSpecificationParser {
             .forEach(x -> typeResolver.addMapping(x.getInterfaceType(), x.getImplementationType()));
     }
 
-    protected SimpleModule buildEnumModule() {
+    private SimpleModule buildEnumModule() {
         SimpleModule module = new SimpleModule();
         ReflectionHelper.ENUMS.forEach(x -> module.addDeserializer(x, new EnumDeserializer<>(x)));
         return module;
     }
 
-    protected SimpleModule buildImplementationModule() {
+    private SimpleModule buildImplementationModule() {
         SimpleModule module = new SimpleModule();
         // module.setAbstractTypes(typeResolver);
         module.setValueInstantiators(new SimpleValueInstantiators() {
@@ -208,8 +207,8 @@ public class MappingSpecificationParser {
                                 // create a proxy instance that implements the bean interface and the config interface
                                 List<Class<?>> interfaces = new ArrayList<>();
                                 interfaces.addAll(Arrays.asList(target.getClass().getInterfaces()));
-                                interfaces.add(LegacyTemplate.class);
-                                LegacyTemplate config = new LegacyTemplateSupport(target);
+                                interfaces.add(Template.class);
+                                Template config = new TemplateSupport(target);
                                 return Proxy.newProxyInstance(getClass().getClassLoader(),
                                     interfaces.toArray(new Class<?>[interfaces.size()]),
                                     (o, method, args) -> {
@@ -225,9 +224,6 @@ public class MappingSpecificationParser {
                                                         .stream().map(p -> p.getName()).collect(Collectors.toSet());
                                                     Set<String> boundProperties = new HashSet<>(bindSpec.getBindings().keySet());
                                                     boundProperties.removeAll(knownProperties);
-                                                    // TODO this is currently included for @this bindings
-                                                    // -> may be removed in the future
-                                                    boundProperties.remove("@this");
                                                     if (!boundProperties.isEmpty()) {
                                                         throw new InvalidBindingException(boundProperties);
                                                     }
@@ -252,13 +248,13 @@ public class MappingSpecificationParser {
             public List<BeanPropertyDefinition> updateProperties(DeserializationConfig config, BeanDescription beanDesc,
                 List<BeanPropertyDefinition> propDefs) {
                 // include all config properties
-                if (!LegacyTemplate.class.isAssignableFrom(beanDesc.getBeanClass()) &&
+                if (!Template.class.isAssignableFrom(beanDesc.getBeanClass()) &&
                     (ReflectionHelper.isModelInterfaceOrDefaultImplementation(beanDesc.getBeanClass()) ||
                         LangString.class.isAssignableFrom(beanDesc.getBeanClass()))) {
                     Set<String> existingProps = propDefs.stream().map(propDef -> propDef.getName()).collect(Collectors.toSet());
                     List<BeanPropertyDefinition> compoundDefs = new ArrayList<>(propDefs);
                     compoundDefs.addAll(
-                        config.introspect(config.getTypeFactory().constructSimpleType(LegacyTemplate.class, null))
+                        config.introspect(config.getTypeFactory().constructSimpleType(Template.class, null))
                             .findProperties().stream()
                             // filter properties that are already contained in base bean interface
                             .filter(propDef -> !existingProps.contains(propDef.getName())).collect(Collectors.toList()));

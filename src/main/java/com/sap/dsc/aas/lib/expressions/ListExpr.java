@@ -17,7 +17,7 @@ public class ListExpr implements Expression {
     /**
      * Expressions that are evaluated to compute the actual list elements.
      */
-    protected final Expression[] args;
+    private final Expression[] args;
 
     public ListExpr(List<Expression> args) {
         this(args.toArray(new Expression[args.size()]));
