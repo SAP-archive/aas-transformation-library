@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.networknt.schema.*;
 import com.sap.dsc.aas.lib.TestUtils;
+import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
@@ -28,6 +29,7 @@ public class UaIntegrationTest {
 
     public static final String INTEGRATION_CONFIG = "src/test/resources/ua/uaIntegrationTest.json";
     public static final String UA_BIG_MACHINE = "src/test/resources/ua/big.machine.nodeset.xml";
+    public static final String NOT_A_NODESET = "src/test/resources/aml/full_AutomationComponent.aml";
     public static final String NAMEPLATE_CONFIG = "src/test/resources/ua/diToNameplate.json";
     public static final String JSON_SCHEMA_NAMEPLATE = "src/test/resources/schema/schema_nameplate.json";
 
@@ -82,6 +84,15 @@ public class UaIntegrationTest {
             messages.stream().forEach(message -> System.out.println(message.getMessage()));
             assertThat(messages.size()).isEqualTo(0);
         }
+    }
+    
+    
+    @Test
+    void testInvalidInput() throws Exception {
+        InputStream invalidInputStream = Files.newInputStream(Paths.get(NOT_A_NODESET));
+        UANodeSetTransformer uaTransformer = new UANodeSetTransformer();
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(NAMEPLATE_CONFIG);
+        assertThrows(UnableToReadXmlException.class, () -> uaTransformer.execute(invalidInputStream, mapping));
     }
 
 
