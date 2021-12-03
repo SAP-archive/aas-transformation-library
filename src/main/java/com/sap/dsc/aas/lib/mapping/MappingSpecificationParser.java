@@ -225,9 +225,6 @@ public class MappingSpecificationParser {
                                                         .stream().map(p -> p.getName()).collect(Collectors.toSet());
                                                     Set<String> boundProperties = new HashSet<>(bindSpec.getBindings().keySet());
                                                     boundProperties.removeAll(knownProperties);
-                                                    // TODO this is currently included for @this bindings
-                                                    // -> may be removed in the future
-                                                    boundProperties.remove("@this");
                                                     if (!boundProperties.isEmpty()) {
                                                         throw new InvalidBindingException(boundProperties);
                                                     }

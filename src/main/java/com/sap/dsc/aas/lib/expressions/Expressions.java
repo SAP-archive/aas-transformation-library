@@ -177,7 +177,6 @@ public class Expressions {
     }
 
     static Object divide(Object a, Object b) {
-        // TODO improve for integer division and big decimals
         return values.divide(a, values.doubleValue(b));
     }
 

@@ -41,7 +41,7 @@ public class AmlTransformer extends DocumentTransformer {
         XPathHelper.getInstance().setNamespaceBinding("caex", "http://www.dke.de/CAEX");
     }
 
-    public AmlTransformer(PreconditionValidator validator) {// FIXME only used by tests
+    public AmlTransformer(PreconditionValidator validator) {
         this.preconditionValidator = validator;
         this.amlValidator = new AmlSchemaValidator();
     }

@@ -27,7 +27,6 @@ import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 import com.sap.dsc.aas.lib.ua.transform.validation.UANodeSetSchemaValidator;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
-// TODO write tests
 public class UANodeSetTransformer extends DocumentTransformer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -38,11 +37,9 @@ public class UANodeSetTransformer extends DocumentTransformer {
 
     public UANodeSetTransformer() {
         this(new PreconditionValidator());
-        // FIXME check for needed namespace bindings
-        // XPathHelper.getInstance().setNamespaceBinding(null, null);
     }
 
-    public UANodeSetTransformer(PreconditionValidator validator) {// FIXME only used by tests
+    public UANodeSetTransformer(PreconditionValidator validator) {
         this.preconditionValidator = validator;
         this.nodesetValidator = new UANodeSetSchemaValidator();
     }

@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 
-// TODO add xsd to resources, check validate method, write test classes
 public class UANodeSetSchemaValidator extends SchemaValidator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
