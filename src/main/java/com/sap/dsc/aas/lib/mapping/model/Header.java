@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Header extends TemplateSupport {
 
-    protected Map<String, String> namespaces;
+	private Map<String, String> namespaces;
     private String version;
     private String aasVersion;
     private List<Parameter> parameters = new ArrayList<>();
@@ -54,7 +54,7 @@ public class Header extends TemplateSupport {
     }
 
     @JsonProperty("@parameters")
-    void setParameters(Map<String, String> parameterMap) {
+    public void setParameters(Map<String, String> parameterMap) {
         this.parameters.addAll(
             parameterMap.entrySet().stream().map(e -> new Parameter(e.getKey(), e.getValue())).collect(Collectors.toList()));
     }

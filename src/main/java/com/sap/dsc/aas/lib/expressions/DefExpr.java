@@ -14,7 +14,7 @@ public class DefExpr implements Expression {
     /**
      * The definition's name.
      */
-    protected final String name;
+    private final String name;
 
     public DefExpr(String name) {
         this.name = name;

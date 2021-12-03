@@ -23,7 +23,7 @@ import com.sap.dsc.aas.lib.transform.validation.SchemaValidator;
 public class AmlSchemaValidator extends SchemaValidator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    public static final String PATH_CAEX_XSD = "aml/CAEX_ClassModel_V.3.0.xsd";
+    private static final String PATH_CAEX_XSD = "aml/CAEX_ClassModel_V.3.0.xsd";
 
     public AmlSchemaValidator() {
         super(Thread.currentThread().getContextClassLoader().getResource(PATH_CAEX_XSD));

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.sap.dsc.aas.lib.exceptions.InvalidBindingException;
 import com.sap.dsc.aas.lib.expressions.Expression;
-import com.sap.dsc.aas.lib.mapping.jackson.ExpressionWithDefault;
+import com.sap.dsc.aas.lib.expressions.ExpressionWithDefault;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
 

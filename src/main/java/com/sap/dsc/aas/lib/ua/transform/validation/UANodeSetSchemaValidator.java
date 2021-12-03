@@ -24,7 +24,7 @@ public class UANodeSetSchemaValidator extends SchemaValidator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static final String PATH_NDOESET_XSD = "ua/UANodeSet.xsd";
+    private static final String PATH_NDOESET_XSD = "ua/UANodeSet.xsd";
 
     public UANodeSetSchemaValidator() {
         super(Thread.currentThread().getContextClassLoader().getResource(PATH_NDOESET_XSD));

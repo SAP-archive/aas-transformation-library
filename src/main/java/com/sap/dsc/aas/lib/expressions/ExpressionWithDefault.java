@@ -3,7 +3,7 @@
 
   SPDX-License-Identifier: Apache-2.0 
  */
-package com.sap.dsc.aas.lib.mapping.jackson;
+package com.sap.dsc.aas.lib.expressions;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Collection;
@@ -11,7 +11,6 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.dsc.aas.lib.expressions.Expression;
 import com.sap.dsc.aas.lib.mapping.TransformationContext;
 
 public class ExpressionWithDefault implements Expression {

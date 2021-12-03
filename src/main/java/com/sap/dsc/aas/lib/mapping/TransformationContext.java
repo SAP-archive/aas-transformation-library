@@ -42,7 +42,7 @@ public class TransformationContext {
      * @param template Template which might contain new Variables and Definitions, might be null
      * @return the newly created TransformationContext
      */
-    public static TransformationContext buildContext(TransformationContext parentCtx, Object ctxItem,
+    static TransformationContext buildContext(TransformationContext parentCtx, Object ctxItem,
         Template template) {
         TransformationContext build = new TransformationContext(ctxItem);
         // take over parent ctx
@@ -81,7 +81,7 @@ public class TransformationContext {
      * @param placeholderVars additional or initial vars
      * @return the newly created TransformationContext
      */
-    public static TransformationContext buildContext(TransformationContext parentCtx, Object ctxItem, Template template,
+    static TransformationContext buildContext(TransformationContext parentCtx, Object ctxItem, Template template,
         Map<String, String> placeholderVars) {
         TransformationContext buildContext = buildContext(parentCtx, ctxItem, template);
         if (placeholderVars != null) {

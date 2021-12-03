@@ -59,13 +59,13 @@ import io.adminshell.aas.v3.model.LangString;
  */
 public class MappingSpecificationParser {
 
-    protected static Map<Class<?>, com.fasterxml.jackson.databind.JsonDeserializer> customDeserializers = Map.of(
+	private static Map<Class<?>, com.fasterxml.jackson.databind.JsonDeserializer> customDeserializers = Map.of(
         EmbeddedDataSpecification.class, new EmbeddedDataSpecificationDeserializer(),
         BindSpecification.class, new BindingSpecificationDeserializer(),
         Expression.class, new ExpressionDeserializer());
 
-    protected JsonMapper mapper;
-    protected SimpleAbstractTypeResolver typeResolver;
+	private JsonMapper mapper;
+	private SimpleAbstractTypeResolver typeResolver;
 
     public MappingSpecificationParser() {
         initTypeResolver();
@@ -107,7 +107,7 @@ public class MappingSpecificationParser {
         return mapper.readValue(wrapper, MappingSpecification.class);
     }
 
-    protected void buildMapper() {
+    private void buildMapper() {
         mapper = JsonMapper.builder()
             .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
             // fail on unknown properties for now
@@ -136,7 +136,7 @@ public class MappingSpecificationParser {
         });
     }
 
-    protected SimpleModule buildCustomDeserializerModule() {
+    private SimpleModule buildCustomDeserializerModule() {
         SimpleModule module = new SimpleModule();
         customDeserializers.forEach(module::addDeserializer);
         return module;
@@ -149,13 +149,13 @@ public class MappingSpecificationParser {
             .forEach(x -> typeResolver.addMapping(x.getInterfaceType(), x.getImplementationType()));
     }
 
-    protected SimpleModule buildEnumModule() {
+    private SimpleModule buildEnumModule() {
         SimpleModule module = new SimpleModule();
         ReflectionHelper.ENUMS.forEach(x -> module.addDeserializer(x, new EnumDeserializer<>(x)));
         return module;
     }
 
-    protected SimpleModule buildImplementationModule() {
+    private SimpleModule buildImplementationModule() {
         SimpleModule module = new SimpleModule();
         // module.setAbstractTypes(typeResolver);
         module.setValueInstantiators(new SimpleValueInstantiators() {

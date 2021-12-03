@@ -33,10 +33,10 @@ import com.google.common.hash.Hashing;
 
 public class Expressions {
 
-    static final Map<String, Expression> constants = new HashMap<>();
-    static final Map<String, Function<Object, Object>> functions = new HashMap<>();
+    private static final Map<String, Expression> constants = new HashMap<>();
+    private static final Map<String, Function<Object, Object>> functions = new HashMap<>();
 
-    static final ValueUtils values = ValueUtils.getInstance();
+    private static final ValueUtils values = ValueUtils.getInstance();
 
     static {
         functions.put("list", args -> valueToStream(args).collect(Collectors.toList()));
@@ -158,7 +158,7 @@ public class Expressions {
         });
     }
 
-    protected static Stream<String> nodeListsToString(Stream<?> stream) {
+    private static Stream<String> nodeListsToString(Stream<?> stream) {
         return stream.flatMap(o -> valueToStream(o)).map(o -> {
             if (o instanceof Node) {
                 return ((Node) o).getStringValue();

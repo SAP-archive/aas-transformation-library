@@ -18,7 +18,7 @@ import com.sap.dsc.aas.lib.transform.XPathHelper;
  */
 public class CaexAttributeNameExpr implements Expression {
 
-    protected final String attributeName;
+    private final String attributeName;
 
     public CaexAttributeNameExpr(String attributeName) {
         this.attributeName = attributeName;

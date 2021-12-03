@@ -51,7 +51,7 @@ import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 public class ConsoleApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    protected final MappingSpecificationParser mappingParser;
+    private final MappingSpecificationParser mappingParser;
 
     private static final String OPTION_NAME_CONFIG = "config";
 
@@ -63,7 +63,7 @@ public class ConsoleApplication {
     private static final String OPTION_NAME_PRINT_PLACEHOLDERS = "print-placeholders";
     private static final String OPTION_NAME_PLACEHOLDER_VALUES = "placeholder-values";
 
-    protected CommandLine commandLine;
+    private CommandLine commandLine;
     protected MappingSpecification mapping;
     private Map<String, String> placeholderMap;
 

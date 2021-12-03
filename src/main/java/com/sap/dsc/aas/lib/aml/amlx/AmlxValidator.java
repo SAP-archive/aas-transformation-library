@@ -36,7 +36,7 @@ import com.sap.dsc.aas.lib.exceptions.ValidationException;
 public class AmlxValidator {
 
     private final AmlTransformer amlTransformer;
-    public static final String PATH_TO_RELS = "/_rels/.rels";
+    private static final String PATH_TO_RELS = "/_rels/.rels";
 
     public AmlxValidator() {
         this(new AmlTransformer());

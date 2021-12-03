@@ -19,9 +19,9 @@ public class ValueUtils {
         }
     }
 
-    protected Map<Class<?>, ValueType> typeMap = new IdentityHashMap<Class<?>, ValueType>(
+    private Map<Class<?>, ValueType> typeMap = new IdentityHashMap<Class<?>, ValueType>(
         16);
-    protected Map<Class<?>, Object> defaultValues = new IdentityHashMap<Class<?>, Object>(
+    private Map<Class<?>, Object> defaultValues = new IdentityHashMap<Class<?>, Object>(
         16);
 
     private static ValueUtils instance = null;
@@ -68,7 +68,7 @@ public class ValueUtils {
         return instance;
     }
 
-    public ValueType getType(Object value) {
+    private ValueType getType(Object value) {
         ValueType result = ValueType.ANY;
 
         if (value != null) {
@@ -144,7 +144,7 @@ public class ValueUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public int compareWithConversion(Object v1, Object v2, Number epsilon) {
+    private int compareWithConversion(Object v1, Object v2, Number epsilon) {
         int result;
 
         if (v1 == v2) {
