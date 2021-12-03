@@ -36,11 +36,11 @@
     }
   },
   "aasEnvironmentMapping": {
+    "@foreach": {
+      "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
+    },
     "assetAdministrationShells": [
       {
-        "@foreach": {
-          "@xpath": "//caex:SystemUnitClass[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent'] | //caex:InternalElement[caex:SupportedRoleClass/@RefRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent' or caex:RoleRequirements/@RefBaseRoleClassPath='AutomationMLComponentStandardRCL/AutomationComponent']"
-        },
         "identification": {
           "@bind": {
             "id": {
@@ -105,6 +105,11 @@
             "@foreach": {
               "@caexAttributeName": "Manufacturer"
             },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
+            },
             "semanticId": {
               "keys": [
                 {
@@ -122,6 +127,11 @@
           {
             "@foreach": {
               "@caexAttributeName": "ProductCode"
+            },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
             },
             "semanticId": {
               "keys": [
@@ -141,6 +151,11 @@
             "@foreach": {
               "@caexAttributeName": "DeviceClass"
             },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
+            },
             "semanticId": {
               "keys": [
                 {
@@ -158,6 +173,11 @@
           {
             "@foreach": {
               "@caexAttributeName": "SoftwareRevision"
+            },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
             },
             "semanticId": {
               "keys": [
@@ -177,6 +197,11 @@
             "@foreach": {
               "@caexAttributeName": "HardwareRevision"
             },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
+            },
             "semanticId": {
               "keys": [
                 {
@@ -195,6 +220,11 @@
             "@foreach": {
               "@caexAttributeName": "SerialNumber"
             },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
+            },
             "semanticId": {
               "keys": [
                 {
@@ -212,6 +242,11 @@
           {
             "@foreach": {
               "@caexAttributeName": "Model"
+            },
+            "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              }
             },
             "semanticId": {
               "keys": [
@@ -232,6 +267,9 @@
               "@xpath": "caex:Attribute[@Name='ManufacturerURI']"
             },
             "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              },
               "value": {
                 "@xpath": "caex:Value"
               }
@@ -246,6 +284,9 @@
               "@xpath": "caex:Attribute[@Name='OrderCode']"
             },
             "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              },
               "value": {
                 "@xpath": "caex:Value"
               }
@@ -260,6 +301,9 @@
               "@xpath": "caex:Attribute[@Name='ProductInstanceURI']"
             },
             "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              },
               "value": {
                 "@xpath": "caex:Value"
               }
@@ -274,6 +318,9 @@
               "@xpath": "caex:Attribute[@Name='FabricationNumber']"
             },
             "@bind": {
+              "idShort": {
+                "@xpath": "@Name"
+              },
               "value": {
                 "@xpath": "caex:Value"
               }
@@ -286,9 +333,6 @@
         ]
       },
       {
-        "@foreach": {
-          "@xpath": "."
-        },
         "semanticId": {
           "keys": [
             {
@@ -298,6 +342,7 @@
             }
           ]
         },
+        "idShort": "TechnicalData",
         "identification": {
           "@bind": {
             "id": {
@@ -310,11 +355,6 @@
             }
           },
           "idType": "Custom"
-        },
-        "@bind": {
-          "idShort": {
-            "@xpath": "'TechnicalData'"
-          }
         },
         "submodelElements": [
           {
@@ -423,10 +463,8 @@
                 },
                 "value": [
                   {
+                    "language" : "us-us",
                     "@bind": {
-                      "language": {
-                        "@xpath": "'us-us"
-                      },
                       "value": {
                         "@xpath": "caex:Value"
                       }
@@ -690,6 +728,7 @@
         "@foreach": {
           "@xpath": "caex:Attribute[@Name='CommercialData']"
         },
+        "idShort": "CommercialData",
         "semanticId": {
           "keys": {
             "value": "https://admin-shell.io/SemanticIdNotAvailable/1/1",
@@ -715,11 +754,7 @@
             "@foreach": {
               "@caexAttributeName": "PackagingAndTransportation"
             },
-            "@bind": {
-              "idShort": {
-                "@xpath": " 'PackagingAndTransportation' "
-              }
-            },
+            "idShort": "PackagingAndTransportation",
             "modelType": {
               "name": "SubmodelElementCollection"
             },
@@ -805,6 +840,11 @@
           {
             "@foreach": {
               "@caexAttributeName": "ProductDetails"
+            },
+            "@bind" : {
+              "idShort" : {
+                "@xpath" : "@Name"
+              }
             },
             "modelType": {
               "name": "SubmodelElementCollection"
@@ -1006,6 +1046,11 @@
           {
             "@foreach": {
               "@caexAttributeName": "ProductOrderDetails"
+            },
+            "@bind" : {
+              "idShort" : {
+                "@xpath" : "@Name"
+              }
             },
             "modelType": {
               "name": "SubmodelElementCollection"
@@ -1232,6 +1277,11 @@
           {
             "@foreach": {
               "@caexAttributeName": "ProductPriceDetails"
+            },
+            "@bind" : {
+              "idShort" : {
+                "@xpath" : "@Name"
+              }
             },
             "modelType": {
               "name": "SubmodelElementCollection"
@@ -1533,10 +1583,8 @@
             },
             "value": [
               {
+                "language": "en-us",
                 "@bind": {
-                  "language": {
-                    "@xpath": "'en-us'"
-                  },
                   "text": {
                     "@xpath": "caex:Value"
                   }
@@ -1565,10 +1613,8 @@
             },
             "value": [
               {
+                "language": "en-us",
                 "@bind": {
-                  "language": {
-                    "@xpath": "'en-us'"
-                  },
                   "text": {
                     "@xpath": "caex:Value"
                   }
@@ -1612,10 +1658,8 @@
                 },
                 "value": [
                   {
+                    "language": "en-us",
                     "@bind": {
-                      "language": {
-                        "@xpath": "'en-us'"
-                      },
                       "text": {
                         "@xpath": "caex:Value"
                       }
@@ -1646,10 +1690,8 @@
                 },
                 "value": [
                   {
+                    "language": "en-us",
                     "@bind": {
-                      "language": {
-                        "@xpath": "'en-us'"
-                      },
                       "text": {
                         "@xpath": "caex:Value"
                       }
@@ -1679,10 +1721,8 @@
                   }
                 },
                 "value": {
+                  "language": "en-us",
                   "@bind": {
-                    "language": {
-                      "@xpath": "'en-us'"
-                    },
                     "text": {
                       "@xpath": "caex:Value"
                     }
@@ -1712,10 +1752,8 @@
                 },
                 "value": [
                   {
+                    "language": "en-us",
                     "@bind": {
-                      "language": {
-                        "@xpath": "'en-us'"
-                      },
                       "text": {
                         "@xpath": "caex:Value"
                       }
@@ -1809,10 +1847,8 @@
                     },
                     "value": [
                       {
+                        "language": "en-us",
                         "@bind": {
-                          "language": {
-                            "@xpath": "'en-us'"
-                          },
                           "text": {
                             "@xpath": "caex:Value"
                           }

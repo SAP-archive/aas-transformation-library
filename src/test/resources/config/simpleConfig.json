@@ -278,10 +278,8 @@
                 },
                 "value": [
                   {
+                    "language" : "en",
                     "@bind": {
-                      "language": {
-                        "@xpath": "'en'"
-                      },
                       "text": {
                         "@xpath": "caex:Value"
                       }
@@ -428,8 +426,8 @@
                 "@foreach": {
                   "@caexAttributeName": "aml-lang=en-US"
                 },
+                "language" : "en",
                 "@bind": {
-                  "language": "en",
                   "text": {
                     "@xpath": "caex:Value"
                   }
@@ -439,8 +437,8 @@
                 "@foreach": {
                   "@caexAttributeName": "aml-lang=de-DE"
                 },
+                "language": "de",
                 "@bind": {
-                  "language": "de",
                   "text": {
                     "@xpath": "caex:Value"
                   }
