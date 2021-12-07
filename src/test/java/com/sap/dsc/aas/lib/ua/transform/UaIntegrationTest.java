@@ -9,10 +9,8 @@ import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
 import io.adminshell.aas.v3.model.*;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
@@ -34,9 +32,8 @@ public class UaIntegrationTest {
     public static final String UA_BIG_MACHINE = "src/test/resources/ua/big.machine.nodeset.xml";
     public static final String NOT_A_NODESET = "src/test/resources/aml/full_AutomationComponent.aml";
     public static final String JSON_SCHEMA_NAMEPLATE = "src/test/resources/schema/schema_nameplate.json";
-
-    private ObjectMapper mapper;
     private static AssetAdministrationShellEnvironment shellEnv;
+    private ObjectMapper mapper;
 
     @BeforeEach
     protected void setUp() throws Exception {
@@ -87,7 +84,6 @@ public class UaIntegrationTest {
         }
     }
 
-    @Disabled("pleaseIgnore")
     @Test
     void testMachineTool() throws Exception {
         InputStream uaInputStream = Files.newInputStream(Paths.get(UA_MACHINE_TOOL));
@@ -96,9 +92,12 @@ public class UaIntegrationTest {
         shellEnv = uaTransformer.execute(uaInputStream, mapping);
         assertEquals(1, shellEnv.getSubmodels().size());
         Submodel machineTool = getSubmodel("SampleMachineTool");
-        assertEquals(0, machineTool.getSubmodelElements().size());
+        assertEquals(2, machineTool.getSubmodelElements().size());
+        String operationMode = ((Property) getElement("OperationMode", machineTool)).getValue();
+        assertEquals("1", operationMode);
+        assertEquals(2, ((SubmodelElementCollection) getElement("Production", machineTool)).getValues().size());
     }
-    
+
     @Test
     void testInvalidInput() throws Exception {
         InputStream invalidInputStream = Files.newInputStream(Paths.get(NOT_A_NODESET));

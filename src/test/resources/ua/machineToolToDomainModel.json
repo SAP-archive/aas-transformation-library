@@ -2,7 +2,8 @@
   "@header": {
     "aasVersion": "3.0RC01",
     "@namespaces": {
-      "ua": "http://opcfoundation.org/UA/"
+      "ua": "http://opcfoundation.org/UA/2011/03/UANodeSet.xsd",
+      "uax": "http://opcfoundation.org/UA/2008/02/Types.xsd"
     },
     "@definitions": {},
     "@variables": {},
@@ -52,13 +53,12 @@
       {
         "@foreach": {
           "@uaChildren": [
-            "Objects",
             "3:Machines"
           ]
         },
         "@bind": {
           "idShort": {
-            "@xpath": "DisplayName"
+            "@xpath": "ua:DisplayName"
           }
         },
         "kind": "Instance",
@@ -81,6 +81,91 @@
         },
         "submodelElements": [
           {
+            "idShort": "OperationMode",
+            "kind": "Instance",
+            "semanticId": {
+              "keys": [
+                {
+                  "value": "http://opcfoundation.org/UA/Machinery/MachineOperationMode",
+                  "idType": "Iri",
+                  "type": "Property"
+                }
+              ]
+            },
+            "modelType": {
+              "name": "Property"
+            },
+            "valueType": "string",
+            "@bind": {
+              "value": {
+                "@xpath": "/ua:UANodeSet/*[@ParentNodeId='ns=5;i=5005' and @BrowseName='4:OperationMode']/ua:Value/uax:Int32"
+              }
+            }
+          },
+          {
+            "idShort": "Production",
+            "semanticId": {
+              "keys": [
+                {
+                  "value": "http://opcfoundation.org/UA/Machinery/Production",
+                  "idType": "Iri",
+                  "type": "SubmodelElementCollection"
+                }
+              ]
+            },
+            "modelType": {
+              "name": "SubmodelElementCollection"
+            },
+            "value": [
+              {
+                "idShort": "Active Program",
+                "semanticId": {
+                  "keys": [
+                    {
+                      "value": "http://opcfoundation.org/UA/Machinery/ProductionActiveProgramType",
+                      "idType": "Iri",
+                      "type": "Property"
+                    }
+                  ]
+                },
+                "modelType": {
+                  "name": "Property"
+                },
+                "valueType": "string",
+                "@bind": {
+                  "value": {
+                    "@xpath": "/ua:UANodeSet/*[@ParentNodeId='ns=5;i=6005' and @BrowseName='1:Name']/ua:Value/uax:String"
+                  }
+                }
+              },
+              {
+                "idShort": "Current State",
+                "semanticId": {
+                  "keys": [
+                    {
+                      "value": "http://opcfoundation.org/UA/Machinery/ProductionProgramStateMachineType",
+                      "idType": "Iri",
+                      "type": "Property"
+                    }
+                  ]
+                },
+                "modelType": {
+                  "name": "MultiLanguageProperty"
+                },
+                "value": [
+                  {
+                    "@bind": {
+                      "language": {
+                        "@xpath": "/ua:UANodeSet/*[@ParentNodeId='ns=5;i=5009' and @BrowseName='CurrentState']/ua:Value/uax:LocalizedText/uax:Locale"
+                      },
+                      "text": {
+                        "@xpath": "/ua:UANodeSet/*[@ParentNodeId='ns=5;i=5009' and @BrowseName='CurrentState']/ua:Value/uax:LocalizedText/uax:Text"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
