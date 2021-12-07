@@ -7,16 +7,16 @@ import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
-import io.adminshell.aas.v3.dataformat.json.JsonSchemaValidator;
 import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
 import io.adminshell.aas.v3.model.*;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
@@ -27,10 +27,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UaIntegrationTest {
 
+    public static final String MACHINE_TOOL_CONIFG = "src/test/resources/ua/machineToolToDomainModel.json";
+    public static final String NAMEPLATE_CONFIG = "src/test/resources/ua/diToNameplate.json";
     public static final String INTEGRATION_CONFIG = "src/test/resources/ua/uaIntegrationTest.json";
+    public static final String UA_MACHINE_TOOL = "src/test/resources/ua/machineTool-example-all-in-one.xml";
     public static final String UA_BIG_MACHINE = "src/test/resources/ua/big.machine.nodeset.xml";
     public static final String NOT_A_NODESET = "src/test/resources/aml/full_AutomationComponent.aml";
-    public static final String NAMEPLATE_CONFIG = "src/test/resources/ua/diToNameplate.json";
     public static final String JSON_SCHEMA_NAMEPLATE = "src/test/resources/schema/schema_nameplate.json";
 
     private ObjectMapper mapper;
@@ -54,8 +56,7 @@ public class UaIntegrationTest {
     }
 
     @Test
-    void testUaNameplate() throws Exception {
-        InputStream schemaInputStream = Files.newInputStream(Paths.get(JSON_SCHEMA_NAMEPLATE));
+    void testUaDiNameplate() throws Exception {
         InputStream uaInputStream = Files.newInputStream(Paths.get(UA_BIG_MACHINE));
         UANodeSetTransformer uaTransformer = new UANodeSetTransformer();
         MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(NAMEPLATE_CONFIG);
@@ -85,7 +86,18 @@ public class UaIntegrationTest {
             assertThat(messages.size()).isEqualTo(0);
         }
     }
-    
+
+    @Disabled("pleaseIgnore")
+    @Test
+    void testMachineTool() throws Exception {
+        InputStream uaInputStream = Files.newInputStream(Paths.get(UA_MACHINE_TOOL));
+        UANodeSetTransformer uaTransformer = new UANodeSetTransformer();
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(MACHINE_TOOL_CONIFG);
+        shellEnv = uaTransformer.execute(uaInputStream, mapping);
+        assertEquals(1, shellEnv.getSubmodels().size());
+        Submodel machineTool = getSubmodel("SampleMachineTool");
+        assertEquals(0, machineTool.getSubmodelElements().size());
+    }
     
     @Test
     void testInvalidInput() throws Exception {
