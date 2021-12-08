@@ -31,7 +31,7 @@ public abstract class DocumentTransformer extends MappingSpecificationDocumentTr
      * @return
      * @throws TransformationException
      */
-    public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping,
+    public AssetAdministrationShellEnvironment execute(InputStream inStream, MappingSpecification mapping,
         Map<String, String> initialVars)
         throws TransformationException {
         if (mapping.getHeader() == null) {
@@ -52,9 +52,9 @@ public abstract class DocumentTransformer extends MappingSpecificationDocumentTr
      * @return
      * @throws TransformationException
      */
-    public AssetAdministrationShellEnvironment transform(InputStream inStream, MappingSpecification mapping)
+    public AssetAdministrationShellEnvironment execute(InputStream inStream, MappingSpecification mapping)
         throws TransformationException {
-        return transform(inStream, mapping, null);
+        return execute(inStream, mapping, null);
     }
 
     /**

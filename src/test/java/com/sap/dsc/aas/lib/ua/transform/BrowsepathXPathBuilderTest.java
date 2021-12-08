@@ -24,7 +24,10 @@ import org.junit.jupiter.api.Test;
 
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.TemplateTransformer;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
+import com.sap.dsc.aas.lib.transform.DocumentTransformer;
+import com.sap.dsc.aas.lib.transform.GenericDocumentTransformer;
 import com.sap.dsc.aas.lib.transform.MappingSpecificationDocumentTransformer;
 import com.sap.dsc.aas.lib.transform.XPathHelper;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
@@ -38,12 +41,12 @@ public class BrowsepathXPathBuilderTest {
     private final String invalidBrowsePathConfigTest = "src/test/resources/mappings/generic/invalidBrowsepathTest.json";
     private final String browsePathChildrenConfigTest = "src/test/resources/mappings/generic/browsePathChildrenTest.json";
     private Document xmlDoc;
-    private MappingSpecificationDocumentTransformer transformer;
+    private TemplateTransformer transformer;
 
     @BeforeEach
     void setUp() throws TransformationException, IOException {
         parser = new MappingSpecificationParser();
-        transformer = new MappingSpecificationDocumentTransformer();
+        transformer = new TemplateTransformer();
         try (InputStream nodesetStream = Files.newInputStream(Paths.get(nodesetMinimalInputFileName))) {
             UANodeSetTransformer transformer = new UANodeSetTransformer();
             xmlDoc = transformer.readXmlDocument(nodesetStream);
@@ -72,7 +75,7 @@ public class BrowsepathXPathBuilderTest {
         BrowsepathXPathBuilder.updateInstance(xmlDoc);
         MappingSpecification spec = parser
             .loadMappingSpecification(browsePathConfigTest);
-        AssetAdministrationShellEnvironment aas = transformer.createShellEnv(xmlDoc, spec, null);
+        AssetAdministrationShellEnvironment aas = transformer.transform(spec, xmlDoc, null);
         assertNotNull(aas);
         assertEquals(1, aas.getSubmodels().size());
         assertEquals(aas.getSubmodels().get(0).getIdShort(), "ns=1;i=1010");
@@ -83,7 +86,7 @@ public class BrowsepathXPathBuilderTest {
         BrowsepathXPathBuilder.updateInstance(xmlDoc);
         MappingSpecification spec = parser
             .loadMappingSpecification(invalidBrowsePathConfigTest);
-        RuntimeException e = assertThrows(RuntimeException.class, () -> transformer.createShellEnv(xmlDoc, spec, null));
+        RuntimeException e = assertThrows(RuntimeException.class, () -> transformer.transform(spec, xmlDoc, null));
         Throwable cause = e.getCause();
         assertThat(cause instanceof IllegalArgumentException);
     }
@@ -102,7 +105,7 @@ public class BrowsepathXPathBuilderTest {
             BrowsepathXPathBuilder pathBuilder = BrowsepathXPathBuilder.getInstance();
             MappingSpecification spec = new MappingSpecificationParser()
                 .loadMappingSpecification(browsePathChildrenConfigTest);
-            AssetAdministrationShellEnvironment aas = new MappingSpecificationDocumentTransformer().createShellEnv(uaDoc, spec, null);
+            AssetAdministrationShellEnvironment aas = new TemplateTransformer().transform(spec, xmlDoc, null);
             assertNotNull(aas);
             assertEquals(aas.getSubmodels().size(), 11);
             String[] browsePath = {"3:Machines", "4:KR16-2-MotionSystem", "2:Controllers", "2:0", "2:CurrentUser", "2:Level"};

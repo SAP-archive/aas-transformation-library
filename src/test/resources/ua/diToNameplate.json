@@ -13,7 +13,7 @@
       },
       "@bind": {
         "idShort": {
-          "@xpath": "@DisplayName"
+          "@xpath": "/ua:UANodeSet/ua:NamespaceUris/ua:Uri[1]"
         }
       },
       "identification": {
@@ -73,7 +73,8 @@
                 },
                 "/identification"
               ]
-            }
+            },
+            "idType": "Custom"
           }
         },
         "submodelElements": [
@@ -95,15 +96,19 @@
                 "text": "legally valid designation of the natural or judicial person which is directly responsible for the design, production, packaging and labeling of a productin respect to its being brought into circulation"
               }
             ],
-            "modelType": "MultiLanguageProperty",
-            "value": {
-              "language": "en-us",
-              "@bind": {
-                "text": {
-                  "@xpath": "/ua:UANodeSet/*[@ParentNodeId='ns=4;i=1267' and @BrowseName='1:Manufacturer']/ua:Value/uax:LocalizedText/uax:Text"
+            "modelType": {
+              "name": "MultiLanguageProperty"
+            },
+            "value": [
+              {
+                "language": "en-us",
+                "@bind": {
+                  "text": {
+                    "@xpath": "/ua:UANodeSet/*[@ParentNodeId='ns=4;i=1267' and @BrowseName='1:Manufacturer']/ua:Value/uax:LocalizedText/uax:Text"
+                  }
                 }
               }
-            }
+            ]
           },
           {
             "semanticId": {
@@ -116,15 +121,19 @@
               ]
             },
             "idShort": "ManufacturerProductDesignation",
-            "modelType": "MultiLanguageProperty",
-            "value": {
-              "language": "de",
-              "@bind": {
-                "text": {
-                  "@xpath": "ua:Description"
+            "modelType": {
+              "name": "MultiLanguageProperty"
+            },
+            "value": [
+              {
+                "language": "de",
+                "@bind": {
+                  "text": {
+                    "@xpath": "ua:Description"
+                  }
                 }
               }
-            }
+            ]
           },
           {
             "idShort": "SerialNumber",
@@ -188,11 +197,15 @@
                     }
                   ]
                 },
-                "modelType": "MultiLanguageProperty",
-                "value": {
-                  "language": "de",
-                  "text": "Langemarckstrasse"
-                }
+                "modelType": {
+                  "name": "MultiLanguageProperty"
+                },
+                "value": [
+                  {
+                    "language": "de",
+                    "text": "Langemarckstrasse"
+                  }
+                ]
               },
               {
                 "idShort": "Zipcode",
@@ -205,11 +218,15 @@
                     }
                   ]
                 },
-                "modelType": "MultiLanguageProperty",
-                "value": {
-                  "language": "de",
-                  "text": "45141"
-                }
+                "modelType": {
+                  "name": "MultiLanguageProperty"
+                },
+                "value": [
+                  {
+                    "language": "de",
+                    "text": "45141"
+                  }
+                ]
               },
               {
                 "idShort": "CityTown",
@@ -222,7 +239,9 @@
                     }
                   ]
                 },
-                "modelType": "MultiLanguageProperty",
+                "modelType": {
+                  "name": "MultiLanguageProperty"
+                },
                 "value": {
                   "language": "de",
                   "text": "Essen"
@@ -239,7 +258,9 @@
                     }
                   ]
                 },
-                "modelType": "MultiLanguageProperty",
+                "modelType": {
+                  "name": "MultiLanguageProperty"
+                },
                 "value": {
                   "language": "en-us",
                   "text": "GER"
@@ -259,7 +280,9 @@
                     }
                   ]
                 },
-                "modelType": "SubmodelElementCollection",
+                "modelType": {
+                  "name": "SubmodelElementCollection"
+                },
                 "value": [
                   {
                     "idShort": "EmailAddress",
@@ -272,7 +295,9 @@
                         }
                       ]
                     },
-                    "modelType": "Property",
+                    "modelType": {
+                      "name": "Property"
+                    },
                     "valueType": "string",
                     "value": "tools.de@atlascopco.com"
                   }
@@ -305,7 +330,9 @@
                         }
                       ]
                     },
-                    "modelType": "MultiLanguageProperty",
+                    "modelType": {
+                      "name": "MultiLanguageProperty"
+                    },
                     "value": {
                       "language": "en-us",
                       "text": "+49 201 2177 0"
@@ -324,7 +351,9 @@
                     }
                   ]
                 },
-                "modelType": "Property",
+                "modelType": {
+                  "name": "Property"
+                },
                 "valueType": "string"
               }
             ]

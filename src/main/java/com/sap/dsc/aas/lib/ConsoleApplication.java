@@ -51,7 +51,7 @@ import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 public class ConsoleApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    protected final MappingSpecificationParser mappingParser;
+    private final MappingSpecificationParser mappingParser;
 
     private static final String OPTION_NAME_CONFIG = "config";
 
@@ -63,7 +63,7 @@ public class ConsoleApplication {
     private static final String OPTION_NAME_PRINT_PLACEHOLDERS = "print-placeholders";
     private static final String OPTION_NAME_PLACEHOLDER_VALUES = "placeholder-values";
 
-    protected CommandLine commandLine;
+    private CommandLine commandLine;
     protected MappingSpecification mapping;
     private Map<String, String> placeholderMap;
 
@@ -84,14 +84,14 @@ public class ConsoleApplication {
         throws IOException, TransformationException {
         try (InputStream amlStream = Files.newInputStream(Paths.get(amlFilePath))) {
             logHeaderInfo();
-            return new AmlTransformer().transform(amlStream, mapping, placeholderMap);
+            return new AmlTransformer().execute(amlStream, mapping, placeholderMap);
         }
     }
 
     protected AssetAdministrationShellEnvironment transformAml(InputStream amlStream)
         throws IOException, TransformationException {
         logHeaderInfo();
-        return new AmlTransformer().transform(amlStream, mapping, placeholderMap);
+        return new AmlTransformer().execute(amlStream, mapping, placeholderMap);
     }
 
     private AssetAdministrationShellEnvironment transformAmlx(String amlxInputFileName)
@@ -106,14 +106,14 @@ public class ConsoleApplication {
     private AssetAdministrationShellEnvironment transformNodeSet(String nodesetInputFileName) throws IOException, TransformationException {
         try (InputStream nodesetStream = Files.newInputStream(Paths.get(nodesetInputFileName))) {
             logHeaderInfo();
-            return new UANodeSetTransformer().transform(nodesetStream, mapping, placeholderMap);
+            return new UANodeSetTransformer().execute(nodesetStream, mapping, placeholderMap);
         }
     }
 
     private AssetAdministrationShellEnvironment transformGeneric(String genericInputFileName) throws IOException, TransformationException {
         try (InputStream genericStream = Files.newInputStream(Paths.get(genericInputFileName))) {
             logHeaderInfo();
-            return new GenericDocumentTransformer().transform(genericStream, mapping, placeholderMap);
+            return new GenericDocumentTransformer().execute(genericStream, mapping, placeholderMap);
         }
     }
 

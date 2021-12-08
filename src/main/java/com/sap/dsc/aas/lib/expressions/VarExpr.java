@@ -14,7 +14,7 @@ public class VarExpr implements Expression {
     /**
      * The variable's name.
      */
-    protected final String name;
+	private final String name;
 
     public VarExpr(String name) {
         this.name = name;

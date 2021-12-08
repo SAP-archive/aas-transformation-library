@@ -27,12 +27,12 @@ import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersionDetector;
 import com.networknt.schema.ValidationMessage;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
-import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 import io.adminshell.aas.v3.dataformat.DeserializationException;
 import io.adminshell.aas.v3.dataformat.Deserializer;
+import io.adminshell.aas.v3.dataformat.SerializationException;
 import io.adminshell.aas.v3.dataformat.Serializer;
 import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
 import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
@@ -61,21 +61,37 @@ import io.adminshell.aas.v3.model.SubmodelElementCollection;
 public class TransformationIntegrationTest {
 
     public static final String CONFIG_JSON = "src/test/resources/config/simpleConfig.json";
+    public static final String AUTOMATION_COMPONENT_CONFIG_JSON = "src/test/resources/config/AutomationComponentConfig.json";
     public static final String AML_INPUT = "src/test/resources/aml/full_AutomationComponent.aml";
     public static final String JSON_SCHEMA_AAS = "src/test/resources/schema/schema_v3.0_RC01.json";
     public static final String JSON_SCHEMA_PLAIN = "src/test/resources/schema/schema_2019-09.json";
     public static final String AAS_v3_JSON = "src/test/resources/aas/AASEnv_Test_JSON_v3.json";
 
+    private static AssetAdministrationShellEnvironment shellEnv;
+
     @BeforeEach
     protected void setUp() throws Exception {
         TestUtils.resetBindings();
+        InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
+
+        AmlTransformer amlTransformer = new AmlTransformer();
+
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(CONFIG_JSON);
+
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
     }
 
-    AssetAdministrationShellEnvironment createShellEnv() throws IOException, TransformationException {
+    @Test
+    void testFull() throws Exception {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
+
         AmlTransformer amlTransformer = new AmlTransformer();
-        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(CONFIG_JSON);
-        return amlTransformer.transform(amlInputStream, mapping);
+
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(AUTOMATION_COMPONENT_CONFIG_JSON);
+
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
+
+        System.out.println(new JsonSerializer().write(shellEnv));
     }
 
     @Test
@@ -91,9 +107,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void ambientTemperatureRangeTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel generalTechnicalData = getSubmodel("GeneralTechnicalData", shellEnv);
+    void ambientTemperatureRangeTransformed() {
+        Submodel generalTechnicalData = getSubmodel("GeneralTechnicalData");
         SubmodelElement ambientTemperature = getElement("AmbientTemperature", generalTechnicalData);
 
         assertThat(ambientTemperature).isNotNull();
@@ -117,9 +132,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void materialMultiLanguagePropertyTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel generalTechnicalData = getSubmodel("GeneralTechnicalData", shellEnv);
+    void materialMultiLanguagePropertyTransformed() {
+        Submodel generalTechnicalData = getSubmodel("GeneralTechnicalData");
         SubmodelElement descriptionShort = getElement("Material", generalTechnicalData);
 
         assertThat(descriptionShort).isNotNull();
@@ -136,9 +150,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void productDetailsDescriptionMultiLanguagePropertyTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel commercialData = getSubmodel("CommercialData", shellEnv);
+    void productDetailsDescriptionMultiLanguagePropertyTransformed() {
+        Submodel commercialData = getSubmodel("CommercialData");
         SubmodelElement descriptionShort = getSubmodelCollectionElement("ProductDetails", "DescriptionShort", commercialData);
 
         assertThat(descriptionShort).isNotNull();
@@ -153,9 +166,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void packagingAndTransportationEntityTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel commercialData = getSubmodel("CommercialData", shellEnv);
+    void packagingAndTransportationEntityTransformed() {
+        Submodel commercialData = getSubmodel("CommercialData");
         SubmodelElement packagingAndTransportation = getElement("PackagingAndTransportation", commercialData);
 
         assertThat(packagingAndTransportation).isNotNull();
@@ -189,9 +201,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void operationAOperationTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel operations = getSubmodel("Operations", shellEnv);
+    void operationAOperationTransformed() {
+        Submodel operations = getSubmodel("Operations");
         SubmodelElement operationA = getElement("OperationA", operations);
 
         assertThat(operationA).isNotNull();
@@ -207,9 +218,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void browsableCapabilityTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel identificationData = getSubmodel("submodelShortId1", shellEnv);
+    void browsableCapabilityTransformed() {
+        Submodel identificationData = getSubmodel("submodelShortId1");
         SubmodelElement browsable = getElement("Browseable", identificationData);
 
         assertThat(browsable).isNotNull();
@@ -217,9 +227,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void sampleFileTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel documents = getSubmodel("Documents", shellEnv);
+    void sampleFileTransformed() {
+        Submodel documents = getSubmodel("Documents");
         SubmodelElement submodelElement = getElement("Betriebsanleitung", documents);
 
         assertThat(submodelElement).isNotNull();
@@ -232,9 +241,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void stepGeometryReferenceElementTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel documents = getSubmodel("Documents", shellEnv);
+    void stepGeometryReferenceElementTransformed() {
+        Submodel documents = getSubmodel("Documents");
         SubmodelElement stepGeometry = getElement("STEPGeometry", documents);
 
         assertThat(stepGeometry).isNotNull();
@@ -252,9 +260,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void relationshipElementTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        SubmodelElement relElement = getElement("relElement", getSubmodel("Operations", shellEnv));
+    void relationshipElementTransformed() {
+        SubmodelElement relElement = getElement("relElement", getSubmodel("Operations"));
 
         assertThat(relElement).isNotNull();
         assertThat(relElement).isInstanceOf(RelationshipElement.class);
@@ -276,9 +283,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void annotatedRelationshipElementTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel operations = getSubmodel("Operations", shellEnv);
+    void annotatedRelationshipElementTransformed() {
+        Submodel operations = getSubmodel("Operations");
         SubmodelElement annoRelElement = getElement("annoRelElement", operations);
 
         assertNotNull(annoRelElement);
@@ -312,9 +318,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void sampleBlobTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel documents = getSubmodel("Documents", shellEnv);
+    void sampleBlobTransformed() {
+        Submodel documents = getSubmodel("Documents");
         SubmodelElement submodelElement = getElement("BetriebsanleitungBIN", documents);
 
         assertThat(submodelElement).isNotNull();
@@ -327,9 +332,8 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void sampleBasicEventTransformed() throws Exception {
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
-        Submodel documents = getSubmodel("Documents", shellEnv);
+    void sampleBasicEventTransformed() {
+        Submodel documents = getSubmodel("Documents");
         SubmodelElement basicEvent = getElement("SampleBasicEvent", documents);
 
         assertThat(basicEvent).isNotNull();
@@ -344,14 +348,13 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void validateTransformedAgainstAASJSONSchema() throws Exception {
+    void validateTransformedAgainstAASJSONSchema() throws IOException, SerializationException {
         ObjectMapper mapper = new ObjectMapper();
         Serializer serializer = new JsonSerializer();
 
         JsonNode schemaNode = mapper.readTree(Files.newInputStream(Paths.get(JSON_SCHEMA_AAS)));
         JsonSchema schema = JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaNode)).getSchema(schemaNode);
 
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
         JsonNode jsonNode = mapper.readTree(serializer.write(shellEnv));
 
         Set<ValidationMessage> errors = schema.validate(jsonNode);
@@ -362,14 +365,13 @@ public class TransformationIntegrationTest {
     }
 
     @Test
-    void validateTransformedAgainstPlainJSONSchema() throws Exception {
+    void validateTransformedAgainstPlainJSONSchema() throws IOException, SerializationException {
         ObjectMapper mapper = new ObjectMapper();
         Serializer serializer = new JsonSerializer();
 
         JsonNode schemaNode = mapper.readTree(Files.newInputStream(Paths.get(JSON_SCHEMA_PLAIN)));
         JsonSchema schema = JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaNode)).getSchema(schemaNode);
 
-        AssetAdministrationShellEnvironment shellEnv = createShellEnv();
         JsonNode jsonNode = mapper.readTree(serializer.write(shellEnv));
 
         Set<ValidationMessage> errors = schema.validate(jsonNode);
@@ -388,7 +390,7 @@ public class TransformationIntegrationTest {
             .orElseThrow(() -> new AssertionFailedError("SubmodelElement with IdShort '" + idShort + "' not found"));
     }
 
-    Submodel getSubmodel(String idShort, AssetAdministrationShellEnvironment shellEnv) {
+    Submodel getSubmodel(String idShort) {
         assertNotNull(shellEnv.getSubmodels());
 
         return shellEnv.getSubmodels().stream()

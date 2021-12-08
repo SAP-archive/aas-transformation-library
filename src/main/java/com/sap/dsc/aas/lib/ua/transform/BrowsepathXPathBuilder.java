@@ -114,7 +114,7 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
         return getNodeFromBrowsePath(browsePath, null);
     }
 
-    public Node getNodeFromBrowsePath(String[] browsePath, Node prev) {
+    private Node getNodeFromBrowsePath(String[] browsePath, Node prev) {
         if (browsePath == null || browsePath.length == 0 || browsePath[0] == null
             || browsePath[0].replace("/", "").trim().isEmpty()) {
             return prev;
@@ -215,7 +215,7 @@ public class BrowsepathXPathBuilder implements XPathBuilder {
             .findFirst().orElse(null);
     }
 
-    public String getNamespace(String browseName) {
+    String getNamespace(String browseName) {
         if (browseName == null || browseName.trim().isEmpty()) {
             return namespaceURIs.get(0);
         }

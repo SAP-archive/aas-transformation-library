@@ -23,7 +23,7 @@ public class XPathExpr implements Expression {
     /**
      * Expressions that are evaluated to compute the actual list elements.
      */
-    protected final List<Expression> args;
+	private final List<Expression> args;
 
     public XPathExpr(List<Expression> args) {
         this.args = args;
