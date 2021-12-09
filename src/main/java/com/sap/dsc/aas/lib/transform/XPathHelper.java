@@ -117,7 +117,7 @@ public class XPathHelper {
         if (currentUri == null) {
             namespaces.put(nsPrefix, validNsUri);
         } else if (currentUri != validNsUri) {
-            LOGGER.warn(String.format("Prefix '%s' already set to '%s', will be overriden with 's'", nsPrefix,
+            LOGGER.warn(String.format("Prefix '%s' already set to '%s', will be overriden with '%s'", nsPrefix,
                 currentUri, validNsUri));
             namespaces.put(nsPrefix, validNsUri);
         } else {
