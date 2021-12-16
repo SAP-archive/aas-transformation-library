@@ -3,17 +3,15 @@
 We develop with Github using pull requests (see this [Github guide](https://guides.github.com/introduction/flow/) for a short introduction).
 
 **Development branch.** The development branch is always `development`. Expect changes on this branch from time to time.
-On push to the development branch, a snapshot release will be triggered. Please ensure the correct naming in the build.gradle file.
 
 **Releases.** The releases mark the development milestones on the `main` branch with a certain feature completeness.
-Every push/accepted merge request to the `main` branch will trigger a release.
+Every push/accepted merge request to the `main` branch will trigger a release. Please ensure the correct versioning in the build.gradle file.
 
 ## Pull Requests
 
 **Feature branches.** We develop using the feature branches, see this [section of the Git book](https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows). We use `feature/'feature-name'` and `bugfix/'bugfix-name'` as a naming convention.
 
 If you are a member of the development team, create a feature branch directly within the repository.
-
 Otherwise, if you are a non-member contributor, fork the repository and create the feature branch in your forked repository.
 Developers can open pull requests that will be reviewed and merged to the development branch.
 
@@ -25,7 +23,7 @@ In order to simplify the workflow, please assign the PullRequest directly to the
 
 ## Commit Messages
 
-The commit messages should follow the guidelines from https://chris.beams.io/posts/git-commit:
+The commit messages should follow the guidelines from [this guide](https://chris.beams.io/posts/git-commit):
 
 - Separate subject from body with a blank line
 - Limit the subject line to 50 characters

@@ -1,5 +1,17 @@
 # Importing the AAS Transformation Library
 
+## Usage as a dependency
+
+Currently, builds are exclusively released to GitHub Packages. They can be imported into gradle and maven projects with adjusted versioning, for example:
+
+```xml
+<dependency>
+    <groupId>com.sap.dsc.aas.lib</groupId>
+    <artifactId>aas-transformation-library</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+
 ## Local Usage
 
 We rely on [SapMachine 11](https://sap.github.io/SapMachine/) and use [Gradle](https://gradle.org/).
@@ -12,13 +24,15 @@ You can download and build the repository by yourself by following these steps:
         git clone https://github.com/admin-shell-io/aas-transformation-library
 ```
 
+Use the repository on the commandline. Adjust the name of the jar according to your build.
 ```sh
 $ ./gradlew build
 
 $ java -jar build/distributions/aas-transformation-library-shadow-0.0.1-SNAPSHOT.jar
-usage: transform -a <AML_INPUT_FILE> | -amlx <AMLX_INPUT_FILE> | -p  -c
-       <CONFIG_FILE> [-P <PLACEHOLDER_VALUES_JSON>]
-Transform AutomationML file into an AAS structured file
+usage: transform [-a <AML_INPUT_FILE> | -amlx <AMLX_INPUT_FILE> | -ua
+       <NODESET_INPUT_FILE> | -xml <GENERIC_INPUT_FILE>]  -c <CONFIG_FILE>
+       [-P <PLACEHOLDER_VALUES_JSON>] [-p]
+Transform XML file into an AAS structured file
 
  -a,--aml <AML_INPUT_FILE>                           AML input file
  -amlx,--amlx <AMLX_INPUT_FILE>                      AMLX input file
@@ -27,9 +41,11 @@ Transform AutomationML file into an AAS structured file
                                                      values in JSON format
  -p,--print-placeholders                             Print placeholders
                                                      with description
+ -ua,--ua <NODESET_INPUT_FILE>                       UA NodeSet input file
+ -xml,--xml <GENERIC_INPUT_FILE>                     Generic input file
 
-Missing required options: c, [-a AML input file, -amlx AMLX input file, -p
-Print placeholders with description]
+Missing required option: c
+
 
 $ java -jar ./build/distributions/aas-transformation-library-shadow-0.0.1-SNAPSHOT.jar -c src/test/resources/config/simpleConfig.json -a src/test/resources/aml/full_AutomationComponent.aml
 [main] INFO com.sap.dsc.aas.lib.aml.ConsoleApplication - Loaded config version 1.0.0, aas version 2.0.1
@@ -63,25 +79,15 @@ Writing to: minimal_AutomationMLComponent_WithDocuments/files/TestTXTDeviceManua
 Writing to: minimal_AutomationMLComponent_WithDocuments/files/TestPDFDeviceManual.pdf
 Writing to: minimal_AutomationMLComponent_WithDocuments/files/TestTXTWarranty.txt
 ```
+Output was shortened for increased readability.
 
-## Usage as a dependency
-
-Currently, builds are exclusively released to GitHub Packages. They can be imported into gradle and maven projects with adjusted versioning, for example:
-
-```xml
-<dependency>
-    <groupId>com.sap.dsc.aas.lib</groupId>
-    <artifactId>aas-transformation-library</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-</dependency>
-```
 
 ## Versioning
 
-We version using **semantic versioning** (e.g., `1.0.4`). The first position indicates the major release. Different major 
-releases canvas contain breaking changes and are not necessarily compliant. The second number indicates the minor release 
+We version using **semantic versioning** (e.g., `1.0.4`). The first position indicates the major release. Different major
+releases canvas contain breaking changes and are not necessarily compliant. The second number indicates the minor release
 or revision, which contains new features compared to an older revision. The last position is used for hotfixes or bugfixes.
 
-Note, that the versioning scheme of this project is not directly aligned with the release process of the metamodel or the java-model library! 
-When revisions of the meta-model are released, the [java-model](github.com/admin-shell-io/java-model) will change and 
+Note, that the versioning scheme of this project is not directly aligned with the release process of the metamodel or the java-model library!
+When revisions of the meta-model are released, the [java-model](github.com/admin-shell-io/java-model) will change and
 those changes will be integrated in this library eventually.

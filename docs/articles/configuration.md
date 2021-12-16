@@ -1,11 +1,39 @@
 # Configuration
 
-Asset Administration Shells are instantiated using the basic structure determined in the AAS-JSON specification.
-However, there are a variety of tools that ease the writing process.
+## Basic Structure
+
+Asset Administration Shells are instantiated using a dialect of the [AAS-JSON serialization format](https://github.com/admin-shell-io/aas-specs/tree/feature/JsonUpdate/schemas/json). 
+The following json shows the structure of the dialect. The relevance of each section in the header will be explained by 
+the individual paragraphs.
+```json
+{
+  "@header": {
+    "aasVersion": "3.0RC01",
+    "@namespaces": {},
+    "@definitions": {},
+    "@variables": {},
+    "@parameters": {}
+  },
+  "aasEnvironmentMapping": [
+    {
+      "assetAdministrationShells": [],
+      "assets": [],
+      "submodels": [],
+      "conceptDescriptions": []
+    }
+  ]
+}
+```
+Due to this structure, data that is given in the `aasEnvironmentMapping` section can be parsed as AAS directly if no other
+concepts are applied. The diff demonstrates this - the header is not in the resulting AAS-JSON but everything else is:
+
+![aas-transformation-library schema](../images/conf/schema.png "Diff for config-json and aas-config")
+
+However, this is purely static and does not process any data from the source file.
 
 ## Expressions
 
-Expressions are bottom-level-objects denoted by a `@` at the beginning of the json-key and signify a side-effect during
+Expressions are objects denoted by a `@` at the beginning of the json-key and signify a side-effect during
 runtime. While those configurations with no expression in their context are just parsed as AAS-JSON, expressions are
 evaluated with their result determining the structure of the resulting AAS objects. Examples include:
 
@@ -35,6 +63,8 @@ syntax is as follows:
 }
 ```
 
+![foreachloops](../images/conf/foreach.png "Demonstration of foreach-loops")
+
 ## Dynamic evaluation with `@bind`
 
 Looping around the results of an expression would be obsolete if all resulting objects would hold the same values.
@@ -53,6 +83,9 @@ value that will be used. If I wanted to configure changing idShorts based on the
   }
 }
 ```
+
+![bind](../images/conf/bind.png "Demonstration of bindings")
+
 
 ## Pre-defined Expressions with `@definitions`
 
@@ -92,140 +125,27 @@ assign an id to an AAS.
 }
 ```
 
-# Structure of the config-json file
+![definitions](../images/conf/defs.png "Demonstration of definitions")
 
-The configuration file describes how the AAS file should be generated.
-See [this config file](src/test/resources/config/simpleConfig.json) for an example.
+## Variables and Parameters
 
-## `@header`
+Variables and Parameters are very similar in that they allow to reuse a value by binding it to a variable name. They are
+initialized in the header in the `@variables` section, can be called by `@var` in the `@bind`-context and updated by 
+repeating the `@variables` section in the `aasEnvironmentMapping` section.
 
-The header sets a couple of circumstances for the transformation.
 
-- `aasVersion` indicates the version of the meta-model that a given config-file is created for. This matters since the
-  objects and their json-serialization vary greatly with each version.
-- `@definitions` defines that name and content of the pre-defined expressions (see above) that can later be called
-  with `@def`
-- `@variables` allows the user to define values that can be bound to a variable, updated with another `@variables`
-  statement and dereferenced by `@var`, each in a `@bind`-context
-- `@namespaces` passes namespaces that the DOM4J xPath-Engine needs to successfully evaluate queries on a given XML
-  document.
-- `@parameters` are fixed value variable that will be replaced after the whole transformation and can be set by the
-  caller during runtime. They are dereferenced by `@var` as well.
+![variables](../images/conf/var.png "Demonstration of var")
 
-## Building Asset Administration Shell Environments with the `aasEnvironmentMapping`
 
-The library generates a single AAS Environment for every config-file. The structure of the config-file is as follows.
+Parameters cannot be updated in the config and are not assigned a value in the header. They are given a description and
+are set during runtime from the outside. The CLI and the library both allow to pass data setting the parameters that must
+however be declared in the config header. They are also called by `@var` in the `@bind` context.
 
-```json
-{
-  "@header": {
-    "aasVersion": "3.0RC01",
-    "@namespaces": {},
-    "@definitions": {},
-    "@variables": {},
-    "@parameters": {}
-  },
-  "aasEnvironmentMapping": [
-    {
-      "assetAdministrationShells": [],
-      "assets": [],
-      "submodels": [],
-      "conceptDescriptions": []
-    }
-  ]
-}
-```
+## Auto-Wiring submodels
 
-This structure looks familiar because everything in the "aasEnvironmentMapping" holds the same structure as the JSON-
-serialization of AAS. This is supported both to reuse the syntax as well as improve maintainability and parsability of
-the config-JSON files.
+There are two options to assign a Submodel to a AssetAdministrationShell. The submodel can be passed explicitly as a Reference
+as the json-schema demands. If however the configuration leaves the `submodels` list empty in the config-json, all submodels
+will be bound to all AssetAdministrationShells. This behaviour differs from the rest of the library as attributs that are not 
+given in the config are usually just set to `null`.
 
-### AssetAdministrationShells
-
-```json
-{
-  "@foreach": {
-    "@xpath": "some-xPath-Query that may return multiple results"
-  },
-  "idShort": "someIdShort",
-  "identification": {
-    "idType": "Iri",
-    "id": "someIri"
-  },
-  "assetInformation": {
-    ...
-  }
-}
-```
-
-In the above case all AAS would hold the same idShort and identification which is semantically wrong but can be avoided
-using the `@bind` operator. Please note that the AAS' `submodels:`-key holding references to submodel objects is omitted
-in the config-file since its contents (References to Submodels in the `"submodels":[]` section are generated
-automatically.
-
-### Assets
-
-Configuring Assets is optional in the transformation library, just like it's optional in the AAS in general.
-
-```json
-{
-  "assets": [
-    {
-      "identification": {
-        "id": "Iri",
-        "idType": "SomeIri"
-      }
-    }
-  ]
-}
-```
-
-### Submodels
-
-An AAS Submodel are generated in the `submodels`-section and use expressions the same way as explained before. An
-example:
-
-```json
-{
-  "submodels": [
-    {
-      "@foreach": {
-        "@xpath": "caex:Attribute[@Name='CommercialData']/caex:Attribute[@Name='ManufacturerDetails']"
-      },
-      "semanticId": {
-        "keys": [
-          {
-            "value": "https://admin-shell.io/zvei/nameplate/1/0/Nameplate",
-            "idType": "Iri",
-            "type": "Submodel"
-          }
-        ]
-      },
-      "identification": {
-        "id": "_submodel1",
-        "idType": "Custom"
-      },
-      "submodelElements": [
-        {
-          "semanticId": {
-            "keys": [
-              {
-                "value": "0173-1#02-AAO677#002",
-                "idType": "Irdi",
-                "type": "SubmodelElement"
-              }
-            ]
-          }
-        }
-      ]
-    }
-  ]
-}
-```
-
-SubmodelElements are added into the submodels as defined by the json-spec.
-
-### Concept Descriptions
-
-Concept Descriptions are supported and can be built using the same toolbox of expressions, definitions, variables and
-control statements like @bind and @foreach.
+![autowire](../images/conf/autowire.png "Demonstration of autowiring")
