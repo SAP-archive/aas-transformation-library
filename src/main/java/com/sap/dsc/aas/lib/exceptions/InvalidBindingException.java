@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class InvalidBindingException extends InvalidConfigException {
 
-    protected final Collection<String> fields;
+    private final Collection<String> fields;
 
     public InvalidBindingException(Collection<String> fields) {
         super("Bound fields '" +

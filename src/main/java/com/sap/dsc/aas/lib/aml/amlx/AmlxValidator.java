@@ -36,7 +36,7 @@ import com.sap.dsc.aas.lib.exceptions.ValidationException;
 public class AmlxValidator {
 
     private final AmlTransformer amlTransformer;
-    public static final String PATH_TO_RELS = "/_rels/.rels";
+    private static final String PATH_TO_RELS = "/_rels/.rels";
 
     public AmlxValidator() {
         this(new AmlTransformer());
@@ -131,7 +131,7 @@ public class AmlxValidator {
     private void validateRootAmlFile(String rootDocumentTarget, PackagePart rootDocumentPart) throws TransformationException, IOException {
         try (InputStream rootDocument = rootDocumentPart.getInputStream()) {
             Document readXmlDocument = amlTransformer.readXmlDocument(rootDocument);
-        	amlTransformer.validateDocument(readXmlDocument);
+            amlTransformer.validateDocument(readXmlDocument);
         } catch (TransformationException exception) {
             throw new AmlxInvalidRootAmlDocumentException(rootDocumentTarget, exception);
         }

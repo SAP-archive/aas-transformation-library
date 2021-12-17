@@ -1,19 +1,12 @@
-/*
-  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved.
+/* 
+  SPDX-FileCopyrightText: (C)2021 SAP SE or an affiliate company and aas-transformation-library contributors. All rights reserved. 
 
-  SPDX-License-Identifier: Apache-2.0
+  SPDX-License-Identifier: Apache-2.0 
  */
 package com.sap.dsc.aas.lib.mapping;
 
-import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
-import io.adminshell.aas.v3.dataformat.core.deserialization.EmbeddedDataSpecificationDeserializer;
-import io.adminshell.aas.v3.dataformat.core.deserialization.EnumDeserializer;
-import io.adminshell.aas.v3.dataformat.json.ReflectionAnnotationIntrospector;
-import io.adminshell.aas.v3.model.EmbeddedDataSpecification;
-import io.adminshell.aas.v3.model.LangString;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -26,6 +19,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.util.JsonParserDelegate;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -41,24 +37,35 @@ import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.module.SimpleValueInstantiators;
-import com.sap.dsc.aas.lib.aml.config.jackson.BindingSpecificationDeserializer;
 import com.sap.dsc.aas.lib.exceptions.InvalidBindingException;
+import com.sap.dsc.aas.lib.expressions.Expression;
+import com.sap.dsc.aas.lib.mapping.jackson.BindingSpecificationDeserializer;
+import com.sap.dsc.aas.lib.mapping.jackson.ExpressionDeserializer;
 import com.sap.dsc.aas.lib.mapping.model.BindSpecification;
-import com.sap.dsc.aas.lib.mapping.model.LegacyTemplate;
-import com.sap.dsc.aas.lib.mapping.model.LegacyTemplateSupport;
+import com.sap.dsc.aas.lib.mapping.model.LangStringTemplate;
 import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.mapping.model.Template;
+import com.sap.dsc.aas.lib.mapping.model.TemplateSupport;
+
+import io.adminshell.aas.v3.dataformat.core.ReflectionHelper;
+import io.adminshell.aas.v3.dataformat.core.deserialization.EmbeddedDataSpecificationDeserializer;
+import io.adminshell.aas.v3.dataformat.core.deserialization.EnumDeserializer;
+import io.adminshell.aas.v3.dataformat.json.ReflectionAnnotationIntrospector;
+import io.adminshell.aas.v3.model.EmbeddedDataSpecification;
+import io.adminshell.aas.v3.model.LangString;
 
 /**
  * Class for parsing mapping specifications containing AAS JSON templates.
  */
 public class MappingSpecificationParser {
 
-    protected static Map<Class<?>, com.fasterxml.jackson.databind.JsonDeserializer> customDeserializers = Map.of(
+	private static Map<Class<?>, com.fasterxml.jackson.databind.JsonDeserializer> customDeserializers = Map.of(
         EmbeddedDataSpecification.class, new EmbeddedDataSpecificationDeserializer(),
-        BindSpecification.class, new BindingSpecificationDeserializer());
-    protected JsonMapper mapper;
-    protected SimpleAbstractTypeResolver typeResolver;
+        BindSpecification.class, new BindingSpecificationDeserializer(),
+        Expression.class, new ExpressionDeserializer());
+
+	private JsonMapper mapper;
+	private SimpleAbstractTypeResolver typeResolver;
 
     public MappingSpecificationParser() {
         initTypeResolver();
@@ -72,17 +79,39 @@ public class MappingSpecificationParser {
     }
 
     public MappingSpecification loadMappingSpecification(String filePath) throws IOException {
-        // the following may be used to apply ModelTypeProcessor before parsing the JSON document
-        // String data = Files.readString(Paths.get(filePath));
-        // return mapper.treeToValue(ModelTypeProcessor.preprocess(data), ConfigAmlToAas.class);
-        return mapper.readValue(new File(filePath), MappingSpecification.class);
+        JsonParser parser = mapper.getFactory().createParser(new File(filePath));
+        JsonParserDelegate wrapper = new JsonParserDelegate(parser) {
+            boolean skipObject = false;
+
+            @Override
+            public JsonToken nextToken() throws IOException {
+                if (skipObject) {
+                    skipObject = false;
+                    // skip the current object in case of { "modelType: { "name" : "TheType" } }
+                    while (super.nextToken() != JsonToken.END_OBJECT) {
+                        super.nextToken();
+                    }
+                }
+                // handle case { "modelType: { "name" : "TheType" } }
+                if (super.currentToken() == JsonToken.FIELD_NAME && "modelType".equals(getText())) {
+                    JsonToken modelTypeValue = super.nextToken();
+                    if (modelTypeValue == JsonToken.START_OBJECT) {
+                        modelTypeValue = super.nextValue();
+                        skipObject = true;
+                    }
+                    return modelTypeValue;
+                }
+                return super.nextToken();
+            }
+        };
+        return mapper.readValue(wrapper, MappingSpecification.class);
     }
 
-    protected void buildMapper() {
+    private void buildMapper() {
         mapper = JsonMapper.builder()
             .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
             // fail on unknown properties for now
-            //.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            // .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .annotationIntrospector(new ReflectionAnnotationIntrospector() {
                 public TypeResolverBuilder<?> findTypeResolver(MapperConfig<?> config, AnnotatedClass ac, JavaType baseType) {
                     if (ReflectionHelper.SUBTYPES.containsKey(ac.getRawType())) {
@@ -98,7 +127,7 @@ public class MappingSpecificationParser {
                 }
             })
             // disabled for now until camel case enums are used
-            // .addModule(buildEnumModule())
+            .addModule(buildEnumModule())
             .addModule(buildImplementationModule())
             .addModule(buildCustomDeserializerModule())
             .build();
@@ -107,7 +136,7 @@ public class MappingSpecificationParser {
         });
     }
 
-    protected SimpleModule buildCustomDeserializerModule() {
+    private SimpleModule buildCustomDeserializerModule() {
         SimpleModule module = new SimpleModule();
         customDeserializers.forEach(module::addDeserializer);
         return module;
@@ -120,20 +149,38 @@ public class MappingSpecificationParser {
             .forEach(x -> typeResolver.addMapping(x.getInterfaceType(), x.getImplementationType()));
     }
 
-    protected SimpleModule buildEnumModule() {
+    private SimpleModule buildEnumModule() {
         SimpleModule module = new SimpleModule();
         ReflectionHelper.ENUMS.forEach(x -> module.addDeserializer(x, new EnumDeserializer<>(x)));
         return module;
     }
 
-    protected SimpleModule buildImplementationModule() {
+    private SimpleModule buildImplementationModule() {
         SimpleModule module = new SimpleModule();
         // module.setAbstractTypes(typeResolver);
         module.setValueInstantiators(new SimpleValueInstantiators() {
             @Override
             public ValueInstantiator findValueInstantiator(DeserializationConfig config, BeanDescription beanDesc,
                 ValueInstantiator defaultInstantiator) {
-                if (ReflectionHelper.isModelInterface(beanDesc.getType().getRawClass())) {
+                // LangString class
+                if (LangString.class.isAssignableFrom(beanDesc.getType().getRawClass())) {
+                    return new ValueInstantiator.Delegating(defaultInstantiator) {
+                        @Override
+                        public boolean canInstantiate() {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean canCreateUsingDefault() {
+                            return true;
+                        }
+
+                        public Object createUsingDefault(DeserializationContext ctxt) throws IOException {
+                            return new LangStringTemplate();
+                        }
+                    };
+                    // support model interfaces
+                } else if (ReflectionHelper.isModelInterface(beanDesc.getType().getRawClass())) {
                     JavaType modelType = typeResolver.findTypeMapping(config, beanDesc.getType());
                     return new ValueInstantiator.Delegating(defaultInstantiator) {
                         @Override
@@ -160,39 +207,33 @@ public class MappingSpecificationParser {
                                 // create a proxy instance that implements the bean interface and the config interface
                                 List<Class<?>> interfaces = new ArrayList<>();
                                 interfaces.addAll(Arrays.asList(target.getClass().getInterfaces()));
-                                interfaces.add(LegacyTemplate.class);
-                                LegacyTemplate config = new LegacyTemplateSupport(target);
+                                interfaces.add(Template.class);
+                                Template config = new TemplateSupport(target);
                                 return Proxy.newProxyInstance(getClass().getClassLoader(),
                                     interfaces.toArray(new Class<?>[interfaces.size()]),
-                                    new InvocationHandler() {
-                                        @Override
-                                        public Object invoke(Object o, Method method, Object[] args) throws Throwable {
-                                            try {
-                                                // route to concrete object - either config or the underlying bean
-                                                if (Template.class.isAssignableFrom(method.getDeclaringClass())) {
-                                                    if (method.getParameterTypes().length == 1 &&
-                                                        BindSpecification.class.isAssignableFrom(method.getParameterTypes()[0])) {
-                                                        // validate bind specification
-                                                        BindSpecification bindSpec = (BindSpecification) args[0];
-                                                        Set<String> knownProperties = ctxt.getConfig().introspect(modelType)
-                                                            .findProperties()
-                                                            .stream().map(p -> p.getName()).collect(Collectors.toSet());
-                                                        Set<String> boundProperties = new HashSet<>(bindSpec.getBindings().keySet());
-                                                        boundProperties.removeAll(knownProperties);
-                                                        // TODO this is currently included for @this bindings
-                                                        // -> may be removed in the future
-                                                        boundProperties.remove("@this");
-                                                        if (!boundProperties.isEmpty()) {
-                                                            throw new InvalidBindingException(boundProperties);
-                                                        }
+                                    (o, method, args) -> {
+                                        try {
+                                            // route to concrete object - either template definition or the underlying bean
+                                            if (Template.class.isAssignableFrom(method.getDeclaringClass())) {
+                                                if (method.getParameterTypes().length == 1 &&
+                                                    BindSpecification.class.isAssignableFrom(method.getParameterTypes()[0])) {
+                                                    // validate bind specification
+                                                    BindSpecification bindSpec = (BindSpecification) args[0];
+                                                    Set<String> knownProperties = ctxt.getConfig().introspect(modelType)
+                                                        .findProperties()
+                                                        .stream().map(p -> p.getName()).collect(Collectors.toSet());
+                                                    Set<String> boundProperties = new HashSet<>(bindSpec.getBindings().keySet());
+                                                    boundProperties.removeAll(knownProperties);
+                                                    if (!boundProperties.isEmpty()) {
+                                                        throw new InvalidBindingException(boundProperties);
                                                     }
-                                                    return method.invoke(config, args);
                                                 }
-                                                return method.invoke(target, args);
-                                            } catch (Throwable e) {
-                                                // can be used to set a breakpoint if something goes wrong
-                                                throw e;
+                                                return method.invoke(config, args);
                                             }
+                                            return method.invoke(target, args);
+                                        } catch (Throwable e) {
+                                            // can be used to set a breakpoint if something goes wrong
+                                            throw e;
                                         }
                                     });
                             }
@@ -207,13 +248,13 @@ public class MappingSpecificationParser {
             public List<BeanPropertyDefinition> updateProperties(DeserializationConfig config, BeanDescription beanDesc,
                 List<BeanPropertyDefinition> propDefs) {
                 // include all config properties
-                if (!LegacyTemplate.class.isAssignableFrom(beanDesc.getBeanClass()) &&
-                    ReflectionHelper.isModelInterfaceOrDefaultImplementation(beanDesc.getBeanClass())
-                    && !LangString.class.isAssignableFrom(beanDesc.getBeanClass())) {
+                if (!Template.class.isAssignableFrom(beanDesc.getBeanClass()) &&
+                    (ReflectionHelper.isModelInterfaceOrDefaultImplementation(beanDesc.getBeanClass()) ||
+                        LangString.class.isAssignableFrom(beanDesc.getBeanClass()))) {
                     Set<String> existingProps = propDefs.stream().map(propDef -> propDef.getName()).collect(Collectors.toSet());
                     List<BeanPropertyDefinition> compoundDefs = new ArrayList<>(propDefs);
                     compoundDefs.addAll(
-                        config.introspect(config.getTypeFactory().constructSimpleType(LegacyTemplate.class, null))
+                        config.introspect(config.getTypeFactory().constructSimpleType(Template.class, null))
                             .findProperties().stream()
                             // filter properties that are already contained in base bean interface
                             .filter(propDef -> !existingProps.contains(propDef.getName())).collect(Collectors.toList()));

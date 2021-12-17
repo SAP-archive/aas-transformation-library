@@ -6,7 +6,9 @@
 package com.sap.dsc.aas.lib.aml.transform;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,11 +21,16 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.*;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaException;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SchemaValidatorsConfig;
+import com.networknt.schema.SpecVersionDetector;
+import com.networknt.schema.ValidationMessage;
 import com.sap.dsc.aas.lib.TestUtils;
-import com.sap.dsc.aas.lib.config.ConfigLoader;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 import io.adminshell.aas.v3.dataformat.SerializationException;
 import io.adminshell.aas.v3.dataformat.Serializer;
@@ -45,17 +52,15 @@ public class TechnicalDataSubmodelTransformationTest {
     private static Serializer serializer;
     private static JsonSchemaValidator validator;
 
-
     @BeforeEach
     protected void setUp() throws Exception {
-    	TestUtils.resetBindings();
+        TestUtils.resetBindings();
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigTransformToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_JSON);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
         validator = new JsonSchemaValidator();
         serializer = new JsonSerializer();
 
@@ -78,7 +83,9 @@ public class TechnicalDataSubmodelTransformationTest {
         JsonNode schemaNode = mapper.readTree(Files.newInputStream(Paths.get(JSON_SCHEMA_TECHNICAL_DATA)));
         JsonSchema schema = JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaNode)).getSchema(schemaNode);
         // we need to get the submodel only for the comparison
-        JsonNode jsonNode = mapper.readTree(serializer.write(shellEnv)).get("submodels").get(0);
+        String write = serializer.write(shellEnv);
+        System.out.println(write);
+        JsonNode jsonNode = mapper.readTree(write).get("submodels").get(0);
 
         Set<ValidationMessage> errors = schema.validate(jsonNode);
         if (errors.size() != 0) {
@@ -97,10 +104,10 @@ public class TechnicalDataSubmodelTransformationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigTransformToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_MISSING_MANUFACTURER_NAME);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping =
+            new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_MISSING_MANUFACTURER_NAME);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -122,20 +129,20 @@ public class TechnicalDataSubmodelTransformationTest {
             assertTrue(e.getMessage().contains("https://admin-shell.io/ZVEI/TechnicalData/ManufacturerName/1/1"));
         }
     }
+
     /*
      * this test should fail when the config file does not specify a ManufacturerName SubmodelElement
      * that is required by the TechnicalData Schema
      */
-
     @Test
     void failsWhenIndentificationDataSubmodelElementNotPresent() throws IOException, TransformationException, SerializationException {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigTransformToAas config = configLoader.loadConfig(TECHNICAL_DATA_CONFIG_MISSING_IDENTIFICATION_DATA);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping =
+            new MappingSpecificationParser().loadMappingSpecification(TECHNICAL_DATA_CONFIG_MISSING_IDENTIFICATION_DATA);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         ObjectMapper mapper = new ObjectMapper();
 

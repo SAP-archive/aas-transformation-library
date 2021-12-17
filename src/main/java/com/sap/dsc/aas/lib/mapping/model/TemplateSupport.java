@@ -7,16 +7,18 @@ package com.sap.dsc.aas.lib.mapping.model;
 
 import java.util.Map;
 
+import com.sap.dsc.aas.lib.expressions.Expression;
+
 public class TemplateSupport implements Template {
 
     private Object target;
 
     private BindSpecification bindSpecification;
-    private Map<String, Object> variables;
-    private Map<String, Object> definitions;
+    private Expression foreachExpression;
+    private Map<String, Expression> definitions;
+    private Map<String, Expression> variables;
 
-    public TemplateSupport() {
-    }
+    public TemplateSupport() {}
 
     public TemplateSupport(Object target) {
         this.target = target;
@@ -41,22 +43,32 @@ public class TemplateSupport implements Template {
     }
 
     @Override
-    public Map<String, Object> getVariables() {
-        return variables;
+    public Expression getForeachExpression() {
+        return foreachExpression;
     }
 
     @Override
-    public void setVariables(Map<String, Object> variables) {
-        this.variables = variables;
+    public void setForeachExpression(Expression foreachExpression) {
+        this.foreachExpression = foreachExpression;
     }
 
     @Override
-    public Map<String, Object> getDefinitions() {
+    public Map<String, Expression> getDefinitions() {
         return definitions;
     }
 
     @Override
-    public void setDefinitions(Map<String, Object> definitions) {
+    public void setDefinitions(Map<String, Expression> definitions) {
         this.definitions = definitions;
+    }
+
+    @Override
+    public Map<String, Expression> getVariables() {
+        return variables;
+    }
+
+    @Override
+    public void setVariables(Map<String, Expression> variables) {
+        this.variables = variables;
     }
 }
