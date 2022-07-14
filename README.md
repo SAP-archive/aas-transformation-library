@@ -1,3 +1,8 @@
+# :warning: Migration to Eclipse Digital Twin Top Level Project
+ **NOTE:** We are hounoured to be part of the [Eclipse Foundation](https://projects.eclipse.org/projects/dt) as [Eclipse AAS Model for Java (AAS4J)](https://projects.eclipse.org/projects/dt.aas4j) and this project will be maintained here ([Eclipse AAS4J GitHub Repository](https://github.com/eclipse-digitaltwin/aas4j-transformation-library)). See you there! 
+ 
+***Please*** :point_right: use our new repository Eclipse AAS4J GitHub Repository](https://github.com/eclipse-digitaltwin/aas4j-transformation-library) for contributions and subscribe to our mailing list to interact with our community at the Eclipse Foundation.
+
 # AAS Transformation Library
 
 [![Build Status](https://app.travis-ci.com/SAP/aas-transformation-library.svg?branch=main)](https://app.travis-ci.com/SAP/aas-transformation-library)
