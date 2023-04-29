@@ -6,12 +6,10 @@
 package com.sap.dsc.aas.lib.aml.transform;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static org.mockito.AdditionalMatchers.or;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -21,24 +19,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.dom4j.Node;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.sap.dsc.aas.lib.config.pojo.ConfigIdGeneration;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
-import com.sap.dsc.aas.lib.config.pojo.Precondition;
-import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeForAll;
-import com.sap.dsc.aas.lib.config.pojo.preconditions.PreconditionTypeRange;
-import com.sap.dsc.aas.lib.exceptions.PreconditionValidationException;
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
 import com.sap.dsc.aas.lib.exceptions.UnableToReadXmlException;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 import com.sap.dsc.aas.lib.transform.AbstractTransformerTest;
-import com.sap.dsc.aas.lib.transform.validation.PreconditionValidator;
 
 import io.adminshell.aas.v3.model.AssetAdministrationShell;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
@@ -67,17 +60,16 @@ class TransformAmlTest extends AbstractTransformerTest {
     @BeforeEach
     protected void setUp() throws Exception {
         super.setUp();
-        when(mockIdGenerator.generateId(any(Node.class), or(any(ConfigIdGeneration.class), isNull())))
-            .thenReturn(ID_VALUE);
+        TestUtils.setAMLBindings();
 
-        this.classUnderTest = new AmlTransformer(this.mockIdGenerator, this.mockPreconditionValidator);
+        this.classUnderTest = new AmlTransformer();
         this.amlInputStream = Files.newInputStream(Paths.get("src/test/resources/aml/full_AutomationComponent.aml"));
     }
 
     @Test
     @DisplayName("Straight transform an AML document into AAS format")
     void transformAmlTest() throws TransformationException {
-        AssetAdministrationShellEnvironment result = classUnderTest.transform(amlInputStream, mapping);
+        AssetAdministrationShellEnvironment result = classUnderTest.execute(amlInputStream, mapping);
         assertNotNull(result);
 
         List<AssetAdministrationShell> shells = result.getAssetAdministrationShells();
@@ -88,7 +80,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     @Test
     @DisplayName("Test failure case, that the AML document can't read")
     void transformAmlWithEmptyAmlStream() {
-        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.transform(null, new ConfigTransformToAas()));
+        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.execute(null, new MappingSpecification()));
     }
 
     @Test
@@ -96,7 +88,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     void readInvalidXml() {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><UnclosedOpenTag>Text";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
-        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.transform(inputStream, new ConfigTransformToAas()));
+        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.execute(inputStream, new MappingSpecification()));
     }
 
     @Test
@@ -104,76 +96,7 @@ class TransformAmlTest extends AbstractTransformerTest {
     void readInvalidAml() {
         String initialString = "<?xml version=\"1.0\" encoding=\"utf-8\"?><CustomXmlElement>Text</CustomXmlElement>";
         InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
-        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.transform(inputStream, new ConfigTransformToAas()));
-    }
-
-//    @Test
-//    @DisplayName("Create identifier")
-//    void createIdentifier() throws TransformationException {
-//        Identifier result = ((AbstractTransformer) classUnderTest).createIdentifier(unitClass, createSimpleIdGeneration(ID_VALUE));
-//        assertThat(result).isNotNull();
-//        assertThat(result.getIdentifier()).isEqualTo(ID_VALUE);
-//    }
-
-    @Test
-    @DisplayName("Test a precondition check which succeeds")
-    void preconditionCheckSucceeds() throws TransformationException {
-        this.classUnderTest = new AmlTransformer(this.mockIdGenerator, new PreconditionValidator());
-
-        Precondition precondition = new Precondition();
-        precondition.setConfigElementId(DEFAULT_CONFIG_ELEMENT_ID);
-
-        PreconditionTypeForAll forAll = new PreconditionTypeForAll();
-        forAll.setMinimumNumber(1);
-        forAll.setMaximumNumber(2);
-        precondition.setForAll(forAll);
-
-        PreconditionTypeRange range = new PreconditionTypeRange();
-        range.setFromXPath("//caex:Attribute");
-        range.setMinimumNumber(1);
-        range.setMaximumNumber(0);
-        precondition.setForEach(Arrays.asList(range));
-
-        mapping.setPreconditions(Arrays.asList(precondition));
-
-        assertDoesNotThrow(() -> classUnderTest.transform(amlInputStream, mapping));
-    }
-
-    @Test
-    @DisplayName("Test a precondition check with forAll which fails")
-    void preconditionCheckFailsForAll() throws TransformationException {
-        this.classUnderTest = new AmlTransformer(this.mockIdGenerator, new PreconditionValidator());
-
-        Precondition precondition = new Precondition();
-        precondition.setConfigElementId(DEFAULT_CONFIG_ELEMENT_ID);
-
-        PreconditionTypeForAll forAll = new PreconditionTypeForAll();
-        forAll.setMinimumNumber(4);
-        forAll.setMaximumNumber(4);
-        precondition.setForAll(forAll);
-
-        mapping.setPreconditions(Arrays.asList(precondition));
-
-        assertThrows(PreconditionValidationException.class, () -> classUnderTest.transform(amlInputStream, mapping));
-    }
-
-    @Test
-    @DisplayName("Test a precondition check with forEach which fails")
-    void preconditionCheckFailsForEachAll() throws TransformationException {
-        this.classUnderTest = new AmlTransformer(this.mockIdGenerator, new PreconditionValidator());
-
-        Precondition precondition = new Precondition();
-        precondition.setConfigElementId(DEFAULT_CONFIG_ELEMENT_ID);
-
-        PreconditionTypeRange range = new PreconditionTypeRange();
-        range.setFromXPath("//caex:Attribute");
-        range.setMinimumNumber(1);
-        range.setMaximumNumber(1);
-        precondition.setForEach(Arrays.asList(range));
-
-        mapping.setPreconditions(Arrays.asList(precondition));
-
-        assertThrows(PreconditionValidationException.class, () -> classUnderTest.transform(amlInputStream, mapping));
+        assertThrows(UnableToReadXmlException.class, () -> classUnderTest.execute(inputStream, new MappingSpecification()));
     }
 
     @ParameterizedTest(name = "Given version ''{0}'' expected result ''{1}''")

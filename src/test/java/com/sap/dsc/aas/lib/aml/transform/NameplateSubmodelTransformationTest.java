@@ -19,10 +19,16 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.*;
-import com.sap.dsc.aas.lib.config.ConfigLoader;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaException;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SchemaValidatorsConfig;
+import com.networknt.schema.SpecVersionDetector;
+import com.networknt.schema.ValidationMessage;
+import com.sap.dsc.aas.lib.TestUtils;
 import com.sap.dsc.aas.lib.exceptions.TransformationException;
+import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 import io.adminshell.aas.v3.dataformat.SerializationException;
 import io.adminshell.aas.v3.dataformat.Serializer;
@@ -32,8 +38,8 @@ import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
 
 public class NameplateSubmodelTransformationTest {
 
-    public static final String NAMEPLATE_CONFIG_JSON = "src/test/resources/config/simpleConfig.json";
-    public static final String SIMPLE_CONFIG_JSON = "src/test/resources/config/nameplate/nameplateConfig.json";
+    public static final String NAMEPLATE_CONFIG_JSON = "src/test/resources/config/nameplate/nameplateConfig.json";
+    public static final String SIMPLE_CONFIG_JSON = "src/test/resources/config/simpleConfig.json";
     public static final String NAMEPLATE_CONFIG_MISSING_ADDRESS = "src/test/resources/config/nameplate/nameplateConfigMissingAddress.json";
     public static final String NAMEPLATE_CONFIG_WRONG_ADDRESS_WRONG_SEMANTICID =
         "src/test/resources/config/nameplate/nameplateConfigWrongAddressSemanticId.json";
@@ -46,17 +52,18 @@ public class NameplateSubmodelTransformationTest {
     private static JsonSchemaValidator validator;
     private static Serializer serializer;
     private AmlTransformer amlTransformer;
-    private ConfigLoader configLoader;
+    private MappingSpecificationParser mappingParser;
     private ObjectMapper mapper;
     private InputStream amlInputStream;
 
     @BeforeEach
     protected void setUp() throws Exception {
+        TestUtils.resetBindings();
         amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
         mapper = new ObjectMapper();
 
         amlTransformer = new AmlTransformer();
-        configLoader = new ConfigLoader();
+        mappingParser = new MappingSpecificationParser();
         validator = new JsonSchemaValidator();
         serializer = new JsonSerializer();
     }
@@ -64,8 +71,8 @@ public class NameplateSubmodelTransformationTest {
     @Test
     void validateTransformedNamePlateAgainstAASJSONSchema() throws IOException, TransformationException, SerializationException {
 
-        ConfigTransformToAas config = configLoader.loadConfig(NAMEPLATE_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(NAMEPLATE_CONFIG_JSON);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         String serializedShellEnv = serializer.write(shellEnv);
 
@@ -79,14 +86,14 @@ public class NameplateSubmodelTransformationTest {
     @Test
     void validateTransformedGenericAgainstAASJSONSchema() throws IOException, TransformationException, SerializationException {
 
-        ConfigTransformToAas config = configLoader.loadConfig(SIMPLE_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(SIMPLE_CONFIG_JSON);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         Serializer serializer = new JsonSerializer();
         String serializedShellEnv = serializer.write(shellEnv);
 
         Set<String> errors = validator.validateSchema(serializedShellEnv);
-        errors.stream().forEach(System.out::print);
+        errors.stream().forEach(System.out::println);
         assertThat(errors.size()).isEqualTo(0);
 
     }
@@ -95,8 +102,8 @@ public class NameplateSubmodelTransformationTest {
     void validatesCorrectNamePlateSubmodel() throws IOException, TransformationException, SerializationException {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
-        ConfigTransformToAas config = configLoader.loadConfig(NAMEPLATE_CONFIG_JSON);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(NAMEPLATE_CONFIG_JSON);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         SchemaValidatorsConfig schemaValidatorsConfigconfig = new SchemaValidatorsConfig();
         // When set to true, the validation process stops immediately when the first error occurs.
@@ -127,8 +134,8 @@ public class NameplateSubmodelTransformationTest {
     void failsWhenAddressElementNotPresent() throws IOException, TransformationException, SerializationException {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
-        ConfigTransformToAas config = configLoader.loadConfig(NAMEPLATE_CONFIG_MISSING_ADDRESS);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(NAMEPLATE_CONFIG_MISSING_ADDRESS);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         SchemaValidatorsConfig schemaValidatorsConfigconfig = new SchemaValidatorsConfig();
         // When set to true, the validation process stops immediately when the first error occurs.
@@ -154,8 +161,8 @@ public class NameplateSubmodelTransformationTest {
     void failsAddressHasWrongSubmodelId() throws IOException, TransformationException, SerializationException {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
-        ConfigTransformToAas config = configLoader.loadConfig(NAMEPLATE_CONFIG_WRONG_ADDRESS_WRONG_SEMANTICID);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(NAMEPLATE_CONFIG_WRONG_ADDRESS_WRONG_SEMANTICID);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         SchemaValidatorsConfig schemaValidatorsConfigconfig = new SchemaValidatorsConfig();
         // When set to true, the validation process stops immediately when the first error occurs.
@@ -184,8 +191,8 @@ public class NameplateSubmodelTransformationTest {
     void failsWhenManufacturerProductDesignationElementNotPresent() throws IOException, TransformationException, SerializationException {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
-        ConfigTransformToAas config = configLoader.loadConfig(NAMEPLATE_CONFIG_MISSING_MANUFACTURERPRODUCTDESIGNATION);
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        MappingSpecification mapping = mappingParser.loadMappingSpecification(NAMEPLATE_CONFIG_MISSING_MANUFACTURERPRODUCTDESIGNATION);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         SchemaValidatorsConfig schemaValidatorsConfigconfig = new SchemaValidatorsConfig();
         // When set to true, the validation process stops immediately when the first error occurs.

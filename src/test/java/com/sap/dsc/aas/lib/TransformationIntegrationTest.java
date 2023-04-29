@@ -27,8 +27,8 @@ import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersionDetector;
 import com.networknt.schema.ValidationMessage;
 import com.sap.dsc.aas.lib.aml.transform.AmlTransformer;
-import com.sap.dsc.aas.lib.config.ConfigLoader;
-import com.sap.dsc.aas.lib.config.pojo.ConfigTransformToAas;
+import com.sap.dsc.aas.lib.mapping.MappingSpecificationParser;
+import com.sap.dsc.aas.lib.mapping.model.MappingSpecification;
 
 import io.adminshell.aas.v3.dataformat.DeserializationException;
 import io.adminshell.aas.v3.dataformat.Deserializer;
@@ -36,7 +36,27 @@ import io.adminshell.aas.v3.dataformat.SerializationException;
 import io.adminshell.aas.v3.dataformat.Serializer;
 import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
 import io.adminshell.aas.v3.dataformat.json.JsonSerializer;
-import io.adminshell.aas.v3.model.*;
+import io.adminshell.aas.v3.model.AnnotatedRelationshipElement;
+import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+import io.adminshell.aas.v3.model.BasicEvent;
+import io.adminshell.aas.v3.model.Blob;
+import io.adminshell.aas.v3.model.Capability;
+import io.adminshell.aas.v3.model.Entity;
+import io.adminshell.aas.v3.model.EntityType;
+import io.adminshell.aas.v3.model.File;
+import io.adminshell.aas.v3.model.Key;
+import io.adminshell.aas.v3.model.KeyElements;
+import io.adminshell.aas.v3.model.KeyType;
+import io.adminshell.aas.v3.model.LangString;
+import io.adminshell.aas.v3.model.MultiLanguageProperty;
+import io.adminshell.aas.v3.model.Operation;
+import io.adminshell.aas.v3.model.Range;
+import io.adminshell.aas.v3.model.Reference;
+import io.adminshell.aas.v3.model.ReferenceElement;
+import io.adminshell.aas.v3.model.RelationshipElement;
+import io.adminshell.aas.v3.model.Submodel;
+import io.adminshell.aas.v3.model.SubmodelElement;
+import io.adminshell.aas.v3.model.SubmodelElementCollection;
 
 public class TransformationIntegrationTest {
 
@@ -51,14 +71,14 @@ public class TransformationIntegrationTest {
 
     @BeforeEach
     protected void setUp() throws Exception {
+        TestUtils.resetBindings();
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigTransformToAas config = configLoader.loadConfig(CONFIG_JSON);
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(CONFIG_JSON);
 
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
     }
 
     @Test
@@ -66,11 +86,10 @@ public class TransformationIntegrationTest {
         InputStream amlInputStream = Files.newInputStream(Paths.get(AML_INPUT));
 
         AmlTransformer amlTransformer = new AmlTransformer();
-        ConfigLoader configLoader = new ConfigLoader();
 
-        ConfigTransformToAas config = configLoader.loadConfig(AUTOMATION_COMPONENT_CONFIG_JSON);
+        MappingSpecification mapping = new MappingSpecificationParser().loadMappingSpecification(AUTOMATION_COMPONENT_CONFIG_JSON);
 
-        shellEnv = amlTransformer.transform(amlInputStream, config);
+        shellEnv = amlTransformer.execute(amlInputStream, mapping);
 
         System.out.println(new JsonSerializer().write(shellEnv));
     }
@@ -293,7 +312,7 @@ public class TransformationIntegrationTest {
         assertThat(collection.getValues()).isNotNull();
 
         return collection.getValues().stream()
-            .filter(submodelElement -> submodelElement.getIdShort().equals(idShortElement))
+            .filter(submodelElement -> idShortElement.equals(submodelElement.getIdShort()))
             .findFirst()
             .orElseThrow(() -> new AssertionFailedError("SubmodelElement with IdShort '" + idShortElement + "' not found"));
     }
@@ -366,7 +385,7 @@ public class TransformationIntegrationTest {
         assertThat(submodel.getSubmodelElements()).isNotNull();
 
         return submodel.getSubmodelElements().stream()
-            .filter(submodelElement -> submodelElement.getIdShort().equals(idShort))
+            .filter(submodelElement -> idShort.equals(submodelElement.getIdShort()))
             .findFirst()
             .orElseThrow(() -> new AssertionFailedError("SubmodelElement with IdShort '" + idShort + "' not found"));
     }
@@ -375,7 +394,7 @@ public class TransformationIntegrationTest {
         assertNotNull(shellEnv.getSubmodels());
 
         return shellEnv.getSubmodels().stream()
-            .filter(submodel -> submodel.getIdShort().equals(idShort))
+            .filter(submodel -> idShort.equals(submodel.getIdShort()))
             .findFirst()
             .orElseThrow(() -> new AssertionFailedError("Submodel with IdShort '" + idShort + "' not found"));
     }

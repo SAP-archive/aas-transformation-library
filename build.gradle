@@ -13,15 +13,16 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'eclipse'
     id 'idea'
+    id 'maven-publish'
 }
 
-group = 'com.sap.dsc.aas.lib.aml'
-version = '0.0.1-SNAPSHOT'
+group = 'com.sap.dsc.aas.lib'
+version = '0.1.1'
 
 application {
     group = group
     version = version
-    mainClass.set('com.sap.dsc.aas.lib.aml.ConsoleApplication')
+    mainClass.set('com.sap.dsc.aas.lib.ConsoleApplication')
 }
 
 mainClassName = application.mainClass.get()
@@ -231,13 +232,31 @@ shadowJar {
 
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/NOTICE', 'META-INF/LICENSE', 'META-INF/LICENSE'
 
-    archiveBaseName.set("aml-transformation-library")
+    archiveBaseName.set("aas-transformation-library")
     archiveAppendix.set("shadow")
     archiveExtension.set("jar")
 }
 
 repositories {
     mavenCentral()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/" + System.getenv("GITHUB_REPOSITORY"))
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            artifact jar
+        }
+    }
 }
 
 dependencies {

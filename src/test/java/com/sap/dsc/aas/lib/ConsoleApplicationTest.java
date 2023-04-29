@@ -25,10 +25,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.sap.dsc.aas.lib.aml.helper.AmlxPackageCreator;
-import io.adminshell.aas.v3.dataformat.DeserializationException;
-import io.adminshell.aas.v3.dataformat.Deserializer;
+
 import io.adminshell.aas.v3.dataformat.json.JsonDeserializer;
 import io.adminshell.aas.v3.model.AssetAdministrationShellEnvironment;
+import io.adminshell.aas.v3.model.Property;
+import io.adminshell.aas.v3.model.Submodel;
 
 public class ConsoleApplicationTest {
 
@@ -38,18 +39,23 @@ public class ConsoleApplicationTest {
     private final PrintStream originalErr = System.err;
 
     private final String HELP_CONTENT = "usage: transform";
-    private final String CONFIG_FILE_PATH = "src/test/resources/config/simpleConfig.json";
+    // private final String CONFIG_FILE_PATH = "src/test/resources/config/simpleConfig.json";
+    private final String CONFIG_FILE_PATH = "src/test/resources/mappings/generic/genericXpathTest.json";
     private final String EMPTY_CONFIG_FILE_PATH = "src/test/resources/config/emptyConfig.json";
     private final String AML_FILE_PATH = "src/test/resources/aml/full_AutomationComponent.aml";
+    private final String GENERIC_FILE_PATH = "src/test/resources/mappings/generic/generic.xml";
 
     private ConsoleApplication classUnderTest;
 
     /**
      * Capture system.out in a stream
      * https://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
+     *
+     * @throws Exception
      */
     @BeforeEach
-    public void setUpStreams() {
+    public void setUpStreams() throws Exception {
+        TestUtils.resetBindings();
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
 
@@ -105,7 +111,7 @@ public class ConsoleApplicationTest {
     @Test
     void validConfig() throws IOException {
         classUnderTest.loadConfig(CONFIG_FILE_PATH);
-        assertThat(classUnderTest.config).isNotNull();
+        assertThat(classUnderTest.mapping).isNotNull();
     }
 
     @Test
@@ -139,29 +145,48 @@ public class ConsoleApplicationTest {
     @Test
     void getPlaceholderList() {
         ConsoleApplication.main(new String[] {"-p", "-c", "src/test/resources/config/minimal_placeholder.json"});
+        assertThat(getPrinted()).contains("2 placeholders are expected");
         assertThat(getPrinted()).contains("assetName: Name of the asset");
         assertThat(getPrinted()).contains("submodelName: Name of the submodel");
     }
 
     @Test
-    void replacePlaceholders() throws IOException, DeserializationException {
-        ConsoleApplication.main(new String[] {"-a", AML_FILE_PATH, "-c", "src/test/resources/config/minimal_placeholder.json", "-P",
-            "{\"assetName\":\"myAssetId\",\"submodelName\":\"mySubmodelId\"}"});
+    void getSinglePlaceholderList() {
+        ConsoleApplication.main(new String[] {"-c", CONFIG_FILE_PATH, "--print-placeholders"});
+        assertThat(getPrinted()).contains("1 placeholders");
+        assertThat(getPrinted()).contains("genericPlaceholder: A generic placeholder");
+    }
 
-        String outputFileName = classUnderTest.deriveOutputFileName(AML_FILE_PATH);
-        Path path = Paths.get(outputFileName);
-        File outputFile = path.toFile();
-        assertThat(outputFile.exists()).isTrue();
+    @Test
+    void replacePlaceholdersGeneric() throws Exception {
+        File genericInputFile = new File(GENERIC_FILE_PATH);
+        String genericInputFileDir = genericInputFile.getAbsolutePath();
+        String expectedValue = "expectedValue";
+        String placeholderMap = "{\"genericPlaceholder\":\"" + expectedValue + "\"}";
 
-        String aasJson = Files.readString(path);
+        ConsoleApplication.main(new String[] {"-c", CONFIG_FILE_PATH, "-xml", genericInputFileDir, "-p", "-P", placeholderMap});
 
-        Deserializer deserializer = new JsonDeserializer();
-        AssetAdministrationShellEnvironment assetShellEnv = deserializer.read(aasJson);
-
-        assertThat(assetShellEnv).isNotNull();
-        assertThat(assetShellEnv.getSubmodels().get(0).getIdentification().getIdentifier())
-            .isEqualTo("submodel mySubmodelId of asset myAssetId");
+        String outputFileName = classUnderTest.deriveOutputFileName(genericInputFileDir);
+        Path outputFilePath = Paths.get(outputFileName);
+        File outputFile = outputFilePath.toFile();
+        String outputJson = Files.readString(outputFilePath);
+        AssetAdministrationShellEnvironment assetShellEnv = new JsonDeserializer().read(outputJson);
+        Submodel firstSubmodel = assetShellEnv.getSubmodels().get(0);
+        Property firstProperty = (Property) firstSubmodel.getSubmodelElements().get(0);
+        assertThat(firstProperty.getValue()).isEqualTo(expectedValue);
         assertThat(outputFile.delete()).isTrue();
+    }
+
+    @Test
+    void missingPlaceholders() throws Exception {
+        File genericInputFile = new File(GENERIC_FILE_PATH);
+        String genericInputFileDir = genericInputFile.getAbsolutePath();
+        String expectedValue = "expectedValue";
+        String placeholderMap = "{\"notTheExpectedPlaceholder\":\"" + expectedValue + "\"}";
+
+        ConsoleApplication.main(new String[] {"-c", CONFIG_FILE_PATH, "-xml", genericInputFileDir, "-p", "-P", placeholderMap});
+
+        assertThat(getPrinted()).contains("No value for placeholder");
     }
 
     @Test
@@ -190,4 +215,17 @@ public class ConsoleApplicationTest {
         Files.delete(Paths.get("minimal_AutomationMLComponent_WithDocuments/"));
     }
 
+    @Test
+    void validConfigAndGeneric() throws Exception {
+        File genericFile = new File(GENERIC_FILE_PATH);
+        String genericFileDir = genericFile.getAbsolutePath();
+        String outputFileName = classUnderTest.deriveOutputFileName(genericFileDir);
+        File outputFile = new File(outputFileName);
+
+        ConsoleApplication.main(new String[] {"-c", CONFIG_FILE_PATH, "-xml", genericFileDir});
+
+        assertThat(getPrinted()).contains("Loaded config version");
+        assertThat(getPrinted()).contains("Wrote AAS file");
+        assertTrue(outputFile.delete());;
+    }
 }

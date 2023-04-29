@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "aasVersion": "3.0RC01",
-  "placeholders": [
+  "@parameters": [
     {
       "name": "manufacturerId",
       "description" : "The Id of the manufacturer, will be filled from the CliendId before calling the MEI Api"
